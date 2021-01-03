@@ -48,15 +48,27 @@ class _SplashScreenState extends State<SplashScreen> {
           case AppKeys.PATIENT:
             {
               targetScreen = Provider<NotificationProvider>(
-                  create: (context) => NotificationProvider(),
-                  child: PatientHome());
+                create: (context) {
+                  NotificationProvider notificationProvider =
+                  NotificationProvider();
+                  notificationProvider.firebaseMessaging.subscribeToTopic(
+                      'messages_${FirebaseAuth.instance.currentUser.uid}');
+                  return notificationProvider;
+                },
+                child: PatientHome());
               break;
             }
           case AppKeys.PRACTITIONER:
             {
               targetScreen = Provider<NotificationProvider>(
-                  create: (context) => NotificationProvider(),
-                  child: PractitionersHome());
+                create: (context) {
+                  NotificationProvider notificationProvider =
+                  NotificationProvider();
+                  notificationProvider.firebaseMessaging.subscribeToTopic(
+                      'messages_${FirebaseAuth.instance.currentUser.uid}');
+                  return notificationProvider;
+                },
+                child: PractitionersHome());
               break;
             }
           case 'null':

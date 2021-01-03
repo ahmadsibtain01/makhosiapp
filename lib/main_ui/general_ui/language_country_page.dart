@@ -4,10 +4,12 @@ import 'package:makhosi_app/helpers/others/preferences_helper.dart';
 import 'package:makhosi_app/main_ui/general_ui/user_types_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
+import 'package:provider/provider.dart';
 
 class LanguageCountrySelect extends StatefulWidget {
   @override
@@ -73,15 +75,29 @@ class _LanguageCountrySelectState extends State<LanguageCountrySelect> {
                       if (user != null) {
                         switch (userType) {
                           case AppKeys.PATIENT:
-                            {
-                              targetScreen = PatientHome();
-                              break;
-                            }
+                            targetScreen = Provider<NotificationProvider>(
+                                create: (context) {
+                                  NotificationProvider notificationProvider =
+                                      NotificationProvider();
+                                  notificationProvider.firebaseMessaging
+                                      .subscribeToTopic(
+                                          'messages_${FirebaseAuth.instance.currentUser.uid}');
+                                  return notificationProvider;
+                                },
+                                child: PatientHome());
+                            break;
                           case AppKeys.PRACTITIONER:
-                            {
-                              targetScreen = PractitionersHome();
-                              break;
-                            }
+                            targetScreen = Provider<NotificationProvider>(
+                                create: (context) {
+                                  NotificationProvider notificationProvider =
+                                      NotificationProvider();
+                                  notificationProvider.firebaseMessaging
+                                      .subscribeToTopic(
+                                          'messages_${FirebaseAuth.instance.currentUser.uid}');
+                                  return notificationProvider;
+                                },
+                                child: PractitionersHome());
+                            break;
                           case 'null':
                             {
                               targetScreen = UserTypeScreen();

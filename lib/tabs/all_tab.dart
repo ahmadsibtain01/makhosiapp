@@ -20,12 +20,12 @@ class AllTab extends StatefulWidget {
 }
 
 class _AllTabState extends State<AllTab> {
-  List<dynamic> _dataList =null;
+  List<dynamic> _dataList = [];
   bool _isLoading = true;
 
   @override
   void initState() {
-    _dataList=new List();
+    _dataList = new List();
     _getData();
     super.initState();
   }
@@ -34,28 +34,25 @@ class _AllTabState extends State<AllTab> {
     await FirebaseFirestore.instance
         .collection(AppKeys.PRACTITIONERS)
         .limit(20)
-        .get().then((QuerySnapshot querySnapshot)
-    {
-      querySnapshot.docs.forEach((data)
-      {
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((data) {
         _dataList.add(data.data());
       });
-    }
-    );
+    });
 
-    _isLoading=false;
-
+    _isLoading = false;
   }
 
-  int index=0;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
     return _isLoading
         ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
         : _dataList.isEmpty
-        ? AppStatusComponents.errorBody(message: 'No practitioner found')
-        : _getBody();
+            ? AppStatusComponents.errorBody(message: 'No practitioner found')
+            : _getBody();
   }
 
   Widget _getBody() {
@@ -87,19 +84,27 @@ class _AllTabState extends State<AllTab> {
     );
   }
 
-  Widget _getRow(dynamic snapshot)
-  {
-    String firstName=" ";
-    String secondName=" ";
-    String location= " ";
+  Widget _getRow(dynamic snapshot) {
+    String firstName = " ";
+    String secondName = " ";
+    String location = " ";
 
-    firstName=snapshot[AppKeys.FIRST_NAME];
-    secondName=snapshot[AppKeys.SECOND_NAME];
-    location=snapshot[AppKeys.PRACTICE_LOCATION];
+    firstName = snapshot[AppKeys.FIRST_NAME];
+    secondName = snapshot[AppKeys.SECOND_NAME];
+    location = snapshot[AppKeys.PRACTICE_LOCATION];
 
-    if(firstName==null){firstName=" ";};
-    if(secondName==null){secondName=" ";};
-    if(location==null){location=" ";};
+    if (firstName == null) {
+      firstName = " ";
+    }
+    ;
+    if (secondName == null) {
+      secondName = " ";
+    }
+    ;
+    if (location == null) {
+      location = " ";
+    }
+    ;
 
     return GestureDetector(
       onTap: () {
@@ -123,15 +128,15 @@ class _AllTabState extends State<AllTab> {
                   borderRadius: BorderRadius.circular(8),
                   child: snapshot[(AppKeys.PROFILE_IMAGE)] == null
                       ? Image.asset(
-                    'images/profile_background.png',
-                    width: ScreenDimensions.getScreenWidth(context) / 3,
-                  )
+                          'images/profile_background.png',
+                          width: ScreenDimensions.getScreenWidth(context) / 3,
+                        )
                       : Image.network(
-                    snapshot[(AppKeys.PROFILE_IMAGE)],
-                    width: ScreenDimensions.getScreenWidth(context) / 3,
-                    height: ScreenDimensions.getScreenWidth(context) / 3,
-                    fit: BoxFit.cover,
-                  ),
+                          snapshot[(AppKeys.PROFILE_IMAGE)],
+                          width: ScreenDimensions.getScreenWidth(context) / 3,
+                          height: ScreenDimensions.getScreenWidth(context) / 3,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                 Expanded(

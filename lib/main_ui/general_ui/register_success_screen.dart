@@ -1,13 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
 import 'package:makhosi_app/enums/click_type.dart';
 import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/traditional_healers_screenone.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/tradional_healer_register_screen_main.dart';
+import 'package:provider/provider.dart';
+
 class RegisterSuccessScreen extends StatefulWidget {
   ClickType _clickType;
   String serviceType;
@@ -31,7 +35,11 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
             SizedBox(
               height: 120,
             ),
-            Image.asset('images/done.png', height: 180, width: 180,),
+            Image.asset(
+              'images/done.png',
+              height: 180,
+              width: 180,
+            ),
             SizedBox(
               height: 50,
             ),
@@ -71,10 +79,26 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
     Object targetScreen;
     switch (clickType) {
       case ClickType.PATIENT:
-        targetScreen = PatientHome();
+        targetScreen = Provider<NotificationProvider>(
+            create: (context) {
+              NotificationProvider notificationProvider =
+                  NotificationProvider();
+              notificationProvider.firebaseMessaging.subscribeToTopic(
+                  'messages_${FirebaseAuth.instance.currentUser.uid}');
+              return notificationProvider;
+            },
+            child: PatientHome());
         break;
       case ClickType.PRACTITIONER:
-        targetScreen = PractitionersHome();
+        targetScreen = Provider<NotificationProvider>(
+            create: (context) {
+              NotificationProvider notificationProvider =
+                  NotificationProvider();
+              notificationProvider.firebaseMessaging.subscribeToTopic(
+                  'messages_${FirebaseAuth.instance.currentUser.uid}');
+              return notificationProvider;
+            },
+            child: PractitionersHome());
         break;
       case ClickType.LOGIN:
         break;
@@ -82,8 +106,7 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
         break;
     }
     if (widget.serviceType != null && widget.serviceType == 'Abelaphi')
-      NavigationController.pushReplacement(
-          context, onBoardingOne());
+      NavigationController.pushReplacement(context, OnBoardingOne());
     else
       NavigationController.pushReplacement(context, targetScreen);
   }
