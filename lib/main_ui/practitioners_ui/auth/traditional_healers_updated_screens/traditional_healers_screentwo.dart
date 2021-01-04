@@ -129,7 +129,7 @@ class _TraditionalHealersScreenTwoState
           Others.getSizedBox(boxHeight: 32, boxWidth: 0),
           AppTextFields.getMultiLineRegisterField(
             controller: _threePeopleReferenceController,
-            label: '3 references: Please provider name, surname, email address',
+            label: '3 references: Please provider(name, surname, & email)',
           ),
           Others.getSizedBox(boxHeight: 32, boxWidth: 0),
           AppButtons.getRoundedButton2(

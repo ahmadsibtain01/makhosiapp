@@ -12,7 +12,7 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:rating_bar/rating_bar.dart';
-import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
 
 class AllTab extends StatefulWidget {
   @override
@@ -88,10 +88,17 @@ class _AllTabState extends State<AllTab> {
     String firstName = " ";
     String secondName = " ";
     String location = " ";
+    String years=" ";
+   String language=" ";
+   String service=" ";
+
 
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
-    location = snapshot[AppKeys.PRACTICE_LOCATION];
+    location = snapshot[AppKeys.ADDRESS];
+    years=snapshot[AppKeys.PRACTICE_YEARS];
+    language=snapshot[AppKeys.LANGUAGES];
+    service=snapshot[AppKeys.SERVICE_TYPE];
 
     if (firstName == null) {
       firstName = " ";
@@ -108,10 +115,7 @@ class _AllTabState extends State<AllTab> {
 
     return GestureDetector(
       onTap: () {
-        NavigationController.push(
-          context,
-          BusinessCard(),
-        );
+        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service),);
       },
       child: Container(
         child: Card(

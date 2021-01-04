@@ -23,6 +23,9 @@ import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
+import 'package:location/location.dart';
+import 'package:geocoder/geocoder.dart';
+
 
 class PatientRegisterScreen extends StatefulWidget {
   ClickType _userType;
@@ -51,6 +54,11 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
   RegisterHelper _registerHelper = RegisterHelper();
   PreferencesHelper _preferencesHelper = PreferencesHelper();
   bool _isLoading = false;
+  String _selectedLocation;
+  Location _location;
+  Coordinates _userCoordinates;
+  PermissionStatus _permissionStatus;
+
 
   @override
   void initState() {
@@ -60,8 +68,33 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen>
       _addressController.text = widget._snapshot.get(AppKeys.ADDRESS);
     }
     super.initState();
+      _location = Location();
+      _checkLocationPermissions();
   }
-
+  Future<void> _checkLocationPermissions() async {
+    _permissionStatus = await _location.hasPermission();
+    if (_permissionStatus == PermissionStatus.denied)
+      _permissionStatus = await _location.requestPermission();
+    if (_permissionStatus == PermissionStatus.denied) {
+      AppToast.showToast(message: 'Permission denied');
+      return;
+    }
+    _getUserLocation();
+  }
+  Future<void> _getUserLocation() async {
+    LocationData locationData = await _location.getLocation();
+    _userCoordinates =
+        Coordinates(locationData.latitude, locationData.longitude);
+    _getUserAddress();
+  }
+  Future<void> _getUserAddress() async {
+    List<Address> addressList =
+    await Geocoder.local.findAddressesFromCoordinates(_userCoordinates);
+    if (addressList.isNotEmpty) {
+      _addressController.text = addressList[0].addressLine;
+      //_userCity = addressList[0].subAdminArea;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

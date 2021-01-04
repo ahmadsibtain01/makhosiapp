@@ -348,12 +348,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     SizedBox(
     width: 20,
     ),
-    Icon(
-    Icons.arrow_forward_ios_outlined,
-    size: 20 ,
-
-
-    )
+      Image.asset(
+        'images/arrow.png',
+      )
 
     ],
     ),
@@ -384,12 +381,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     SizedBox(
     width: 82,
     ),
-    Icon(
-    Icons.arrow_forward_ios_outlined,
-    size: 20 ,
-
-
-    )
+      Image.asset(
+        'images/arrow.png',
+      )
 
     ],
     ),
@@ -424,12 +418,9 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     SizedBox(
     width: 101,
     ),
-    Icon(
-    Icons.arrow_forward_ios_outlined,
-    size: 20 ,
-
-
-    )
+      Image.asset(
+        'images/arrow.png',
+      )
 
     ],
     ),

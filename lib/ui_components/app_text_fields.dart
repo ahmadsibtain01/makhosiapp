@@ -77,7 +77,7 @@ class AppTextFields {
         labelStyle: TextStyle(
           color: Colors.grey,
         ),
-        hintMaxLines: 2,
+        hintMaxLines: 3,
       ),
 
     );
