@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
@@ -30,10 +31,9 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
   @override
   void initState() {
-    _practitioners=new List();
+    _practitioners = new List();
 
-
-  _getLocation();
+    _getLocation();
     super.initState();
   }
 
@@ -83,7 +83,6 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   }
 
   Future<void> _getPractitioners() async {
-
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection(AppKeys.PRACTITIONERS)
@@ -96,13 +95,12 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
         });
       } else {
         snapshot.docs.forEach((doc) {
-          _practitioners.add(doc.data());
+          _practitioners.add({'id': doc.id, ...doc.data()});
           Marker marker = Marker(
             markerId: MarkerId(doc.id),
             icon: _customMarker,
             infoWindow: InfoWindow(
-                title:
-                    '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
+                title: '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
             position: LatLng(
               doc[AppKeys.COORDINATES][AppKeys.LATITUDE],
               doc[AppKeys.COORDINATES][AppKeys.LONGITUDE],
@@ -222,9 +220,9 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   }
 
   Widget _getPractitionerRow(dynamic snapshot) {
-    bool isOnline=false;
-    if(snapshot[AppKeys.ONLINE]!=null) {
-      isOnline= snapshot[AppKeys.ONLINE];
+    bool isOnline = false;
+    if (snapshot[AppKeys.ONLINE] != null) {
+      isOnline = snapshot[AppKeys.ONLINE];
     }
     String name =
         '${snapshot[AppKeys.FIRST_NAME]} ${snapshot[AppKeys.SECOND_NAME]}';
@@ -281,7 +279,10 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                   Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                   GestureDetector(
                     onTap: () {
-                      //TODO: take user to chat screen
+                      NavigationController.push(
+                        context,
+                        PatientChatScreen(snapshot['id']),
+                      );
                     },
                     child: Icon(
                       Icons.mail_outline,

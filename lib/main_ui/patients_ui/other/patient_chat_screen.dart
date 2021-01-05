@@ -58,10 +58,17 @@ class _PatientChatScreenState extends State<PatientChatScreen>
         .doc(widget._practitionerUid)
         .get()
         .then((doc) async {
-      var mute = await doc.get('mute');
-      setState(() {
-        _muted = mute;
-      });
+      var mute = false;
+      try {
+        mute = await doc.get('mute');
+        setState(() {
+          _muted = mute;
+        });
+      } catch (e) {
+        setState(() {
+          _muted = mute;
+        });
+      }
     });
   }
 
@@ -297,7 +304,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             sender: widget._myUid,
                             reciever: widget._practitionerUid,
                             title:
-                            'Voice call from ${user.get(AppKeys.FULL_NAME)}',
+                                'Voice call from ${user.get(AppKeys.FULL_NAME)}',
                             body: {
                               'patientUid': widget._myUid,
                               'type': 'voice',
@@ -332,7 +339,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             sender: widget._myUid,
                             reciever: widget._practitionerUid,
                             title:
-                            'Video call from ${user.get(AppKeys.FULL_NAME)}',
+                                'Video call from ${user.get(AppKeys.FULL_NAME)}',
                             body: {
                               'patientUid': widget._myUid,
                               'type': 'video'
@@ -632,7 +639,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             sender: widget._myUid,
                             reciever: widget._practitionerUid,
                             title:
-                            'Message from ${user.get(AppKeys.FULL_NAME)}',
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
                             message: message,
                             body: {
                               'patientUid': widget._myUid,
@@ -662,7 +669,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             sender: widget._myUid,
                             reciever: widget._practitionerUid,
                             title:
-                            'Message from ${user.get(AppKeys.FULL_NAME)}',
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
                             message: message,
                             body: {
                               'patientUid': widget._myUid,
@@ -692,7 +699,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                             sender: widget._myUid,
                             reciever: widget._practitionerUid,
                             title:
-                            'Message from ${user.get(AppKeys.FULL_NAME)}',
+                                'Message from ${user.get(AppKeys.FULL_NAME)}',
                             message: message,
                             body: {
                               'patientUid': widget._myUid,

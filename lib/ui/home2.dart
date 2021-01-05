@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -32,241 +34,247 @@ class Home extends StatelessWidget {
             ),
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.black),
-                onPressed:() {
+                onPressed: () {
                   NavigationController.push(
-                    context,
-                    PatientHome(),
-                  );
-                }
-            ),
+                      context,
+                      Provider<NotificationProvider>(
+                          create: (context) {
+                            NotificationProvider notificationProvider =
+                                NotificationProvider();
+                            notificationProvider.firebaseMessaging.subscribeToTopic(
+                                'messages_${FirebaseAuth.instance.currentUser.uid}');
+                            return notificationProvider;
+                          },
+                          child: PatientHome()));
+                }),
           ),
           body: homeProvider.loading
               ? Center(
-            child: CircularProgressIndicator(),
-          )
+                  child: CircularProgressIndicator(),
+                )
               : RefreshIndicator(
-            onRefresh: () => homeProvider.getFeeds(),
-            child: ListView(
-              children: <Widget>[
-                getSearchBarUI(context),
-                Container(
-                  height: 250,
-                  child: Center(
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: homeProvider.top.feed.entry.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        Entry entry = homeProvider.top.feed.entry[index];
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 10),
-                          child: BookCard(
-                            img: entry.coverImage,
-                            entry: entry,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      stops: [0.015, 0.015],
-                      colors: [
-                        Color.fromRGBO(209, 2, 99, 1),
-                        Theme.of(context).backgroundColor
-                      ],
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  onRefresh: () => homeProvider.getFeeds(),
+                  child: ListView(
                     children: <Widget>[
-                      Text(
-                        "Categories",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                      getSearchBarUI(context),
+                      Container(
+                        height: 250,
+                        child: Center(
+                          child: ListView.builder(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: homeProvider.top.feed.entry.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              Entry entry = homeProvider.top.feed.entry[index];
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                child: BookCard(
+                                  img: entry.coverImage,
+                                  entry: entry,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  height: 60,
-                  child: Center(
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: homeProvider.top.feed.link.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        Link link = homeProvider.top.feed.link[index];
-
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            stops: [0.015, 0.015],
+                            colors: [
+                              Color.fromRGBO(209, 2, 99, 1),
+                              Theme.of(context).backgroundColor
+                            ],
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Categories",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    child: Genre(
-                                      title: "${link.title}",
-                                      url: link.href,
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: 60,
+                        child: Center(
+                          child: ListView.builder(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: homeProvider.top.feed.link.length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              Link link = homeProvider.top.feed.link[index];
+
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
                                     ),
                                   ),
-                                );
-                              },
-                              child: Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    "${link.title}",
-                                    style: TextStyle(
-                                      color:
-                                      Theme.of(context).primaryColor,
-                                      fontWeight: FontWeight.w500,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child: Genre(
+                                            title: "${link.title}",
+                                            url: link.href,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                          "${link.title}",
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Trending!",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            stops: [0.015, 0.015],
+                            colors: [
+                              Color.fromRGBO(209, 2, 99, 1),
+                              Theme.of(context).backgroundColor
+                            ],
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        "Trending!",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      stops: [0.015, 0.015],
-                      colors: [
-                        Color.fromRGBO(209, 2, 99, 1),
-                        Theme.of(context).backgroundColor
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                GridView.builder(
-                  padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  shrinkWrap: true,
-                  physics: new NeverScrollableScrollPhysics(),
-                  itemCount: 4,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.0,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    Entry entry = homeProvider.trends.feed.entry[index];
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: SpotLight(
-                        img: entry.coverImage,
-                        title: entry.title,
-                        entry: entry,
+                      SizedBox(
+                        height: 5,
                       ),
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      stops: [0.015, 0.015],
-                      colors: [
-                        Color.fromRGBO(209, 2, 99, 1),
-                        Theme.of(context).backgroundColor
-                      ],
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        "Breaking News",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                      GridView.builder(
+                        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                        shrinkWrap: true,
+                        physics: new NeverScrollableScrollPhysics(),
+                        itemCount: 4,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1.0,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          Entry entry = homeProvider.trends.feed.entry[index];
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: SpotLight(
+                              img: entry.coverImage,
+                              title: entry.title,
+                              entry: entry,
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            stops: [0.015, 0.015],
+                            colors: [
+                              Color.fromRGBO(209, 2, 99, 1),
+                              Theme.of(context).backgroundColor
+                            ],
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Breaking News",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: homeProvider.recent.feed.entry.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Entry entry = homeProvider.recent.feed.entry[index];
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: homeProvider.recent.feed.entry.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Entry entry = homeProvider.recent.feed.entry[index];
 
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: BookListItem(
-                        img: entry.coverImage,
-                        title: entry.title,
-                        author: entry.category[0],
-                        desc: entry.summary
-                            .replaceAll(RegExp(r"<[^>]*>"), ''),
-                        entry: entry,
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: BookListItem(
+                              img: entry.coverImage,
+                              title: entry.title,
+                              author: entry.category[0],
+                              desc: entry.summary
+                                  .replaceAll(RegExp(r"<[^>]*>"), ''),
+                              entry: entry,
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
         );
       },
     );
@@ -275,7 +283,7 @@ class Home extends StatelessWidget {
   Widget getSearchBarUI(BuildContext context) {
     // Create a text controller and use it to retrieve the current value
     // of the TextField.
-    final _txtSearch  = TextEditingController();
+    final _txtSearch = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
@@ -337,27 +345,28 @@ class Home extends StatelessWidget {
                 ),
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  _txtSearch.text.isEmpty ? Fluttertoast.showToast(
-                    msg: "You just perform an empty search so we had nothing to show you.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    timeInSecForIosWeb: 5,
-                  )
+                  _txtSearch.text.isEmpty
+                      ? Fluttertoast.showToast(
+                          msg:
+                              "You just perform an empty search so we had nothing to show you.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          timeInSecForIosWeb: 5,
+                        )
                       : Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: Genre(
-                        title: "Search Result",
-                        url: Api.searchUrl+_txtSearch.text,
-                      ),
-                    ),
-                  );
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: Genre(
+                              title: "Search Result",
+                              url: Api.searchUrl + _txtSearch.text,
+                            ),
+                          ),
+                        );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Icon(Icons.search,
-                      size: 25,
-                      color: Theme.of(context).backgroundColor),
+                      size: 25, color: Theme.of(context).backgroundColor),
                 ),
               ),
             ),

@@ -119,13 +119,13 @@ class _LoginScreenState extends State<LoginScreen>
             Others.getSizedBox(boxHeight: 24, boxWidth: 0),
             widget._userType == ClickType.PATIENT
                 ? AppLabels.getLabel(
-              labelText: 'Or connect with',
-              size: 15,
-              labelColor: Colors.grey,
-              isBold: false,
-              isUnderlined: false,
-              alignment: TextAlign.center,
-            )
+                    labelText: 'Or connect with',
+                    size: 15,
+                    labelColor: Colors.grey,
+                    isBold: false,
+                    isUnderlined: false,
+                    alignment: TextAlign.center,
+                  )
                 : Container(),
             Others.getSizedBox(boxHeight: 8, boxWidth: 0),
             _getSocialLoginSection(),
@@ -183,23 +183,23 @@ class _LoginScreenState extends State<LoginScreen>
                     text: 'Ts&Cs, ',
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () => NavigationController.push(
-                        context,
-                        WebViewPage(
-                          link: StringConstants.EULA_LINK,
-                          title: 'Ts&Cs',
-                        ),
-                      ),
+                            context,
+                            WebViewPage(
+                              link: StringConstants.EULA_LINK,
+                              title: 'Ts&Cs',
+                            ),
+                          ),
                   ),
                   TextSpan(
                     text: 'Data Privacy and Protection ',
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () => NavigationController.push(
-                        context,
-                        WebViewPage(
-                          link: StringConstants.PRIVACY_POLICY_LINK,
-                          title: 'Data Privacy and Protection',
-                        ),
-                      ),
+                            context,
+                            WebViewPage(
+                              link: StringConstants.PRIVACY_POLICY_LINK,
+                              title: 'Data Privacy and Protection',
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -222,22 +222,22 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _getSocialLoginSection() {
     return widget._userType == ClickType.PATIENT
         ? Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // _getSocialLoginButton(
-        //   SocialLoginType.FACEBOOK,
-        //   'images/facebook.png',
-        // ),
-        _getSocialLoginButton(
-          SocialLoginType.GOOGLE,
-          'images/google.png',
-        ),
-        // _getSocialLoginButton(
-        //   SocialLoginType.TWITTER,
-        //   'images/twitter.png',
-        // ),
-      ],
-    )
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // _getSocialLoginButton(
+              //   SocialLoginType.FACEBOOK,
+              //   'images/facebook.png',
+              // ),
+              _getSocialLoginButton(
+                SocialLoginType.GOOGLE,
+                'images/google.png',
+              ),
+              // _getSocialLoginButton(
+              //   SocialLoginType.TWITTER,
+              //   'images/twitter.png',
+              // ),
+            ],
+          )
         : Container();
   }
 
@@ -249,10 +249,10 @@ class _LoginScreenState extends State<LoginScreen>
             _handleGoogleLogin();
             break;
           case SocialLoginType.FACEBOOK:
-          // TODO: Handle this case.
+            // TODO: Handle this case.
             break;
           case SocialLoginType.TWITTER:
-          // TODO: Handle this case.
+            // TODO: Handle this case.
             break;
         }
       },
@@ -272,7 +272,17 @@ class _LoginScreenState extends State<LoginScreen>
     });
     bool result = await LoginHelper().loginUsingGoogle();
     if (result) {
-      NavigationController.pushReplacement(context, PatientHome());
+      NavigationController.pushReplacement(
+          context,
+          Provider<NotificationProvider>(
+              create: (context) {
+                NotificationProvider notificationProvider =
+                    NotificationProvider();
+                notificationProvider.firebaseMessaging.subscribeToTopic(
+                    'messages_${FirebaseAuth.instance.currentUser.uid}');
+                return notificationProvider;
+              },
+              child: PatientHome()));
     } else {
       AppToast.showToast(message: 'Error logging in');
       setState(() {
@@ -320,12 +330,12 @@ class _LoginScreenState extends State<LoginScreen>
         await _preferencesHelper.setUserType(widget._userType);
         Object targetScreen;
         switch (widget._userType) {
-        // ignore: missing_enum_constant_in_switch
+          // ignore: missing_enum_constant_in_switch
           case ClickType.PATIENT:
             targetScreen = Provider<NotificationProvider>(
                 create: (context) {
                   NotificationProvider notificationProvider =
-                  NotificationProvider();
+                      NotificationProvider();
                   notificationProvider.firebaseMessaging.subscribeToTopic(
                       'messages_${FirebaseAuth.instance.currentUser.uid}');
                   return notificationProvider;
@@ -337,7 +347,7 @@ class _LoginScreenState extends State<LoginScreen>
             targetScreen = Provider<NotificationProvider>(
                 create: (context) {
                   NotificationProvider notificationProvider =
-                  NotificationProvider();
+                      NotificationProvider();
                   notificationProvider.firebaseMessaging.subscribeToTopic(
                       'messages_${FirebaseAuth.instance.currentUser.uid}');
                   return notificationProvider;

@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/chat/practitioner_chat_screen.dart';
+import 'package:makhosi_app/models/inbox_model.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 
@@ -14,91 +15,109 @@ class Consultations extends StatefulWidget {
 
 enum Sort { onlineClient, newClient, oldClient }
 
-class _ConsultationsState extends State<Consultations>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  List<DocumentSnapshot> _newClientList = [];
+class _ConsultationsState extends State<Consultations> {
+  List<InboxModel> _inboxList = [];
+  StreamSubscription _subscription;
+  String _uid;
 
   Sort _sortBy = Sort.onlineClient;
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
+    _uid = FirebaseAuth.instance.currentUser.uid;
+    _subscription = _inboxStream().listen((inbox) {
+      _inboxList.clear();
+      inbox.docs.forEach((snapshot) {
+        InboxModel model = InboxModel();
+        model.inBoxSnapshot = snapshot;
+        _inboxList.add(model);
+      });
+      setState(() {
+        isLoading = false;
+      });
+    });
     super.initState();
-    // _getConsultationsNewClientData();
-    // _getConsultationsOldClientData();
-    _getConsultationsOnlineData();
-
-    _controller = AnimationController(vsync: this);
   }
-
-  Future<void> _getConsultationsNewClientData() async {
-    setState(() {
-      isLoading = true;
-    });
-    // _uid = FirebaseAuth.instance.currentUser.uid;
-    var _newClientSnapshot = await FirebaseFirestore.instance
-        .collection("consultations")
-        .orderBy("creation_date", descending: true)
-        .get();
-
-    setState(() {
-      _newClientList = _newClientSnapshot.docs;
-      isLoading = false;
-    });
-  }
-
-  Future<void> _getConsultationsOldClientData() async {
-    setState(() {
-      isLoading = true;
-    });
-    // _uid = FirebaseAuth.instance.currentUser.uid;
-    var _oldClientSnapshot = await FirebaseFirestore.instance
-        .collection("consultations")
-        .orderBy("creation_date", descending: false)
-        .get();
-
-    setState(() {
-      _newClientList = _oldClientSnapshot.docs;
-      isLoading = false;
-    });
-  }
-
-  Future<void> _getConsultationsOnlineData() async {
-    setState(() {
-      isLoading = true;
-    });
-    // _uid = FirebaseAuth.instance.currentUser.uid;
-    var _onlineSnapshot = await FirebaseFirestore.instance
-        .collection("consultations")
-        .where("online", isEqualTo: true)
-        .get();
-
-    setState(() {
-      _newClientList = _onlineSnapshot.docs;
-      isLoading = false;
-    });
-  }
-
-  // }
 
   @override
   void dispose() {
+    _subscription.cancel();
     super.dispose();
-    _controller.dispose();
   }
 
-  Widget createbox(DocumentSnapshot client) {
+  Stream<QuerySnapshot> _inboxStream() {
+    switch (_sortBy) {
+      case Sort.oldClient:
+        setState(() {
+          isLoading = true;
+        });
+        return FirebaseFirestore.instance
+            .collection('chats')
+            .doc(_uid)
+            .collection('inbox')
+            .orderBy('timestamp', descending: false)
+            .snapshots();
+      case Sort.newClient:
+        setState(() {
+          isLoading = true;
+        });
+        return FirebaseFirestore.instance
+            .collection('chats')
+            .doc(_uid)
+            .collection('inbox')
+            .orderBy('timestamp', descending: true)
+            .snapshots();
+      case Sort.onlineClient:
+        setState(() {
+          isLoading = true;
+        });
+        return FirebaseFirestore.instance
+            .collection('chats')
+            .doc(_uid)
+            .collection('inbox')
+            .orderBy('timestamp', descending: true)
+            .snapshots();
+      default:
+        setState(() {
+          isLoading = true;
+        });
+        return FirebaseFirestore.instance
+            .collection('chats')
+            .doc(_uid)
+            .collection('inbox')
+            .orderBy('timestamp', descending: true)
+            .snapshots();
+    }
+  }
+
+  Future<void> _getSenderProfile(int position) async {
+    _inboxList[position].senderProfileSnapshot = await FirebaseFirestore
+        .instance
+        .collection('patients')
+        .doc(_inboxList[position].inBoxSnapshot.id)
+        .get();
+    setState(() {});
+  }
+
+  Widget createbox(int position) {
+    InboxModel model = _inboxList[position];
+    // String lastMessage = model.inBoxSnapshot.get('last_message');
+    // Timestamp timestamp = model.inBoxSnapshot.get('timestamp');
+    // lastMessage = lastMessage.length > 20
+    //     \? '${lastMessage.substring(0, 19)}...'
+    //     : lastMessage;
+
+    if (model.senderProfileSnapshot == null) {
+      _getSenderProfile(position);
+    }
     return Column(
       children: [
         GestureDetector(
           onTap: () {
             NavigationController.push(
               context,
-              PractitionerChatScreen(
-                client.get("user_id"),
-              ),
+              PractitionerChatScreen(model.inBoxSnapshot.id),
             );
           },
           child: Container(
@@ -120,12 +139,13 @@ class _ConsultationsState extends State<Consultations>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  client.get("name"),
+                  model.senderProfileSnapshot != null
+                      ? model.senderProfileSnapshot.get('full_name')
+                      : '',
                   style: TextStyle(
                     color: AppColors.SMALL_TEXT,
                     fontWeight: FontWeight.w500,
                     fontSize: 12.0,
-                    fontFamily: 'Montserrat',
                   ),
                 ),
                 Icon(Icons.keyboard_arrow_right),
@@ -194,8 +214,7 @@ class _ConsultationsState extends State<Consultations>
                 leading: Radio(
                   value: Sort.newClient,
                   groupValue: _sortBy,
-                  onChanged: (newCli) async {
-                    await _getConsultationsNewClientData();
+                  onChanged: (newCli) {
                     setState(() {
                       _sortBy = newCli;
                     });
@@ -215,8 +234,7 @@ class _ConsultationsState extends State<Consultations>
                 leading: Radio(
                   value: Sort.onlineClient,
                   groupValue: _sortBy,
-                  onChanged: (onli) async {
-                    await _getConsultationsOnlineData();
+                  onChanged: (onli) {
                     setState(() {
                       _sortBy = onli;
                     });
@@ -236,8 +254,7 @@ class _ConsultationsState extends State<Consultations>
                 leading: Radio(
                   value: Sort.oldClient,
                   groupValue: _sortBy,
-                  onChanged: (old) async {
-                    await _getConsultationsOldClientData();
+                  onChanged: (old) {
                     setState(() {
                       _sortBy = old;
                     });
@@ -248,13 +265,9 @@ class _ConsultationsState extends State<Consultations>
               Expanded(
                 child: isLoading
                     ? Center(child: CircularProgressIndicator())
-                    : ListView(
-                        shrinkWrap: true,
-                        children: _newClientList
-                            .map<Widget>(
-                              (client) => createbox(client),
-                            )
-                            .toList(),
+                    : ListView.builder(
+                        itemCount: _inboxList.length,
+                        itemBuilder: (context, position) => createbox(position),
                       ),
               ),
             ],
