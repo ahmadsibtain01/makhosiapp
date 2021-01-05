@@ -2,24 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
+import 'package:makhosi_app/Screens/instagram.dart';
+import 'package:makhosi_app/Screens/facebook.dart';
+import 'package:makhosi_app/Screens/linkedin.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'dart:async';
 
+import 'package:flutter/services.dart';
 //import 'package:flutter_linkedin/linkedloginflutter.dart';
 //import 'dart:async';
+import 'package:makhosi_app/utils/navigation_controller.dart';
 
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard2 extends StatefulWidget {
-  String firstname, secondname, location, years, language, service;
+  String firstname, secondname, location, years, language, service, instagram, linkedin, fb, whatsapp;
   BusinessCard2(
-      this.firstname, this.secondname, this.location, this.years, this.language, this.service
+      this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
   );
   @override
-  _BusinessCardState createState() => _BusinessCardState(this.firstname, this.secondname, this.location, this.years, this.language, this.service);
+  _BusinessCardState createState() => _BusinessCardState(this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp);
 }
 
 class _BusinessCardState extends State<BusinessCard2> {
-  String firstname, secondname, location,years, language, service;
+  String firstname, secondname, location,years, language, service, instagram,linkedin, fb,whatsapp;
   _BusinessCardState(
-      this.firstname, this.secondname, this.location,this.years, this.language, this.service
+      this.firstname, this.secondname, this.location,this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
 );
   /* static final FacebookLogin facebookSignIn = new FacebookLogin();
   String _message = 'Log in/out by pressing the buttons below.';
@@ -81,6 +88,33 @@ class _BusinessCardState extends State<BusinessCard2> {
       print(error.errorDescription);
     });
   }*/
+  String _platformVersion = 'Unknown';
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await FlutterOpenWhatsapp.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -260,23 +294,43 @@ class _BusinessCardState extends State<BusinessCard2> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(
-                                        'images/administration_images/insta.png'),
+                                    InkWell(
+                                      onTap: () {
+                                        if(instagram!=null)
+                                          {
+                                            NavigationController.push(context, Instagram(instagram));
+                                          }
+                                      },
+                                      child:Image.asset(
+                                          'images/administration_images/insta.png'),
+                                    ),
+
                                     sizeBoxW(30),
                                     InkWell(
                                       onTap: () {
-                                        // login();
+                                        if(linkedin!=null)
+                                          {
+                                            NavigationController.push(context, LinkedIn(linkedin));
+                                          }
                                       },
                                       child: Image.asset(
                                           'images/administration_images/linkedIn.png'),
                                     ),
                                     sizeBoxW(30),
-                                    Image.asset(
+                                    InkWell(
+                                      onTap: (){
+                                        FlutterOpenWhatsapp.sendSingleMessage("03104000953", "Hello");
+                                      },
+                                      child: Image.asset(
                                         'images/administration_images/whatsApp.png'),
+                                    ),
                                     sizeBoxW(30),
                                     InkWell(
                                       onTap: () {
-                                        //_login();
+                                        if(fb!=null)
+                                          {
+                                            NavigationController.push(context, Facebook(fb));
+                                          }
                                       },
                                       child: Image.asset(
                                           'images/administration_images/facebook.png'),

@@ -69,6 +69,8 @@ dependencies:
   intl: ^0.16.1
   rxdart: ^0.25.0
   weather: ^1.2.4
+  flutter_inappwebview: ^4.0.0+4
+  flutter_open_whatsapp: ^0.1.2
   #flutter_linkedin: ^1.0.2
   #flutter_facebook_login: ^3.0.0
 

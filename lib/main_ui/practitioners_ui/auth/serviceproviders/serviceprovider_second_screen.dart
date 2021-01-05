@@ -34,7 +34,11 @@ class _PractitionerRegisterScreenSecondState
     implements IRoundedButtonClicked, IClickableClicked {
   var _yearsInPracticeController = TextEditingController();
   var _websiteLinkController = TextEditingController();
-  var _socialMediaUsernameController = TextEditingController();
+  var _socialMediaUsernameControllerInstagram = TextEditingController();
+  var _socialMediaUsernameControllerLinkedIn = TextEditingController();
+  var _socialMediaUsernameControllerFacebook = TextEditingController();
+  var _socialMediaUsernameControllerWhatsapp= TextEditingController();
+
   var _deliveryPriceController = TextEditingController();
   var _consultationFeeController = TextEditingController();
   TimingModel _timingModel;
@@ -45,7 +49,7 @@ class _PractitionerRegisterScreenSecondState
   String _selectedPaymentType;
   //checkbox
   bool isBuisnessWebsite = false;
-  bool isSocialMedia = false;
+  bool isSocialMediaInsta=false, isSocialMediaLinkedIn=false, isSocialMediaFb  = false, isSocialMediaWhatsapp=false;
   bool isDelivery = false;
   bool sickNote = false, invoice = false, quotation = false;
   //formkey
@@ -138,13 +142,13 @@ class _PractitionerRegisterScreenSecondState
           //do you have social media check boxes
           CheckboxListTile(
             title: Text(
-              "Do you have social media accounts?",
+              "Do you have instagram account?",
               style: TextStyle(fontSize: 15.0),
             ),
-            value: isSocialMedia,
+            value: isSocialMediaInsta,
             onChanged: (newValue) {
               setState(() {
-                isSocialMedia = newValue;
+                isSocialMediaInsta = newValue;
               });
             },
             controlAffinity:
@@ -152,10 +156,10 @@ class _PractitionerRegisterScreenSecondState
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           Visibility(
-            visible: isSocialMedia,
+            visible: isSocialMediaInsta,
             child: AppTextFields.getTextField(
-              controller: _socialMediaUsernameController,
-              label: 'Please enter social media account username',
+              controller: _socialMediaUsernameControllerInstagram,
+              label: 'Please enter instagram account username',
               isPassword: false,
               isNumber: false,
             ),
@@ -167,6 +171,81 @@ class _PractitionerRegisterScreenSecondState
           //   isPassword: false,
           //   isNumber: false,
           // ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          CheckboxListTile(
+            title: Text(
+              "Do you have linkedIn account?",
+              style: TextStyle(fontSize: 15.0),
+            ),
+            value: isSocialMediaLinkedIn,
+            onChanged: (newValue) {
+              setState(() {
+                isSocialMediaLinkedIn = newValue;
+              });
+            },
+            controlAffinity:
+            ListTileControlAffinity.trailing, //  <-- leading Checkbox
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          Visibility(
+            visible: isSocialMediaLinkedIn,
+            child: AppTextFields.getTextField(
+              controller: _socialMediaUsernameControllerLinkedIn,
+              label: 'Please enter linkedIn account url',
+              isPassword: false,
+              isNumber: false,
+            ),
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          CheckboxListTile(
+            title: Text(
+              "Do you have Facebook account?",
+              style: TextStyle(fontSize: 15.0),
+            ),
+            value: isSocialMediaFb,
+            onChanged: (newValue) {
+              setState(() {
+                isSocialMediaFb = newValue;
+              });
+            },
+            controlAffinity:
+            ListTileControlAffinity.trailing, //  <-- leading Checkbox
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          Visibility(
+            visible: isSocialMediaFb,
+            child: AppTextFields.getTextField(
+              controller: _socialMediaUsernameControllerFacebook,
+              label: 'Please enter facebook account url',
+              isPassword: false,
+              isNumber: false,
+            ),
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          CheckboxListTile(
+            title: Text(
+              "Do you have Whatsapp account?",
+              style: TextStyle(fontSize: 15.0),
+            ),
+            value: isSocialMediaWhatsapp,
+            onChanged: (newValue) {
+              setState(() {
+                isSocialMediaWhatsapp = newValue;
+              });
+            },
+            controlAffinity:
+            ListTileControlAffinity.trailing, //  <-- leading Checkbox
+          ),
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          Visibility(
+            visible: isSocialMediaWhatsapp,
+            child: AppTextFields.getTextField(
+              controller: _socialMediaUsernameControllerWhatsapp,
+              label: 'Please enter your whatsapp number',
+              isPassword: false,
+              isNumber: false,
+            ),
+          ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           //do you have delivery service check boxes
           CheckboxListTile(
@@ -357,7 +436,11 @@ class _PractitionerRegisterScreenSecondState
     if (_formKey.currentState.validate()) {
       String practiceYears = _yearsInPracticeController.text.trim();
       String website_link = _websiteLinkController.text.trim();
-      String social_media_link = _socialMediaUsernameController.text.trim();
+      String social_media_link = _socialMediaUsernameControllerInstagram.text.trim();
+      String social_media_link2 = _socialMediaUsernameControllerLinkedIn.text.trim();
+      String social_media_link3= _socialMediaUsernameControllerFacebook.text.trim();
+      String social_media_link4= _socialMediaUsernameControllerWhatsapp.text.trim();
+
       String delivery_price = _deliveryPriceController.text.trim();
       String consultation_fee = _consultationFeeController.text.trim();
       if (_selectedPractice == null) {
@@ -372,9 +455,18 @@ class _PractitionerRegisterScreenSecondState
           AppKeys.PRACTICE_YEARS: practiceYears,
           AppKeys.COMPANY_WEBSITE: isBuisnessWebsite,
           AppKeys.COMPANY_WEBSITE_LINK: isBuisnessWebsite ? website_link : null,
-          AppKeys.SOCIAL_MEDIA: isSocialMedia,
-          AppKeys.LIST_OF_SOCIAL_MEDIA:
-              isSocialMedia ? [social_media_link] : null,
+          AppKeys.SOCIAL_MEDIA: isSocialMediaInsta,
+          AppKeys.LIST_OF_SOCIAL_MEDIA: isSocialMediaInsta ? social_media_link: null,
+
+          AppKeys.isSocialMediaLinkedIn: isSocialMediaLinkedIn,
+          AppKeys.LinkedInList: isSocialMediaLinkedIn ? social_media_link2: null,
+
+          AppKeys.isSocialMediaFb: isSocialMediaFb,
+          AppKeys.FbList: isSocialMediaFb ? social_media_link3: null,
+
+          AppKeys.isSocialMediaWhatsapp: isSocialMediaWhatsapp,
+          AppKeys.WhatsappList: isSocialMediaWhatsapp ? social_media_link4: null,
+
           AppKeys.IS_DELIVER: isDelivery,
           AppKeys.DELIVERY_PRICE: isDelivery ? delivery_price : null,
           AppKeys.TIMINGS: {
