@@ -11,7 +11,7 @@ import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
-import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
 
 class NearbyPractitionersTab extends StatefulWidget {
   @override
@@ -168,7 +168,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
           ),
           elevation: 3,
           child: Padding(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(2),
             child: Column(
               children: [
                 Row(
@@ -223,11 +223,50 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
   Widget _getPractitionerRow(dynamic snapshot) {
     bool isOnline=false;
+    String firstName = " ";
+    String secondName = " ";
+    String location = " ";
+    String years=" ";
+    String language=" ";
+    String service=" ";
+    dynamic instagram=" ";
+    dynamic linkedin=" ";
+    dynamic fb=" ";
+    dynamic whatsapp=" ";
+    whatsapp=snapshot['WhatsappList'];
+
+
+    firstName = snapshot[AppKeys.FIRST_NAME];
+    secondName = snapshot[AppKeys.SECOND_NAME];
+    location = snapshot[AppKeys.ADDRESS];
+    years=snapshot[AppKeys.PRACTICE_YEARS];
+    language=snapshot[AppKeys.LANGUAGES];
+    service=snapshot[AppKeys.SERVICE_TYPE];
+    instagram=snapshot[AppKeys.LIST_OF_SOCIAL_MEDIA];
+    linkedin=snapshot['LinkedInList'];
+    fb=snapshot['FbList'];
+    if (firstName == null) {
+      firstName = " ";
+    }
+
+    if (secondName == null) {
+      secondName = " ";
+    }
+
+    if (location == null) {
+      location = " ";
+    }
+
+    if (instagram == null) {
+      instagram = " ";
+    }
+
+
     if(snapshot[AppKeys.ONLINE]!=null) {
       isOnline= snapshot[AppKeys.ONLINE];
     }
     String name =
-        '${snapshot[AppKeys.FIRST_NAME]} ${snapshot[AppKeys.SECOND_NAME]}';
+        '${snapshot[AppKeys.FIRST_NAME]} ${snapshot[AppKeys.LAST_NAME]}';
     if (name.length > 30) {
       name = '${name.substring(0, 27)}...';
     }
@@ -298,10 +337,8 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                       ),
                       color: AppColors.COLOR_PRIMARY,
                       onPressed: () {
-                        NavigationController.push(
-                          context,
-                          BusinessCard(),
-                        );
+                        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
+
                       },
                       child: Text(
                         'View More',

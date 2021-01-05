@@ -1,4 +1,13 @@
 class AppKeys {
+  static const isSocialMediaLinkedIn = 'isSocialMediaLinkedIn';
+  static const isSocialMediaFb = 'isSocialMediaFb';
+  static const LinkedInList = 'LinkedInList';
+  static const FbList = 'FbList';
+  static const isSocialMediaWhatsapp = 'isSocialMediaWhatsapp';
+  static const WhatsappList = 'WhatsappList';
+
+
+
   static const USER_TYPE = 'user_type';
   static const APP_LANGUAGE = 'AppLanguage';
   static const APP_COUNTRY = 'AppCountry';
