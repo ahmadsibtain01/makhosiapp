@@ -292,7 +292,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                       Column(
                         children: [
                           Text(
-                            '2/3',
+                            '2.3',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 21,

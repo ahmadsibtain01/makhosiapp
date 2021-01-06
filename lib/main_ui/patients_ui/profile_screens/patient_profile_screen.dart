@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:makhosi_app/tabs/near2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -26,6 +26,7 @@ import 'package:makhosi_app/thirdMain.dart';
 import 'package:makhosi_app/main_ui/general_ui/settingpage2.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_inbox_screen.dart';
+import 'package:makhosi_app/main_ui/patients_ui/auth/update.dart';
 class PatientProfileScreen extends StatefulWidget {
   DocumentSnapshot _snapshot;
   bool _isViewer;
@@ -52,6 +53,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
   Widget build(BuildContext context) {
     finished();
     return Scaffold(
+
       body: Stack(
         children: [
 
@@ -65,19 +67,8 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
               fit: BoxFit.cover,
             ),
           ),
-          new Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: AppBar(
-              title: Text(''),// You can add title here
-              leading: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: AppColors.COLOR_PRIMARY, size: 40,),
-                onPressed: (){Navigator.of(context).pop();},
-              ),
-              backgroundColor: Colors.blue.withOpacity(0.1), //You can make this transparent
-              elevation: 0.0, //No shadow
-            ),),
+
+
           SingleChildScrollView(
             child: Column(
               children: [
@@ -100,6 +91,18 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                 },
                 child: Image.asset('images/logout.png'),
               )
+          ),
+          Align(
+            alignment: Alignment(-0.86, -0.88),
+            child:  GestureDetector(
+              onTap: (){
+                Navigator.of(context).pop();
+              },
+              child: Image.asset(
+                  'images/back_ar.png'
+              ),
+
+            ),
           ),
         ],
       ),
@@ -232,7 +235,7 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                             Column(
                               children: [
                                 Text(
-                                  '2/5',
+                                  '2.5',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,
@@ -303,6 +306,10 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
                           ),
                           color: AppColors.COLOR_PRIMARY,
                           onPressed: () {
+                            NavigationController.pushReplacement(
+                              context,
+                              PatientRegisterScreen2(),
+                            );
                             //NavigationController.push(
                             //context,
                             //BLogHomeScreen(_snapshot.id, true),
@@ -369,7 +376,12 @@ class _PatientProfileScreenState extends State<PatientProfileScreen>
     child: FlatButton(
     height: 45,
     //minWidth: 50,
-    onPressed: null,
+    onPressed: (){
+      NavigationController.push(
+        context,
+        NearbyPractitionersTab2(),
+      );
+    },
     child: Row(
     children: [
     Text('FIND A SERVICE', style: TextStyle(

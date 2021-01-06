@@ -14,14 +14,13 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
 import 'package:clay_containers/clay_containers.dart';
 import 'package:rating_bar/rating_bar.dart';
-import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 
-class NearbyPractitionersTab extends StatefulWidget {
+class NearbyPractitionersTab2 extends StatefulWidget {
   @override
   _NearbyPractitionersTabState createState() => _NearbyPractitionersTabState();
 }
 
-class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
+class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
   List<dynamic> _practitioners = null;
   String _userCity, _mapStyle;
   bool _isLoading = true;
@@ -34,7 +33,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   @override
   void initState() {
     _practitioners=new List();
-  _getLocation();
+    _getLocation();
     super.initState();
   }
 
@@ -55,7 +54,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
       );
       List<Address> addressList = await Geocoder.local
           .findAddressesFromCoordinates(
-              Coordinates(locationData.latitude, locationData.longitude));
+          Coordinates(locationData.latitude, locationData.longitude));
       if (addressList.isNotEmpty) {
         _userCity = addressList[0].subAdminArea;
         await _loadMapStyle();
@@ -103,7 +102,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
             icon: _customMarker,
             infoWindow: InfoWindow(
                 title:
-                    '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
+                '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
             position: LatLng(
               doc[AppKeys.COORDINATES][AppKeys.LATITUDE],
               doc[AppKeys.COORDINATES][AppKeys.LONGITUDE],
@@ -126,14 +125,19 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
-        : _error != null
-            ? AppStatusComponents.errorBody(message: _error)
-            : _practitioners.isEmpty
-                ? AppStatusComponents.errorBody(
-                    message: 'No practitioner in your area')
-                : _getBody();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Find A Service'),
+      ),
+      body: _isLoading
+          ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
+          : _error != null
+          ? AppStatusComponents.errorBody(message: _error)
+          : _practitioners.isEmpty
+          ? AppStatusComponents.errorBody(
+          message: 'No practitioner in your area')
+          : _getBody(),
+    );
   }
 
   Widget _getBody() {
@@ -158,127 +162,127 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
   Widget _getPractitionersCount() {
     return Align(
-      alignment: Alignment.topLeft,
-      child: Row(
-        children: [
-          Container(
-            height: 135,
-            width: 150,
-            margin: EdgeInsets.only(left: 16, top: 16),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              elevation: 3,
-              child: Padding(
-                padding: EdgeInsets.all(2),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset('images/Oval.png'),
-                        Others.getSizedBox(boxHeight: 0, boxWidth: 5),
+        alignment: Alignment.topLeft,
+        child: Row(
+          children: [
+            Container(
+              height: 135,
+              width: 150,
+              margin: EdgeInsets.only(left: 16, top: 16),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 3,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset('images/Oval.png'),
+                          Others.getSizedBox(boxHeight: 0, boxWidth: 5),
 
-                        Text(
-                          'Traditional\n Healer',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          _practitioners.length.toString(),
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Others.getSizedBox(boxHeight: 0, boxWidth: 8),
-                        Text(
-                          '${_practitioners.length == 1 ? 'Practitioner' : 'Practitioners'}\nFound',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-                    Text(
-                      'Around You',
-                      style: TextStyle(
-                        fontSize: 13,
+                          Text(
+                            'Traditional\n Healer',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                      Row(
+                        children: [
+                          Text(
+                            _practitioners.length.toString(),
+                            style: TextStyle(
+                              fontSize: 32,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Others.getSizedBox(boxHeight: 0, boxWidth: 8),
+                          Text(
+                            '${_practitioners.length == 1 ? 'Practitioner' : 'Practitioners'}\nFound',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+                      Text(
+                        'Around You',
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            height: 135,
-            width: 150,
-            margin: EdgeInsets.only(left: 16, top: 16),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              elevation: 3,
-              child: Padding(
-                padding: EdgeInsets.all(2),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset('images/Oval.png'),
-                        Others.getSizedBox(boxHeight: 0, boxWidth: 5),
+            Container(
+              height: 135,
+              width: 150,
+              margin: EdgeInsets.only(left: 16, top: 16),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 3,
+                child: Padding(
+                  padding: EdgeInsets.all(2),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset('images/Oval.png'),
+                          Others.getSizedBox(boxHeight: 0, boxWidth: 5),
 
-                        Text(
-                          'Mechanics',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          _practitioners.length.toString(),
-                          style: TextStyle(
-                            fontSize: 32,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Others.getSizedBox(boxHeight: 0, boxWidth: 8),
-                        Text(
-                          '${_practitioners.length == 1 ? 'Mechanic' : 'Mechanics'}\nFound',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Others.getSizedBox(boxHeight: 8, boxWidth: 0),
-                    Text(
-                      'Around You',
-                      style: TextStyle(
-                        fontSize: 13,
+                          Text(
+                            'Mechanics',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                      Row(
+                        children: [
+                          Text(
+                            _practitioners.length.toString(),
+                            style: TextStyle(
+                              fontSize: 32,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Others.getSizedBox(boxHeight: 0, boxWidth: 8),
+                          Text(
+                            '${_practitioners.length == 1 ? 'Mechanic' : 'Mechanics'}\nFound',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+                      Text(
+                        'Around You',
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      )
+          ],
+        )
     );
   }
 
@@ -363,21 +367,21 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                 children: [
                   snapshot[AppKeys.PROFILE_IMAGE] != null
                       ? CircleAvatar(
-                          radius: 20,
-                          backgroundImage:
-                              NetworkImage(snapshot[AppKeys.PROFILE_IMAGE]),
-                        )
+                    radius: 20,
+                    backgroundImage:
+                    NetworkImage(snapshot[AppKeys.PROFILE_IMAGE]),
+                  )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(32),
-                          child: Container(
-                            color: Colors.black12,
-                            child: Icon(
-                              Icons.person,
-                              size: 40,
-                              color: Colors.black38,
-                            ),
-                          ),
-                        ),
+                    borderRadius: BorderRadius.circular(32),
+                    child: Container(
+                      color: Colors.black12,
+                      child: Icon(
+                        Icons.person,
+                        size: 40,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ),
                   Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                   Expanded(
                     child: Text(
@@ -396,25 +400,25 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
                 ],
               ),
-Container(
-  width: 190,
-  height: 12,
+              Container(
+                width: 190,
+                height: 12,
 
-  child: Row(
-    children: [
-      Others.getSizedBox(boxHeight: 0, boxWidth: 23),
-      Expanded(
-        child: Text(
-          location,
-          style: TextStyle(
-            fontSize: 8,
-          ),
-        ),
-      ),
-    ],
+                child: Row(
+                  children: [
+                    Others.getSizedBox(boxHeight: 0, boxWidth: 23),
+                    Expanded(
+                      child: Text(
+                        location,
+                        style: TextStyle(
+                          fontSize: 8,
+                        ),
+                      ),
+                    ),
+                  ],
 
-  ),
-),
+                ),
+              ),
 
               Row(
                 children: [
@@ -472,13 +476,10 @@ Container(
                     borderRadius: 50,
                     child:   GestureDetector(
                       onTap: () {
-                        NavigationController.push(
-                          context,
-                          PatientChatScreen(snapshot['id']),
-                        );
+                        //TODO: take user to chat screen
                       },
                       child: Image.asset(
-                        'images/msg.png'
+                          'images/msg.png'
                       ),
                     ),
 
@@ -508,7 +509,7 @@ Container(
                   ),
                 ],
               ),
-           //   Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+              //   Others.getSizedBox(boxHeight: 8, boxWidth: 0),
 
             ],
           ),
