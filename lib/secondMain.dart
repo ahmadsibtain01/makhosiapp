@@ -8,10 +8,12 @@ import 'providers/details_provider.dart';
 import 'ui/splash.dart';
 import 'helper/constants.dart';
 import 'ui_user/login.dart';
+
 class app extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print('Main2');
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppProvider()),
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: appProvider.navigatorKey,
           title: Constants.appName,
           theme: appProvider.theme,
-          home: appProvider.isLogin ==  "0" ? LoginPage() : Splash(),
+          home: appProvider.isLogin == "0" ? LoginPage() : Splash(),
         );
       },
     );

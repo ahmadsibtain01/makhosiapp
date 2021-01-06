@@ -7,6 +7,7 @@ import 'package:makhosi_app/utils/app_colors.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  print('main1');
   //SharedPreferences.setMockInitialValues({});
   runApp(
     MaterialApp(

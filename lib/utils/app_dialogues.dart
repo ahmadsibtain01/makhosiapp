@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
+import 'package:makhosi_app/ui/newfolder_popup.dart.dart';
 
 class AppDialogues {
   static void showConfirmationDialogue({
@@ -30,6 +31,19 @@ class AppDialogues {
           ),
         ],
       ),
+    );
+  }
+
+  static showNewFolderPopup(context, controller, {onCreateFolder}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomNewFolderDialogBox(
+          // formKey: formKey,
+          folderNameController: controller,
+          onCreateFolder: onCreateFolder,
+        );
+      },
     );
   }
 }
