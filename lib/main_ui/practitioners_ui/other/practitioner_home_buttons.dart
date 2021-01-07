@@ -241,13 +241,29 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
                   ClientRecords(),
                 );
               },
-              child: Icon(Icons.storage, color: AppColors.COLOR_PRIMARY),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Icon(Icons.storage, color: AppColors.COLOR_PRIMARY),
+              ),
             ),
             GestureDetector(
               onTap: () {
                 //logout
+                print('logout');
+                Others.showInfoDialog(
+                  context: context,
+                  title: 'Log Out?',
+                  message: 'Are youn sure you want to log out of the app?',
+                  positiveButtonLabel: 'LOG OUT',
+                  negativeButtonLabel: 'CANCEL',
+                  iInfoDialogClicked: this,
+                  isInfo: false,
+                );
               },
-              child: Icon(Icons.logout, color: AppColors.COLOR_PRIMARY),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Icon(Icons.logout, color: AppColors.COLOR_PRIMARY),
+              ),
             ),
           ],
         ),

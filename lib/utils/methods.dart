@@ -28,4 +28,21 @@ class Methods {
     String totalBytes = formatBytes(bytes);
     return totalBytes;
   }
+
+  static int totalFoldersSizedInInt(List<Folders> folderList) {
+    int bytes = 0;
+    for (var folder in folderList) {
+      bytes += folder.foldersize;
+    }
+    return bytes;
+  }
+
+  static String totalFreeSpace(int totalUseSpace, int totalSpace) {
+    totalSpace = totalSpace * 1073741824;
+    print('totaluse: ' + totalUseSpace.toString());
+    print('totalspace: ' + totalSpace.toString());
+    int bytes = totalSpace - totalUseSpace; // 1 GB = 1073741824 bytes
+    String totalBytes = formatBytes(bytes, decimals: 1);
+    return totalBytes;
+  }
 }

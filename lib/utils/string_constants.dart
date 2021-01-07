@@ -103,4 +103,7 @@ E.	Ability to get sick notes and invoices from trusted service providers
     "Xhosa",
     "Tsonga"
   ];
+
+  static const String upgradeStorageTxt =
+      'To add more storage space, you have to upgrade your subscription plan. Or alternatively should you encounter any trouble or difficulties please contact our support team: support@mkhosi.com';
 }

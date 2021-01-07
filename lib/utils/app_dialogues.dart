@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
+import 'package:makhosi_app/ui/customstoragepopup.dart';
 import 'package:makhosi_app/ui/newfolder_popup.dart.dart';
 
 class AppDialogues {
@@ -43,6 +44,15 @@ class AppDialogues {
           folderNameController: controller,
           onCreateFolder: onCreateFolder,
         );
+      },
+    );
+  }
+
+  static showUpgradeStoragePopup(context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomUpgradeStorageDialogBox();
       },
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:makhosi_app/Assets/app_assets.dart';
 import 'package:makhosi_app/Assets/custom_listtile.dart';
 import 'package:makhosi_app/Screens/folderview.dart';
+import 'package:makhosi_app/Screens/mypersonal_drive.dart';
 import 'package:makhosi_app/models/folder.dart';
 import 'package:makhosi_app/utils/app_dialogues.dart';
 import 'package:makhosi_app/utils/file_picker_service.dart';
@@ -54,7 +55,19 @@ class _ClientRecordsState extends State<ClientRecords> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image(image: AssetImage('images/ic_back.png')),
-                Image(image: AssetImage('images/ic_popmenu.png')),
+                GestureDetector(
+                    onTap: () {
+                      NavigationController.push(
+                          context,
+                          MyPersonalStorage(
+                            totalUseStorageSize:
+                                Methods.totalFoldersSizedInInt(listOfFolders),
+                          ));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image(image: AssetImage('images/ic_popmenu.png')),
+                    )),
               ],
             ),
           ),
@@ -151,6 +164,7 @@ class _ClientRecordsState extends State<ClientRecords> {
                         ),
                         listOfFolders.length != 0
                             ? ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
                                 itemCount: listOfFolders.length,
                                 itemBuilder: (context, index) {
