@@ -8,10 +8,12 @@ import 'providers/details_provider.dart';
 import 'ui/splash2.dart';
 import 'helper/constants.dart';
 import 'ui_user/login.dart';
+
 class app extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print('main3');
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppProvider()),

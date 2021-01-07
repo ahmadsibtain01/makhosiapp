@@ -4,8 +4,9 @@ import 'package:makhosi_app/main_ui/administration/report.dart';
 import 'package:makhosi_app/main_ui/administration/request.dart';
 import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
-
-
+import 'package:makhosi_app/Screens/account_screen.dart';
+import 'package:makhosi_app/Screens/bottomnav.dart';
+import 'package:makhosi_app/main_ui/administration/report.dart';
 class Admin extends StatefulWidget {
   @override
   _AdminState createState() => _AdminState();
@@ -197,7 +198,7 @@ class _AdminState extends State<Admin> {
         onTap: (index){
           if(index==1){
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context)=> BusinessCard()
+                builder: (context)=> MainDashboardScreen()
             ));
           }
           else if(index==2){

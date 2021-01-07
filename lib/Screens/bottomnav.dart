@@ -13,32 +13,52 @@ class MainDashboardScreen extends StatefulWidget {
 }
 
 class _MainDashboardScreenState extends State<MainDashboardScreen> {
-
   int _pageIndex = 0;
   GlobalKey _bottomNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-
     final List<Widget> _bottomNavChilds = [
       ClientRecords(),
-      MyPersonalStorage(),
+      MyPersonalStorage(
+        totalUseStorageSize: 0,
+      ),
       AccountsScreen(),
       SummaryScreen(),
       NotificationScreen(),
-
     ];
 
     //BottomNavigationBar
-    CurvedNavigationBar bottomNav = new CurvedNavigationBar(key: _bottomNavigationKey,
+    CurvedNavigationBar bottomNav = new CurvedNavigationBar(
+      key: _bottomNavigationKey,
       index: 0,
       height: 60.0,
       items: <Widget>[
-        Icon(Icons.folder_outlined, size: 30, color: Colors.white,),
-        Icon(Icons.data_usage, size: 30,  color: Colors.white,),
-        Icon(Icons.account_balance_outlined, size: 25,  color: Colors.white,),
-        Icon(Icons.legend_toggle, size: 30,  color: Colors.white,),
-        Icon(Icons.notifications_none, size: 30,  color: Colors.white,),
+        Icon(
+          Icons.folder_outlined,
+          size: 30,
+          color: Colors.white,
+        ),
+        Icon(
+          Icons.data_usage,
+          size: 30,
+          color: Colors.white,
+        ),
+        Icon(
+          Icons.account_balance_outlined,
+          size: 25,
+          color: Colors.white,
+        ),
+        Icon(
+          Icons.legend_toggle,
+          size: 30,
+          color: Colors.white,
+        ),
+        Icon(
+          Icons.notifications_none,
+          size: 30,
+          color: Colors.white,
+        ),
       ],
       color: AppColors.themecolor,
       buttonBackgroundColor: AppColors.themecolor,
