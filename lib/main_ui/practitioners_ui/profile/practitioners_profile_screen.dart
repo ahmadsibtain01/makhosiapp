@@ -13,6 +13,7 @@ import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_home_but
 import 'package:makhosi_app/ui/ratingstaticpage.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
+import 'package:makhosi_app/utils/app_dialogues.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
@@ -265,27 +266,32 @@ class _PractitionersProfileScreenState
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Column(
-                            children: [
-                              Text(
-                                '0',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 21,
-                                  color: Colors.black,
-                                  // fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            onTap: () {
+                              AppDialogues.showNoOfClientsPopup(context);
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  '0',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 21,
+                                    color: Colors.black,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'N0. OF CLIENTS',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.bold,
+                                Text(
+                                  'N0. OF CLIENTS',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           Container(
                             margin: EdgeInsets.only(left: 10, right: 10),
@@ -327,27 +333,32 @@ class _PractitionersProfileScreenState
                             width: 2,
                             color: Colors.black38,
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                '2000',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 21,
-                                  color: Colors.black,
-                                  //fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            onTap: () {
+                              AppDialogues.showEarningPopup(context);
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  '2000',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 21,
+                                    color: Colors.black,
+                                    //fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'TOTAL EARNINGS (ZAR)',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.bold,
+                                Text(
+                                  'TOTAL EARNINGS (ZAR)',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
 import 'package:makhosi_app/ui/customstoragepopup.dart';
+import 'package:makhosi_app/ui/earningpopup.dart';
 import 'package:makhosi_app/ui/newfolder_popup.dart.dart';
+import 'package:makhosi_app/ui/noofclientspopup.dart';
 
 class AppDialogues {
   static void showConfirmationDialogue({
@@ -53,6 +55,24 @@ class AppDialogues {
       context: context,
       builder: (BuildContext context) {
         return CustomUpgradeStorageDialogBox();
+      },
+    );
+  }
+
+  static showNoOfClientsPopup(context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return NoOfClientsDialogBox();
+      },
+    );
+  }
+
+  static showEarningPopup(context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EarningDialogBox();
       },
     );
   }
