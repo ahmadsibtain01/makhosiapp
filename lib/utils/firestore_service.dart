@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:makhosi_app/models/folder.dart';
 
-class FirestoreService {
+class FirestoreService extends ChangeNotifier {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -36,6 +36,19 @@ class FirestoreService {
     } catch (error) {
       print(error.toString());
       return [];
+    }
+  }
+
+  updateFolder(Folders folder) async {
+    try {
+      await db
+          .collection('service_provider')
+          .doc(auth.currentUser.uid)
+          .collection('folders')
+          .doc(folder.reference.id)
+          .update(folder.toMap());
+    } catch (error) {
+      print(error.toString());
     }
   }
 

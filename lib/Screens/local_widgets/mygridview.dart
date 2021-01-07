@@ -33,7 +33,8 @@ class MyGridView extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: url,
                   fit: BoxFit.cover,
-                  placeholder: (context, string) => CircularProgressIndicator(),
+                  placeholder: (context, string) =>
+                      Center(child: CircularProgressIndicator()),
                 ),
               )),
         );

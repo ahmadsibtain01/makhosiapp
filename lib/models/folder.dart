@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Folders {
   String _foldername;
-  String _foldersize;
+  int _foldersize;
   List<String> _listOfFilesUrl;
   DocumentReference reference;
 
@@ -26,7 +26,10 @@ class Folders {
   Folders.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
+  //getters
   String get foldername => _foldername;
-  String get foldersize => _foldersize;
+  int get foldersize => _foldersize;
   List<String> get listOfFilesUrl => _listOfFilesUrl;
+  //setters
+  set foldersize(int value) => _foldersize = value;
 }

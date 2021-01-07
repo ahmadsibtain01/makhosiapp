@@ -5,8 +5,12 @@ import 'package:makhosi_app/Assets/custom_listtile.dart';
 import 'package:makhosi_app/Screens/folderview.dart';
 import 'package:makhosi_app/models/folder.dart';
 import 'package:makhosi_app/utils/app_dialogues.dart';
+import 'package:makhosi_app/utils/file_picker_service.dart';
+import 'package:makhosi_app/utils/firebasestorageservice.dart';
 import 'package:makhosi_app/utils/firestore_service.dart';
+import 'package:makhosi_app/utils/methods.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:provider/provider.dart';
 
 class ClientRecords extends StatefulWidget {
   @override
@@ -83,7 +87,7 @@ class _ClientRecordsState extends State<ClientRecords> {
                     Padding(
                       padding: const EdgeInsets.only(top: 15.0),
                       child: Text(
-                        "32 items . 350 Mb",
+                        "${Methods.getItemCount(listOfFolders)} items . ${Methods.totalFoldersSized(listOfFolders)}",
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.normal,
@@ -98,17 +102,17 @@ class _ClientRecordsState extends State<ClientRecords> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15.0),
-            child: Text(
-              "Last update 10 October 2020 .",
-              style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.grey,
-                  fontFamily: 'Poppins'),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 15.0),
+          //   child: Text(
+          //     "Last update 10 October 2020 .",
+          //     style: TextStyle(
+          //         fontSize: 11,
+          //         fontWeight: FontWeight.normal,
+          //         color: Colors.grey,
+          //         fontFamily: 'Poppins'),
+          //   ),
+          // ),
           Stack(
             children: [
               Padding(
@@ -151,21 +155,24 @@ class _ClientRecordsState extends State<ClientRecords> {
                                 itemCount: listOfFolders.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
-                                    onTap: () {
-                                      NavigationController.push(
-                                        context,
-                                        FolderViewPage(
-                                          folderFilesUrls: listOfFolders[index]
-                                              .listOfFilesUrl,
-                                          title:
-                                              listOfFolders[index].foldername,
-                                        ),
-                                      );
+                                    onTap: () async {
+                                      Provider.of<FilePickerService>(context,
+                                              listen: false)
+                                          .clearFilePickItem();
+
+                                      await Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return FolderViewPage(
+                                          folder: listOfFolders[index],
+                                        );
+                                      }));
+
+                                      setState(() {});
                                     },
                                     child: items12(
                                       title: listOfFolders[index].foldername,
                                       subtitle:
-                                          '${listOfFolders[index].listOfFilesUrl.length} items, ${listOfFolders[index].foldersize}',
+                                          '${listOfFolders[index].listOfFilesUrl.length} items, ${Methods.formatBytes(listOfFolders[index].foldersize)}',
                                     ),
                                   );
                                 },
@@ -191,7 +198,7 @@ class _ClientRecordsState extends State<ClientRecords> {
                         context,
                         foldernameController,
                         onCreateFolder: (foldername) async {
-                          final folder = Folders(foldername, '0', []);
+                          final folder = Folders(foldername, 0, []);
                           await database.createFolder(folder);
                           setState(() {
                             listOfFolders.add(folder);

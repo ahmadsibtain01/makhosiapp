@@ -51,6 +51,15 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+<array>
+   <string>fetch</string>
+   <string>remote-notification</string>
+</array>
+<key>NSAppleMusicUsageDescription</key>
+<string>Need Files access</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Needs photo access</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
