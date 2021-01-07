@@ -108,7 +108,7 @@ class _PractitionersHomeState extends State<PractitionersHome> {
               break;
             case 'text':
               NavigationController.push(context,
-                  PractitionerChatScreen(message['data']['patientUid']));
+                  PractitionerChatScreen(patientUid:message['data']['patientUid']));
 
               break;
             default:
@@ -137,7 +137,7 @@ class _PractitionersHomeState extends State<PractitionersHome> {
               break;
             case 'text':
               NavigationController.push(context,
-                  PractitionerChatScreen(message['data']['patientUid']));
+                  PractitionerChatScreen(patientUid:message['data']['patientUid']));
               break;
             default:
           }

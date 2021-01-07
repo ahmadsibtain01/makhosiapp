@@ -131,7 +131,7 @@ class _AdminState extends State<Admin> {
               children: [
                 Icon(Icons.description_outlined,color: Colors.white,size: 35,),
                 sizeBox(20),
-                Text('150',style: TextStyle(
+                Text('0',style: TextStyle(
                   color: Colors.white,fontWeight: FontWeight.w500,fontSize: 18,
                 ),),
                 Text(text,style: TextStyle(

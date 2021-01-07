@@ -80,7 +80,7 @@ class _PractitionerInboxScreenState extends State<PractitionerInboxScreen> {
       onTap: () {
         NavigationController.push(
           context,
-          PractitionerChatScreen(model.inBoxSnapshot.id),
+          PractitionerChatScreen(patientUid:model.inBoxSnapshot.id),
         );
       },
       child: Container(
