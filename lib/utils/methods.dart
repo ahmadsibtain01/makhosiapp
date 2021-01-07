@@ -41,7 +41,7 @@ class Methods {
     totalSpace = totalSpace * 1073741824;
     print('totaluse: ' + totalUseSpace.toString());
     print('totalspace: ' + totalSpace.toString());
-    int bytes = totalSpace - totalUseSpace; // 1 GB = 1073741824 bytes
+    int bytes = totalSpace - totalSpace; // 1 GB = 1073741824 bytes
     String totalBytes = formatBytes(bytes, decimals: 1);
     return totalBytes;
   }
