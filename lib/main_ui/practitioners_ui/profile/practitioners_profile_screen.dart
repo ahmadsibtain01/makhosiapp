@@ -307,7 +307,7 @@ class _PractitionersProfileScreenState
                             child: Column(
                               children: [
                                 Text(
-                                  '2.3',
+                                  '0',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,
@@ -316,7 +316,7 @@ class _PractitionersProfileScreenState
                                   ),
                                 ),
                                 Text(
-                                  'NO. OF RATINGS',
+                                  'YOUR RATING',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 10,
@@ -340,7 +340,7 @@ class _PractitionersProfileScreenState
                             child: Column(
                               children: [
                                 Text(
-                                  '2000',
+                                  '0',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,

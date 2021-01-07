@@ -34,7 +34,7 @@ class EarningDialogBox extends StatelessWidget {
             ),
             SizedBox(height: 10.0),
             Text(
-              '2000 is your total amount of earnings from all your transactions on the app',
+              '0 is your total amount of earnings from all your transactions on the app',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 // fontWeight: FontWeight.bold,
