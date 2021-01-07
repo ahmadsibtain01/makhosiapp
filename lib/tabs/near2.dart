@@ -4,7 +4,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
@@ -15,14 +14,13 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
 import 'package:clay_containers/clay_containers.dart';
 import 'package:rating_bar/rating_bar.dart';
-import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 
-class NearbyPractitionersTab extends StatefulWidget {
+class NearbyPractitionersTab2 extends StatefulWidget {
   @override
   _NearbyPractitionersTabState createState() => _NearbyPractitionersTabState();
 }
 
-class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
+class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
   List<dynamic> _practitioners = null;
   String _userCity, _mapStyle;
   bool _isLoading = true;
@@ -34,7 +32,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   Color baseColor = Color(0xFFF2F2F2);
   @override
   void initState() {
-    _practitioners = new List();
+    _practitioners=new List();
     _getLocation();
     super.initState();
   }
@@ -56,7 +54,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
       );
       List<Address> addressList = await Geocoder.local
           .findAddressesFromCoordinates(
-              Coordinates(locationData.latitude, locationData.longitude));
+          Coordinates(locationData.latitude, locationData.longitude));
       if (addressList.isNotEmpty) {
         _userCity = addressList[0].subAdminArea;
         await _loadMapStyle();
@@ -85,6 +83,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   }
 
   Future<void> _getPractitioners() async {
+
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection(AppKeys.PRACTITIONERS)
@@ -97,12 +96,13 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
         });
       } else {
         snapshot.docs.forEach((doc) {
-          _practitioners.add({'id': doc.id, ...doc.data()});
+          _practitioners.add(doc.data());
           Marker marker = Marker(
             markerId: MarkerId(doc.id),
             icon: _customMarker,
             infoWindow: InfoWindow(
-                title: '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
+                title:
+                '${doc[AppKeys.FIRST_NAME]} ${doc[AppKeys.LAST_NAME]}'),
             position: LatLng(
               doc[AppKeys.COORDINATES][AppKeys.LATITUDE],
               doc[AppKeys.COORDINATES][AppKeys.LONGITUDE],
@@ -125,14 +125,19 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
-        : _error != null
-            ? AppStatusComponents.errorBody(message: _error)
-            : _practitioners.isEmpty
-                ? AppStatusComponents.errorBody(
-                    message: 'No practitioner in your area')
-                : _getBody();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Find A Service'),
+      ),
+      body: _isLoading
+          ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
+          : _error != null
+          ? AppStatusComponents.errorBody(message: _error)
+          : _practitioners.isEmpty
+          ? AppStatusComponents.errorBody(
+          message: 'No practitioner in your area')
+          : _getBody(),
+    );
   }
 
   Widget _getBody() {
@@ -177,6 +182,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                         children: [
                           Image.asset('images/Oval.png'),
                           Others.getSizedBox(boxHeight: 0, boxWidth: 5),
+
                           Text(
                             'Traditional\n Healer',
                             style: TextStyle(
@@ -234,6 +240,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                         children: [
                           Image.asset('images/Oval.png'),
                           Others.getSizedBox(boxHeight: 0, boxWidth: 5),
+
                           Text(
                             'Mechanics',
                             style: TextStyle(
@@ -275,7 +282,8 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
               ),
             ),
           ],
-        ));
+        )
+    );
   }
 
   Widget _getPractitionersList() {
@@ -294,28 +302,29 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   }
 
   Widget _getPractitionerRow(dynamic snapshot) {
-    bool isOnline = false;
+    bool isOnline=false;
     String firstName = " ";
     String secondName = " ";
     String location = " ";
-    String years = " ";
-    String language = " ";
-    String service = " ";
-    dynamic instagram = " ";
-    dynamic linkedin = " ";
-    dynamic fb = " ";
-    dynamic whatsapp = " ";
-    whatsapp = snapshot['WhatsappList'];
+    String years=" ";
+    String language=" ";
+    String service=" ";
+    dynamic instagram=" ";
+    dynamic linkedin=" ";
+    dynamic fb=" ";
+    dynamic whatsapp=" ";
+    whatsapp=snapshot['WhatsappList'];
+
 
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
     location = snapshot[AppKeys.ADDRESS];
-    years = snapshot[AppKeys.PRACTICE_YEARS];
-    language = snapshot[AppKeys.LANGUAGES];
-    service = snapshot[AppKeys.SERVICE_TYPE];
-    instagram = snapshot[AppKeys.LIST_OF_SOCIAL_MEDIA];
-    linkedin = snapshot['LinkedInList'];
-    fb = snapshot['FbList'];
+    years=snapshot[AppKeys.PRACTICE_YEARS];
+    language=snapshot[AppKeys.LANGUAGES];
+    service=snapshot[AppKeys.SERVICE_TYPE];
+    instagram=snapshot[AppKeys.LIST_OF_SOCIAL_MEDIA];
+    linkedin=snapshot['LinkedInList'];
+    fb=snapshot['FbList'];
     if (firstName == null) {
       firstName = " ";
     }
@@ -332,8 +341,9 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
       instagram = " ";
     }
 
-    if (snapshot[AppKeys.ONLINE] != null) {
-      isOnline = snapshot[AppKeys.ONLINE];
+
+    if(snapshot[AppKeys.ONLINE]!=null) {
+      isOnline= snapshot[AppKeys.ONLINE];
     }
     String name =
         '${snapshot[AppKeys.FIRST_NAME]} ${snapshot[AppKeys.LAST_NAME]}';
@@ -357,21 +367,21 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                 children: [
                   snapshot[AppKeys.PROFILE_IMAGE] != null
                       ? CircleAvatar(
-                          radius: 20,
-                          backgroundImage:
-                              NetworkImage(snapshot[AppKeys.PROFILE_IMAGE]),
-                        )
+                    radius: 20,
+                    backgroundImage:
+                    NetworkImage(snapshot[AppKeys.PROFILE_IMAGE]),
+                  )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(32),
-                          child: Container(
-                            color: Colors.black12,
-                            child: Icon(
-                              Icons.person,
-                              size: 40,
-                              color: Colors.black38,
-                            ),
-                          ),
-                        ),
+                    borderRadius: BorderRadius.circular(32),
+                    child: Container(
+                      color: Colors.black12,
+                      child: Icon(
+                        Icons.person,
+                        size: 40,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ),
                   Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                   Expanded(
                     child: Text(
@@ -386,11 +396,14 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                     width: 8,
                   ),
                   Image.asset('images/Object.png')
+
+
                 ],
               ),
               Container(
                 width: 190,
                 height: 12,
+
                 child: Row(
                   children: [
                     Others.getSizedBox(boxHeight: 0, boxWidth: 23),
@@ -403,6 +416,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                       ),
                     ),
                   ],
+
                 ),
               ),
 
@@ -415,17 +429,15 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                     size: 12,
                   ),
                   Others.getSizedBox(boxHeight: 0, boxWidth: 4),
-                  Text(
-                    isOnline ? 'Available Now' : 'Available Now',
-                    style: TextStyle(
-                      fontSize: 10,
-                    ),
-                  ),
+                  Text(isOnline ? 'Available Now' : 'Available Now',style: TextStyle(
+                    fontSize: 10,
+                  ), ),
                 ],
               ),
               Row(
                 children: [
                   Others.getSizedBox(boxHeight: 0, boxWidth: 15),
+
                   _getRattingBar(),
                   Others.getSizedBox(boxHeight: 0, boxWidth: 4),
                   Text(
@@ -440,17 +452,21 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
               Row(
                 children: [
                   Others.getSizedBox(boxHeight: 0, boxWidth: 8),
+
                   ClayContainer(
                     color: baseColor,
                     height: 40,
                     width: 40,
                     borderRadius: 50,
-                    child: GestureDetector(
+                    child:   GestureDetector(
                       onTap: () {
                         //TODO: take user to chat screen
                       },
-                      child: Image.asset('images/phn.png'),
+                      child: Image.asset(
+                          'images/phn.png'
+                      ),
                     ),
+
                   ),
                   Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                   ClayContainer(
@@ -458,16 +474,17 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                     height: 40,
                     width: 40,
                     borderRadius: 50,
-                    child: GestureDetector(
+                    child:   GestureDetector(
                       onTap: () {
-                        NavigationController.push(
-                          context,
-                          PatientChatScreen(snapshot['id']),
-                        );
+                        //TODO: take user to chat screen
                       },
-                      child: Image.asset('images/msg.png'),
+                      child: Image.asset(
+                          'images/msg.png'
+                      ),
                     ),
+
                   ),
+
                   Others.getSizedBox(boxHeight: 0, boxWidth: 8),
                   SizedBox(
                     width: 100,
@@ -478,20 +495,8 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                       ),
                       color: AppColors.COLOR_PRIMARY,
                       onPressed: () {
-                        NavigationController.push(
-                          context,
-                          BusinessCard2(
-                              firstName,
-                              secondName,
-                              location,
-                              years,
-                              language,
-                              service,
-                              instagram,
-                              linkedin,
-                              fb,
-                              whatsapp),
-                        );
+                        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
+
                       },
                       child: Text(
                         'View More',
@@ -505,13 +510,13 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                 ],
               ),
               //   Others.getSizedBox(boxHeight: 8, boxWidth: 0),
+
             ],
           ),
         ),
       ),
     );
   }
-
   Widget _getRattingBar() {
     return RatingBar.readOnly(
       initialRating: 4.5,
