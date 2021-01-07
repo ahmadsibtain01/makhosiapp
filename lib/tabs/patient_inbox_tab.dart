@@ -12,7 +12,6 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 
-
 class PatientInboxTab extends StatefulWidget {
   @override
   _PatientInboxTabState createState() => _PatientInboxTabState();
@@ -89,12 +88,12 @@ class _PatientInboxTabState extends State<PatientInboxTab> {
               children: [
                 model.senderProfileSnapshot == null
                     ? Others.getProfilePlaceHOlder()
-                    : model.senderProfileSnapshot.get('profile_image') == null
+                    : model.senderProfileSnapshot.get('id_picture') == null
                         ? Others.getProfilePlaceHOlder()
                         : CircleAvatar(
                             radius: 18,
                             backgroundImage: NetworkImage(
-                              model.senderProfileSnapshot.get('profile_image'),
+                              model.senderProfileSnapshot.get('id_picture'),
                             ),
                           ),
                 SizedBox(

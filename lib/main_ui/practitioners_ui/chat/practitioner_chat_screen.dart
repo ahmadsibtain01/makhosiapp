@@ -9,6 +9,7 @@ import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
 import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/chat/payment_request.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_dialogues.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
@@ -36,7 +37,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   int _selectedPosition;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool _muted = false;
-
+  TextEditingController _amountToReq = TextEditingController();
   bool isAbelapi = false;
   TextEditingController customerNameController = new TextEditingController();
   TextEditingController complainController = new TextEditingController();
@@ -323,11 +324,15 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             sender: widget._myUid,
                             reciever: widget._patientUid,
                             title:
-                            'Voice call from ${user.get(AppKeys.FIRST_NAME)}',
+                                'Voice call from ${user.get(AppKeys.FIRST_NAME)}',
                             body: {
                               'practitionerUid': widget._myUid,
                               'type': 'voice',
                             });
+                        _sendMessage(
+                            'Voice call from ${user.get(AppKeys.FIRST_NAME)}',
+                            'voice');
+
                         NavigationController.push(
                             context,
                             AudioCall(
@@ -357,11 +362,14 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             sender: widget._myUid,
                             reciever: widget._patientUid,
                             title:
-                            'Video call from ${user.get(AppKeys.FIRST_NAME)}',
+                                'Video call from ${user.get(AppKeys.FIRST_NAME)}',
                             body: {
                               'practitionerUid': widget._myUid,
                               'type': 'video',
                             });
+                        _sendMessage(
+                            'Video call from ${user.get(AppKeys.FIRST_NAME)}',
+                            'video');
 
                         NavigationController.push(
                             context,
@@ -458,17 +466,17 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                     ),
                     (isAbelapi)
                         ? ListTile(
-                      leading: Icon(
-                        Icons.insert_drive_file,
-                        color: Colors.white,
-                      ),
-                      title: Text(
-                        'Send Sick Note',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
+                            leading: Icon(
+                              Icons.insert_drive_file,
+                              color: Colors.white,
+                            ),
+                            title: Text(
+                              'Send Sick Note',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
                         : Container(),
                     ListTile(
                       leading: Icon(
@@ -505,6 +513,15 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                           color: Colors.white,
                         ),
                       ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        NavigationController.push(
+                            context,
+                            PaymentRequest(
+                              sender: widget._myUid,
+                              reciever: widget._patientUid,
+                            ));
+                      },
                     ),
                     ListTile(
                       onTap: () {
@@ -668,13 +685,14 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             sender: widget._myUid,
                             reciever: widget._patientUid,
                             title:
-                            'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
                             message: message,
                             body: {
                               'practitionerUid': widget._myUid,
                               'type': 'text',
                             });
-                        _sendMessage(message);
+                        _sendMessage(message, 'text');
+                        Others().hideKeyboard(context);
                       }
                     },
                     child: Icon(
@@ -699,13 +717,13 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             sender: widget._myUid,
                             reciever: widget._patientUid,
                             title:
-                            'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
                             message: message,
                             body: {
                               'practitionerUid': widget._myUid,
                               'type': 'text',
                             });
-                        _sendMessage(message);
+                        _sendMessage(message, 'text');
                       }
                     },
                     child: Icon(
@@ -730,13 +748,13 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
                             sender: widget._myUid,
                             reciever: widget._patientUid,
                             title:
-                            'Message from ${user.get(AppKeys.FIRST_NAME)}',
+                                'Message from ${user.get(AppKeys.FIRST_NAME)}',
                             message: message,
                             body: {
                               'practitionerUid': widget._myUid,
                               'type': 'text',
                             });
-                        _sendMessage(message);
+                        _sendMessage(message, 'text');
                       }
                     },
                     child: Icon(
@@ -833,7 +851,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
     });
   }
 
-  Future<void> _sendMessage(String message) async {
+  Future<void> _sendMessage(String message, String type) async {
     //First we will update inbox data for patient i.e last message, seen and timestamp
     FirebaseFirestore.instance
         .collection('chats')
@@ -861,6 +879,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
       {
         'timestamp': Timestamp.now(),
         'message': message,
+        'type': type,
         'is_received': false,
       },
     );
@@ -891,11 +910,11 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
       {
         'timestamp': Timestamp.now(),
         'message': message,
+        'type': type,
         'is_received': true,
       },
     );
     _messageController.text = '';
-    Others().hideKeyboard(context);
   }
 
   Stream<QuerySnapshot> _chatStream() {
