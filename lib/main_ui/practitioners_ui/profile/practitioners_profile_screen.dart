@@ -42,11 +42,13 @@ class _PractitionersProfileScreenState
   dynamic _snapshot;
   bool _isLoading = false, _isFavorite = false;
   String _userId;
+  int totalClient;
 
   @override
   void initState() {
     _snapshot = widget._snapshot;
     _checkFavorite();
+    getData();
     super.initState();
   }
 
@@ -70,6 +72,16 @@ class _PractitionersProfileScreenState
       });
       print(exc);
     }
+  }
+
+  getData()async{
+    String id = FirebaseAuth.instance.currentUser.uid;
+
+    await FirebaseFirestore.instance.collection('bookings').where('appointment_to', isEqualTo: id).get().then((value) {
+      setState(() {
+        totalClient =value.docs.length;
+      });
+    });
   }
 
   @override
@@ -273,7 +285,7 @@ class _PractitionersProfileScreenState
                             child: Column(
                               children: [
                                 Text(
-                                  '0',
+                                  (totalClient!=null)?totalClient.toString():'0',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,

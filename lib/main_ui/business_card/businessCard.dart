@@ -195,28 +195,29 @@ class _BusinessCardState extends State<BusinessCard> {
                           children: [
                             sizeBox(14),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
-                                  child: Container(
-                                    height: 40,
-                                    width: width * .3,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: AppColors.REQUEST_UPPER_O,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Edit Information',
-                                        style: TextStyle(
-                                          color: AppColors.BUSINESS_TEXT1,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 9,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: EdgeInsets.symmetric(horizontal: 5),
+                                //   child: Container(
+                                //     height: 40,
+                                //     width: width * .3,
+                                //     decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(10),
+                                //       color: AppColors.REQUEST_UPPER_O,
+                                //     ),
+                                //     child: Center(
+                                //       child: Text(
+                                //         'Edit Information',
+                                //         style: TextStyle(
+                                //           color: AppColors.BUSINESS_TEXT1,
+                                //           fontWeight: FontWeight.w600,
+                                //           fontSize: 9,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                                 Stack(
                                   children: [
                                     Container(
@@ -238,20 +239,20 @@ class _BusinessCardState extends State<BusinessCard> {
                                             'images/administration_images/avatar.png'),
                                       ),
                                     ),
-                                    Positioned(
-                                        bottom: 10,
-                                        right: 5,
-                                        child: Image.asset(
-                                          'images/administration_images/check.png',
-                                          height: 22,
-                                        ))
+                                    // Positioned(
+                                    //     bottom: 10,
+                                    //     right: 5,
+                                    //     child: Image.asset(
+                                    //       'images/administration_images/check.png',
+                                    //       height: 22,
+                                    //     ))
                                   ],
                                 ),
 
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Image.asset('images/Object.png')
+                                // SizedBox(
+                                //   width: 10,
+                                // ),
+                                // Image.asset('images/Object.png')
                               ],
                             ),
                             sizeBox(10),
@@ -267,7 +268,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                       children: [
                                         Center(
                                           child: Text(
-                                            '${_data['first_name']} ${_data['last_name']}'?? 'Name',
+                                            '${_data['prefered_buisness_name']} ' ?? 'Business name',
                                             style: TextStyle(
                                               color: AppColors.BUSINESS_TEXT2,
                                               fontWeight: FontWeight.w600,
@@ -350,6 +351,15 @@ class _BusinessCardState extends State<BusinessCard> {
                                           ],
                                         ),
                                         sizeBox(10),
+                                        (_data['company_website_link']!=null)?Center(child: Text(
+                                          _data['company_website_link'] ?? 'UrlLink',
+                                          style: TextStyle(
+                                            color: AppColors.BUSINESS_TEXT2,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 11,
+                                          ),
+                                        ),):Container(),
+                                        (_data['company_website_link']!=null)?sizeBox(10):Container(),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
@@ -364,7 +374,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                                     fontSize: 11,
                                                   ),
                                                 ),
-                                                sizeBox(30),
+                                                sizeBox(10),
                                                 Text(
                                                   _data['practice_years'] ?? '0',
                                                   style: TextStyle(
@@ -385,7 +395,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                                     fontSize: 11,
                                                   ),
                                                 ),
-                                                sizeBox(30),
+                                                sizeBox(10),
                                                 Text(
                                                   _data['languages'] ?? 'Language',
                                                   style: TextStyle(
@@ -406,7 +416,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                                     fontSize: 11,
                                                   ),
                                                 ),
-                                                sizeBox(30),
+                                                sizeBox(10),
                                                 Text(
                                                   _data['service_type'] ?? 'Service Type',
                                                   style: TextStyle(
@@ -462,7 +472,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                             padding:
                                                 EdgeInsets.symmetric(horizontal: 25),
                                             child: Text(
-                                              'About',
+                                              'Business Description',
                                               style: TextStyle(
                                                 color: AppColors.BUSINESS_TEXT2,
                                                 fontWeight: FontWeight.w500,
@@ -477,7 +487,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                             padding:
                                                 EdgeInsets.symmetric(horizontal: 25),
                                             child: Text(
-                                              'Thembi Ndlovu is an acreditated Herbalist, with over 5 years experience.  Currently based in Gauteng Province, ',
+                                              _data['service_brief_description'] ?? 'About',
                                               style: TextStyle(
                                                 color: AppColors.BUSINESS_TEXT3,
                                                 fontWeight: FontWeight.w400,
@@ -524,7 +534,7 @@ class _BusinessCardState extends State<BusinessCard> {
                                             padding:
                                                 EdgeInsets.symmetric(horizontal: 25),
                                             child: Text(
-                                              'Hours',
+                                              'Business Operating Times',
                                               style: TextStyle(
                                                 color: AppColors.BUSINESS_TEXT2,
                                                 fontWeight: FontWeight.w500,
@@ -533,19 +543,25 @@ class _BusinessCardState extends State<BusinessCard> {
                                             ),
                                           ),
                                         ),
-                                        hourRow('●   Monday', '${_data['timings']['monday_open']} : ${_data['timings']['monday_close']}'),
-                                        sizeBox(5),
-                                        hourRow('●   Tuesday', '${_data['timings']['tuesday_open']} : ${_data['timings']['tuesday_close']}'),
-                                        sizeBox(5),
-                                        hourRow('●   Wednesday', '${_data['timings']['wednesday_open']} : ${_data['timings']['wednesday_close']}'),
-                                        sizeBox(5),
-                                        hourRow('●   Thursday', '${_data['timings']['thursday_open']} : ${_data['timings']['thursday_close']}'),
-                                        sizeBox(5),
+
+                                        hourRow('●   Monday to Thursday', '${_data['timings']['monday_open']} : ${_data['timings']['monday_close']}'),
+                                        sizeBox(10),
                                         hourRow('●   Friday', '${_data['timings']['friday_open']} : ${_data['timings']['friday_close']}'),
-                                        sizeBox(5),
-                                        hourRow('●   Saturday', '${_data['timings']['saturday_open']} : ${_data['timings']['saturday_close']}'),
-                                        sizeBox(5),
-                                        hourRow('●   Sunday', '${_data['timings']['sunday_open']} : ${_data['timings']['sunday_close']}'),
+                                        sizeBox(10),
+                                        hourRow('●   Saturday and Sunday', '${_data['timings']['sunday_open']} : ${_data['timings']['sunday_close']}'),
+                                        // hourRow('●   Monday', '${_data['timings']['monday_open']} : ${_data['timings']['monday_close']}'),
+                                        // sizeBox(5),
+                                        // hourRow('●   Tuesday', '${_data['timings']['tuesday_open']} : ${_data['timings']['tuesday_close']}'),
+                                        // sizeBox(5),
+                                        // hourRow('●   Wednesday', '${_data['timings']['wednesday_open']} : ${_data['timings']['wednesday_close']}'),
+                                        // sizeBox(5),
+                                        // hourRow('●   Thursday', '${_data['timings']['thursday_open']} : ${_data['timings']['thursday_close']}'),
+                                        // sizeBox(5),
+                                        // hourRow('●   Friday', '${_data['timings']['friday_open']} : ${_data['timings']['friday_close']}'),
+                                        // sizeBox(5),
+                                        // hourRow('●   Saturday', '${_data['timings']['saturday_open']} : ${_data['timings']['saturday_close']}'),
+                                        // sizeBox(5),
+                                        // hourRow('●   Sunday', '${_data['timings']['sunday_open']} : ${_data['timings']['sunday_close']}'),
 
                                         (!checkB)?sizeBox(40):Container(),
                                         (!checkB)?Padding(

@@ -19,7 +19,7 @@ class _RequestDocumentState extends State<RequestDocument> {
   //   'Email',
   // ];
 
-  String companyNo,dueDate, serviceRegistered,email;
+  String requestReason,dueDate, serviceRegistered,email;
   DateTime selectedDate;
 
   bool checkedValue=false;
@@ -83,7 +83,7 @@ class _RequestDocumentState extends State<RequestDocument> {
                         ),),
                       SizedBox(height: 15,),
 
-                      Text('CIPC Company Registration No.',
+                      Text('Reason for request',
                         style: TextStyle(
                           color: Colors.black.withOpacity(.4),fontWeight: FontWeight.w500,fontSize: 12,
                         ),),
@@ -92,9 +92,9 @@ class _RequestDocumentState extends State<RequestDocument> {
                       ),
                       textFieldList(
                               (val) =>
-                          val.isEmpty ? 'please enter CIPC' : null,
+                          val.isEmpty ? 'please enter reason' : null,
                               (value){
-                            companyNo = value;
+                            requestReason = value;
                           }
                       ),
                       SizedBox(
@@ -201,7 +201,7 @@ class _RequestDocumentState extends State<RequestDocument> {
                         child: CheckboxListTile(
                           contentPadding: EdgeInsets.all(0),
                           activeColor: AppColors.CHECK_BOX,
-                          title: Text("Require assistance with filing annual returns?",style: TextStyle(
+                          title: Text("I require assistance understanding my business report",style: TextStyle(
                             color: AppColors.REQUEST_BOTTOM,fontWeight: FontWeight.w600,fontSize: 12,
                           ),),
                           value: checkedValue,
@@ -224,7 +224,7 @@ class _RequestDocumentState extends State<RequestDocument> {
                             final Email email1 = Email(
                               recipients: ['support@mkhosi.com'],
 
-                              body: 'CIPC Company Registration No. :  $companyNo \n\n DueDate :  $dueDate \n\n'
+                              body: 'Reason for request :  $requestReason \n\n DueDate :  $dueDate \n\n'
                                   ' Service Registered :  $serviceRegistered \n\n Email :  $email ',
                               subject: 'Request Document',
                               isHTML: false,

@@ -52,7 +52,17 @@ class _AdminState extends State<Admin> {
         child:
         ListView(
           children: [
-            sizeBox(70),
+            sizeBox(20),
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_rounded),
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            sizeBox(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -218,7 +228,7 @@ class _AdminState extends State<Admin> {
               children: [
                 Icon(Icons.description_outlined,color: Colors.white,size: 35,),
                 sizeBox(20),
-                (data!=null)?Text(data['profileVisit'].toString(),style: TextStyle(
+                (data!=null)?Text((data['profileVisit'] !=null)?data['profileVisit'].toString(): '0',style: TextStyle(
                   color: Colors.white,fontWeight: FontWeight.w500,fontSize: 18,
                 ),):Center(child: CircularProgressIndicator(),),
                 Text(text,style: TextStyle(
@@ -282,6 +292,9 @@ class _AdminState extends State<Admin> {
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         onTap: (index){
+          if(index==0){
+            Navigator.pop(context);
+          }
           if(index==1){
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context)=> MainDashboardScreen()
