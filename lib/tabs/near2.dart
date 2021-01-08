@@ -305,6 +305,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
     bool isOnline=false;
     String firstName = " ";
     String secondName = " ";
+    String email = " ";
     String location = " ";
     String years=" ";
     String language=" ";
@@ -318,6 +319,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
 
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
+    email = snapshot[AppKeys.EMAIL];
     location = snapshot[AppKeys.ADDRESS];
     years=snapshot[AppKeys.PRACTICE_YEARS];
     language=snapshot[AppKeys.LANGUAGES];
@@ -495,7 +497,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
                       ),
                       color: AppColors.COLOR_PRIMARY,
                       onPressed: () {
-                        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
+                        NavigationController.push(context, BusinessCard2(firstName, secondName, email,location, years, language, service, instagram,linkedin,fb,whatsapp),);
 
                       },
                       child: Text(

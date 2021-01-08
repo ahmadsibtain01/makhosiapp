@@ -15,9 +15,9 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard2 extends StatefulWidget {
-  String firstname, secondname, location, years, language, service, instagram, linkedin, fb, whatsapp;
+  String firstname, secondname, email,location, years, language, service, instagram, linkedin, fb, whatsapp;
   BusinessCard2(
-      this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
+      this.firstname, this.secondname, this.email,this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
   );
   @override
   _BusinessCardState createState() => _BusinessCardState(this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp);
@@ -94,6 +94,7 @@ class _BusinessCardState extends State<BusinessCard2> {
   void initState() {
     super.initState();
     initPlatformState();
+    getProfileData();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -495,19 +496,23 @@ class _BusinessCardState extends State<BusinessCard2> {
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: width * .2),
-                                  child: Container(
-                                    height: 55,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(100),
-                                        color: AppColors.COLOR_PRIMARY),
-                                    child: Center(
-                                      child: Text(
-                                        'Book',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16),
+                                  child: GestureDetector(
+                                    onTap: ()async{
+                                    },
+                                    child: Container(
+                                      height: 55,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(100),
+                                          color: AppColors.COLOR_PRIMARY),
+                                      child: Center(
+                                        child: Text(
+                                          'Book',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -526,6 +531,8 @@ class _BusinessCardState extends State<BusinessCard2> {
       ),
     );
   }
+
+  int profileVisit=0;
 
   Widget sizeBox(double height) {
     return SizedBox(
@@ -573,5 +580,39 @@ class _BusinessCardState extends State<BusinessCard2> {
         ],
       ),
     );
+  }
+
+  String id;
+  getProfileData()async{
+    await FirebaseFirestore.instance.collection('service_provider')
+        .where('email', isEqualTo: widget.email).get().then((value)async{
+
+      value.docs.forEach((element) async{
+        print(element.id);
+
+        id = element.id;
+
+        await FirebaseFirestore.instance.collection('service_provider')
+            .doc(id).get().then((value) {
+          if(value.data().containsKey('profileVisit')){
+            profileVisit = value.get('profileVisit');
+          }else{
+            print('asd');
+          }
+
+        }).then((value) async{
+
+          profileVisit++;
+
+          await FirebaseFirestore.instance.collection('service_provider')
+              .doc(id).update(
+              {
+                'profileVisit': profileVisit,
+              }
+          );
+        });
+      });
+    });
+
   }
 }

@@ -301,6 +301,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
     String years = " ";
     String language = " ";
     String service = " ";
+    String email = " ";
     dynamic instagram = " ";
     dynamic linkedin = " ";
     dynamic fb = " ";
@@ -309,6 +310,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
+    email = snapshot[AppKeys.EMAIL];
     location = snapshot[AppKeys.ADDRESS];
     years = snapshot[AppKeys.PRACTICE_YEARS];
     language = snapshot[AppKeys.LANGUAGES];
@@ -483,11 +485,13 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
                           BusinessCard2(
                               firstName,
                               secondName,
+                              email,
                               location,
                               years,
                               language,
                               service,
-                              instagram,
+                              // instagram,
+                              '',
                               linkedin,
                               fb,
                               whatsapp),

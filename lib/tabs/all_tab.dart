@@ -87,6 +87,7 @@ class _AllTabState extends State<AllTab> {
   Widget _getRow(dynamic snapshot) {
     String firstName = " ";
     String secondName = " ";
+    String email = " ";
     String location = " ";
     String years=" ";
    String language=" ";
@@ -99,6 +100,7 @@ class _AllTabState extends State<AllTab> {
 
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
+    email = snapshot[AppKeys.EMAIL];
     location = snapshot[AppKeys.ADDRESS];
     years=snapshot[AppKeys.PRACTICE_YEARS];
     language=snapshot[AppKeys.LANGUAGES];
@@ -122,7 +124,7 @@ class _AllTabState extends State<AllTab> {
 
     return GestureDetector(
       onTap: () {
-        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram, linkedin,fb, whatsapp),);
+        NavigationController.push(context, BusinessCard2(firstName, secondName, email,location, years, language, service, instagram, linkedin,fb, whatsapp),);
       },
       child: Container(
         child: Card(
