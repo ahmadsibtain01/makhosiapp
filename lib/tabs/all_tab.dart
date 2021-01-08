@@ -88,25 +88,24 @@ class _AllTabState extends State<AllTab> {
     String firstName = " ";
     String secondName = " ";
     String location = " ";
-    String years=" ";
-   String language=" ";
-   String service=" ";
-   dynamic instagram=" ";
-    dynamic linkedin=" ";
-    dynamic fb=" ";
-    dynamic whatsapp=" ";
-
+    String years = " ";
+    String language = " ";
+    String service = " ";
+    dynamic instagram = " ";
+    dynamic linkedin = " ";
+    dynamic fb = " ";
+    dynamic whatsapp = " ";
 
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
     location = snapshot[AppKeys.ADDRESS];
-    years=snapshot[AppKeys.PRACTICE_YEARS];
-    language=snapshot[AppKeys.LANGUAGES];
-    service=snapshot[AppKeys.SERVICE_TYPE];
-    instagram=snapshot['social_medias_list'];
-    linkedin=snapshot['LinkedInList'];
-    fb=snapshot['FbList'];
-    whatsapp=snapshot['WhatsappList'];
+    years = snapshot[AppKeys.PRACTICE_YEARS];
+    language = snapshot[AppKeys.LANGUAGES];
+    service = snapshot[AppKeys.SERVICE_TYPE];
+    instagram = snapshot['social_medias_list'];
+    linkedin = snapshot['LinkedInList'];
+    fb = snapshot['FbList'];
+    whatsapp = snapshot['WhatsappList'];
 
     if (firstName == null) {
       firstName = " ";
@@ -122,7 +121,11 @@ class _AllTabState extends State<AllTab> {
 
     return GestureDetector(
       onTap: () {
-        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram, linkedin,fb, whatsapp),);
+        NavigationController.push(
+          context,
+          BusinessCard2(snapshot['id'], firstName, secondName, location, years,
+              language, service, instagram, linkedin, fb, whatsapp),
+        );
       },
       child: Container(
         child: Card(

@@ -14,7 +14,7 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 
 class PatientsBookingScreen extends StatefulWidget {
-  final _snapshot;
+  final DocumentSnapshot _snapshot;
 
   PatientsBookingScreen(this._snapshot);
 
@@ -33,9 +33,11 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
   bool _forSomeoneElse = false;
   var _emailEditController = TextEditingController();
   var _mobileEditController = TextEditingController();
+  Map snap;
 
   @override
   void initState() {
+    var snap = widget._snapshot.data();
     _timingMap = widget._snapshot.get(AppKeys.TIMINGS);
     _emailEditController.text = widget._snapshot.get(AppKeys.EMAIL);
     _getBookings();
@@ -67,183 +69,183 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
       body: _isLoading
           ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
           : CustomScrollView(slivers: [
-        SliverAppBar(
-            expandedHeight: 150.0,
-            backgroundColor: Colors.transparent,
-            floating: false,
-            snap: false,
-            pinned: false,
-            centerTitle: true,
-            title: Text(
-              'BOOKING',
-              style: TextStyle(
-                  color: AppColors.COLOR_DARKGREY,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-            ),
-            flexibleSpace: ListView(
-              children: [
-                SizedBox(
-                  height: 55,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Consultation Fees',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'ZAR/session*',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        '120',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: AppColors.COLOR_ORG,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 0,
-                  ),
-                  child: Text(
-                    '*Note: Session fees are for consultations only and do not'
-                        'include orders,  and other requests',
+              SliverAppBar(
+                  expandedHeight: 150.0,
+                  backgroundColor: Colors.transparent,
+                  floating: false,
+                  snap: false,
+                  pinned: false,
+                  centerTitle: true,
+                  title: Text(
+                    'BOOKING',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
+                        color: AppColors.COLOR_DARKGREY,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
                   ),
-                ),
-              ],
-            ),
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            actions: <Widget>[]),
-        SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height + 26,
-                    margin: EdgeInsets.only(left: 2, right: 2),
-                    padding: EdgeInsets.only(left: 16, right: 16),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
+                  flexibleSpace: ListView(
+                    children: [
+                      SizedBox(
+                        height: 55,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 0,
                         ),
-                      ],
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _getPractitionerDetailsSection(),
-                        _getDatePickerButton(),
-                        Others.getSizedBox(boxHeight: 12, boxWidth: 0),
-                        _getTimeSelectionSection(),
-                        Others.getSizedBox(boxHeight: 32, boxWidth: 0),
-                        Row(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            _getLabelText('Email Address'),
-                            Checkbox(
-                                value: _forSomeoneElse,
-                                onChanged: (val) {
-                                  setState(() {
-                                    _forSomeoneElse = val;
-                                  });
-                                }),
-                            _getLabelText('For someone else'),
+                            Text(
+                              'Consultation Fees',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.underline),
+                            ),
                           ],
                         ),
-                        TextField(
-                          enabled: _forSomeoneElse,
-                          controller: _emailEditController,
-                          decoration: InputDecoration(
-                            enabled: _forSomeoneElse,
-                            fillColor: !_forSomeoneElse
-                                ? Colors.grey[100]
-                                : Colors.transparent,
-                            filled: true,
-                            contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                            border: OutlineInputBorder(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'ZAR/session*',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              '120',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppColors.COLOR_ORG,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 0,
+                        ),
+                        child: Text(
+                          '*Note: Session fees are for consultations only and do not'
+                          'include orders,  and other requests',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Visibility(
-                          visible: _forSomeoneElse,
-                          child: _getLabelText('Phone Number'),
-                        ),
-                        Visibility(
-                          visible: _forSomeoneElse,
-                          child: TextField(
-                            controller: _mobileEditController,
-                            keyboardType: TextInputType.phone,
-                            maxLength: 12,
-                            decoration: InputDecoration(
-                                enabled: _forSomeoneElse,
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 10),
-                                border: OutlineInputBorder()),
-                          ),
-                        ),
-                        Others.getSizedBox(boxHeight: 17, boxWidth: 0),
-                        _getLabelText('Appointment Date & Time'),
-                        _getResultLabel(),
-                        Others.getSizedBox(boxHeight: 24, boxWidth: 0),
-                        AppButtons.getRoundedButton(
-                          context: context,
-                          iRoundedButtonClicked: this,
-                          label: 'Confirm Booking',
-                          clickType: ClickType.DUMMY,
-                        )
-                      ],
+                      ),
+                    ],
+                  ),
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
                     ),
-                  );
-                }, childCount: 1))
-      ]),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  actions: <Widget>[]),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                return Container(
+                  height: MediaQuery.of(context).size.height + 26,
+                  margin: EdgeInsets.only(left: 2, right: 2),
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _getPractitionerDetailsSection(),
+                      _getDatePickerButton(),
+                      Others.getSizedBox(boxHeight: 12, boxWidth: 0),
+                      _getTimeSelectionSection(),
+                      Others.getSizedBox(boxHeight: 32, boxWidth: 0),
+                      Row(
+                        children: [
+                          _getLabelText('Email Address'),
+                          Checkbox(
+                              value: _forSomeoneElse,
+                              onChanged: (val) {
+                                setState(() {
+                                  _forSomeoneElse = val;
+                                });
+                              }),
+                          _getLabelText('For someone else'),
+                        ],
+                      ),
+                      TextField(
+                        enabled: _forSomeoneElse,
+                        controller: _emailEditController,
+                        decoration: InputDecoration(
+                          enabled: _forSomeoneElse,
+                          fillColor: !_forSomeoneElse
+                              ? Colors.grey[100]
+                              : Colors.transparent,
+                          filled: true,
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      Visibility(
+                        visible: _forSomeoneElse,
+                        child: _getLabelText('Phone Number'),
+                      ),
+                      Visibility(
+                        visible: _forSomeoneElse,
+                        child: TextField(
+                          controller: _mobileEditController,
+                          keyboardType: TextInputType.phone,
+                          maxLength: 12,
+                          decoration: InputDecoration(
+                              enabled: _forSomeoneElse,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 10),
+                              border: OutlineInputBorder()),
+                        ),
+                      ),
+                      Others.getSizedBox(boxHeight: 17, boxWidth: 0),
+                      _getLabelText('Appointment Date & Time'),
+                      _getResultLabel(),
+                      Others.getSizedBox(boxHeight: 24, boxWidth: 0),
+                      AppButtons.getRoundedButton(
+                        context: context,
+                        iRoundedButtonClicked: this,
+                        label: 'Confirm Booking',
+                        clickType: ClickType.DUMMY,
+                      )
+                    ],
+                  ),
+                );
+              }, childCount: 1))
+            ]),
     );
   }
 
@@ -314,74 +316,74 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
     }
     return timingList.isNotEmpty
         ? Wrap(
-      children: timingList.map(
-            (hour) {
-          bool isAvailable = true;
-          if (bookedHours.isNotEmpty) {
-            for (var i in bookedHours) {
-              if (i == hour) {
-                isAvailable = false;
-                break;
-              }
-            }
-          }
-          return GestureDetector(
-            onTap: isAvailable
-                ? () {
-              if (_selectedHour != hour) {
-                _selectedHour = hour;
-                _selectionDescriptionLabel =
-                '$_selectedDate at ${_selectedHour <= 12 ? '$_selectedHour AM' : '${_selectedHour - 12} PM'} ';
-              } else {
-                _selectedHour = null;
-                _selectionDescriptionLabel = '';
-              }
-              setState(() {});
-            }
-                : null,
-            child: Container(
-              margin: EdgeInsets.only(right: 12, top: 12),
-              width: ScreenDimensions.getScreenWidth(context) / 5.1,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isAvailable
-                    ? _selectedHour == hour
-                    ? AppColors.COLOR_PRIMARY
-                    : Colors.transparent
-                    : Colors.black12,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: isAvailable
-                      ? _selectedHour == hour
-                      ? Colors.transparent
-                      : AppColors.COLOR_PRIMARY
-                      : Colors.black54,
-                  width: 2,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                hour <= 12 ? '$hour AM' : '${hour - 12} PM',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: isAvailable
-                      ? _selectedHour == hour
-                      ? Colors.white
-                      : AppColors.COLOR_PRIMARY
-                      : Colors.black54,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          );
-        },
-      ).toList(),
-    )
+            children: timingList.map(
+              (hour) {
+                bool isAvailable = true;
+                if (bookedHours.isNotEmpty) {
+                  for (var i in bookedHours) {
+                    if (i == hour) {
+                      isAvailable = false;
+                      break;
+                    }
+                  }
+                }
+                return GestureDetector(
+                  onTap: isAvailable
+                      ? () {
+                          if (_selectedHour != hour) {
+                            _selectedHour = hour;
+                            _selectionDescriptionLabel =
+                                '$_selectedDate at ${_selectedHour <= 12 ? '$_selectedHour AM' : '${_selectedHour - 12} PM'} ';
+                          } else {
+                            _selectedHour = null;
+                            _selectionDescriptionLabel = '';
+                          }
+                          setState(() {});
+                        }
+                      : null,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 12, top: 12),
+                    width: ScreenDimensions.getScreenWidth(context) / 5.1,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isAvailable
+                          ? _selectedHour == hour
+                              ? AppColors.COLOR_PRIMARY
+                              : Colors.transparent
+                          : Colors.black12,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: isAvailable
+                            ? _selectedHour == hour
+                                ? Colors.transparent
+                                : AppColors.COLOR_PRIMARY
+                            : Colors.black54,
+                        width: 2,
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      hour <= 12 ? '$hour AM' : '${hour - 12} PM',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: isAvailable
+                            ? _selectedHour == hour
+                                ? Colors.white
+                                : AppColors.COLOR_PRIMARY
+                            : Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ).toList(),
+          )
         : Container(
-      height: 150,
-      width: ScreenDimensions.getScreenWidth(context),
-      child: AppStatusComponents.errorBody(message: 'Select date.'),
-    );
+            height: 150,
+            width: ScreenDimensions.getScreenWidth(context),
+            child: AppStatusComponents.errorBody(message: 'Select date.'),
+          );
   }
 
   List<int> _getTimingHoursList() {
@@ -428,7 +430,7 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
             if (selectedDate != null) {
               _getDayName(selectedDate.weekday);
               _selectedDate =
-              '${selectedDate.day < 10 ? '0${selectedDate.day}' : selectedDate.day}/${selectedDate.month < 10 ? '0${selectedDate.month}' : selectedDate.month}/${selectedDate.year}';
+                  '${selectedDate.day < 10 ? '0${selectedDate.day}' : selectedDate.day}/${selectedDate.month < 10 ? '0${selectedDate.month}' : selectedDate.month}/${selectedDate.year}';
               _dayBookingsList.clear();
               _bookingList.forEach((booking) {
                 if (booking.get('appointment_date') == _selectedDate) {
@@ -516,6 +518,7 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
 
   Widget _getPractitionerDetailsSection() {
     bool isOnline = widget._snapshot.get(AppKeys.ONLINE);
+
     return Container(
       height: 100,
       decoration: BoxDecoration(
@@ -524,25 +527,25 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
       width: ScreenDimensions.getScreenWidth(context),
       child: Row(
         children: [
-          widget._snapshot.get(AppKeys.PROFILE_IMAGE) != null
+          widget._snapshot.get("id_picture") != null
               ? CircleAvatar(
-            radius: 24,
-            backgroundImage: NetworkImage(
-              widget._snapshot.get(AppKeys.PROFILE_IMAGE),
-            ),
-          )
+                  radius: 24,
+                  backgroundImage: NetworkImage(
+                    widget._snapshot.get("id_picture"),
+                  ),
+                )
               : ClipRRect(
-            borderRadius: BorderRadius.circular(65),
-            child: Container(
-              color: Colors.black12,
-              padding: EdgeInsets.all(12),
-              child: Icon(
-                Icons.person,
-                color: Colors.grey,
-                size: 45,
-              ),
-            ),
-          ),
+                  borderRadius: BorderRadius.circular(65),
+                  child: Container(
+                    color: Colors.black12,
+                    padding: EdgeInsets.all(12),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey,
+                      size: 45,
+                    ),
+                  ),
+                ),
           Others.getSizedBox(boxHeight: 0, boxWidth: 12),
           Expanded(
             child: Column(

@@ -14,22 +14,67 @@ import 'package:flutter/services.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard2 extends StatefulWidget {
-  String firstname, secondname, location, years, language, service, instagram, linkedin, fb, whatsapp;
+  String id,
+      firstname,
+      secondname,
+      location,
+      years,
+      language,
+      service,
+      instagram,
+      linkedin,
+      fb,
+      whatsapp;
   BusinessCard2(
-      this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
-  );
+      this.id,
+      this.firstname,
+      this.secondname,
+      this.location,
+      this.years,
+      this.language,
+      this.service,
+      this.instagram,
+      this.linkedin,
+      this.fb,
+      this.whatsapp);
   @override
-  _BusinessCardState createState() => _BusinessCardState(this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp);
+  _BusinessCardState createState() => _BusinessCardState(
+      this.firstname,
+      this.secondname,
+      this.location,
+      this.years,
+      this.language,
+      this.service,
+      this.instagram,
+      this.linkedin,
+      this.fb,
+      this.whatsapp);
 }
 
 class _BusinessCardState extends State<BusinessCard2> {
-  String firstname, secondname, location,years, language, service, instagram,linkedin, fb,whatsapp;
+  String firstname,
+      secondname,
+      location,
+      years,
+      language,
+      service,
+      instagram,
+      linkedin,
+      fb,
+      whatsapp;
   _BusinessCardState(
-      this.firstname, this.secondname, this.location,this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
-);
+      this.firstname,
+      this.secondname,
+      this.location,
+      this.years,
+      this.language,
+      this.service,
+      this.instagram,
+      this.linkedin,
+      this.fb,
+      this.whatsapp);
   /* static final FacebookLogin facebookSignIn = new FacebookLogin();
   String _message = 'Log in/out by pressing the buttons below.';
   Future<Null> _login() async {
@@ -100,11 +145,15 @@ class _BusinessCardState extends State<BusinessCard2> {
     _getUserProfileData();
     initPlatformState();
   }
+
   Future<void> _getUserProfileData() async {
-    _userProfileSnapshot =
-    await FirebaseFirestore.instance.collection('service_provider').doc(firstname).get();
+    _userProfileSnapshot = await FirebaseFirestore.instance
+        .collection('service_provider')
+        .doc(widget.id)
+        .get();
     setState(() {});
   }
+
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
@@ -134,13 +183,13 @@ class _BusinessCardState extends State<BusinessCard2> {
         height: height,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Colors.black87,
-                Colors.black,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )),
+          colors: [
+            Colors.black87,
+            Colors.black,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        )),
         child: Column(
           children: [
             sizeBox(30),
@@ -305,41 +354,41 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        if(instagram!=null)
-                                          {
-                                            NavigationController.push(context, Instagram(instagram));
-                                          }
+                                        if (instagram != null) {
+                                          NavigationController.push(
+                                              context, Instagram(instagram));
+                                        }
                                       },
-                                      child:Image.asset(
+                                      child: Image.asset(
                                           'images/administration_images/insta.png'),
                                     ),
-
                                     sizeBoxW(30),
                                     InkWell(
                                       onTap: () {
-                                        if(linkedin!=null)
-                                          {
-                                            NavigationController.push(context, LinkedIn(linkedin));
-                                          }
+                                        if (linkedin != null) {
+                                          NavigationController.push(
+                                              context, LinkedIn(linkedin));
+                                        }
                                       },
                                       child: Image.asset(
                                           'images/administration_images/linkedIn.png'),
                                     ),
                                     sizeBoxW(30),
                                     InkWell(
-                                      onTap: (){
-                                        FlutterOpenWhatsapp.sendSingleMessage("03104000953", "Hello");
+                                      onTap: () {
+                                        FlutterOpenWhatsapp.sendSingleMessage(
+                                            "03104000953", "Hello");
                                       },
                                       child: Image.asset(
-                                        'images/administration_images/whatsApp.png'),
+                                          'images/administration_images/whatsApp.png'),
                                     ),
                                     sizeBoxW(30),
                                     InkWell(
                                       onTap: () {
-                                        if(fb!=null)
-                                          {
-                                            NavigationController.push(context, Facebook(fb));
-                                          }
+                                        if (fb != null) {
+                                          NavigationController.push(
+                                              context, Facebook(fb));
+                                        }
                                       },
                                       child: Image.asset(
                                           'images/administration_images/facebook.png'),
@@ -349,7 +398,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                 sizeBox(10),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
                                       'Years of Service',
@@ -380,7 +429,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                 sizeBox(30),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
                                       '${years} years',
@@ -420,7 +469,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   alignment: Alignment.topLeft,
                                   child: Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 25),
+                                        EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
                                       'About',
                                       style: TextStyle(
@@ -435,7 +484,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   alignment: Alignment.topLeft,
                                   child: Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 25),
+                                        EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
                                       'Thembi Ndlovu is an acreditated Herbalist, with over 5 years experience.  Currently based in Gauteng Province, ',
                                       style: TextStyle(
@@ -451,7 +500,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   alignment: Alignment.topLeft,
                                   child: Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 25),
+                                        EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
                                       'Business Rules',
                                       style: TextStyle(
@@ -466,7 +515,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   alignment: Alignment.topLeft,
                                   child: Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 25),
+                                        EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
                                       'Thembi Ndlovu is an acreditated Herbalist, with over 5 years experience.  Currently based in Gauteng Province, ',
                                       style: TextStyle(
@@ -482,7 +531,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   alignment: Alignment.topLeft,
                                   child: Padding(
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 25),
+                                        EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
                                       'Hours',
                                       style: TextStyle(
@@ -502,8 +551,12 @@ class _BusinessCardState extends State<BusinessCard2> {
                                     '08:00am : 08:00pm'),
                                 sizeBox(40),
                                 InkWell(
-                                  onTap: (){
-                                   // NavigationController.push(context, PatientsBookingScreen());
+                                  onTap: () {
+                                    if (_userProfileSnapshot != null)
+                                      NavigationController.push(
+                                          context,
+                                          PatientsBookingScreen(
+                                              _userProfileSnapshot));
                                   },
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -512,7 +565,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                       height: 55,
                                       decoration: BoxDecoration(
                                           borderRadius:
-                                          BorderRadius.circular(100),
+                                              BorderRadius.circular(100),
                                           color: AppColors.COLOR_PRIMARY),
                                       child: Center(
                                         child: Text(
@@ -526,7 +579,6 @@ class _BusinessCardState extends State<BusinessCard2> {
                                     ),
                                   ),
                                 ),
-
                                 sizeBox(20)
                               ],
                             ),

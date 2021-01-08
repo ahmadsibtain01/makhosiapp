@@ -6,8 +6,6 @@ class AppKeys {
   static const isSocialMediaWhatsapp = 'isSocialMediaWhatsapp';
   static const WhatsappList = 'WhatsappList';
 
-
-
   static const USER_TYPE = 'user_type';
   static const APP_LANGUAGE = 'AppLanguage';
   static const APP_COUNTRY = 'AppCountry';
@@ -37,7 +35,7 @@ class AppKeys {
   static const FIRST_NAME = 'first_name';
   static const LAST_NAME = 'last_name';
   static const FULL_NAME = 'full_name';
-  static const SECOND_NAME = 'second_name';
+  static const SECOND_NAME = 'last_name';
   static const NATIONALITY = 'nationality';
   static const TYPE_OF_IDENTIFICATION = 'type_of_identification';
   static const IDENTIFICATION_NUMBER = 'type_of_identification_number';
