@@ -102,6 +102,7 @@ flutter:
     - assets/images/
     - images/administration_images/
     - images/ic_back.png
+    - images/booking_pg.jpg
     - images/ic_folder.png
     - images/ic_popmenu.png
     - images/ic_search.png
@@ -120,6 +121,7 @@ flutter:
     - assets/audio/pickup-ringing.mp3
     - assets/audio/phone-busy.mp3
     - assets/audio/call-ring.mp3
+
 
 
   # The following line ensures that the Material Icons font is
