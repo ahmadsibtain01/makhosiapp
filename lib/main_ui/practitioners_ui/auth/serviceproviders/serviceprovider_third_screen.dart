@@ -182,12 +182,7 @@ class _PractitionerRegisterScreenFirstState
             clickType: ClickType.DUMMY,
           ),
         ),
-        Others.getSizedBox(boxHeight: 0, boxWidth: 8),
-        Text(
-          _pickedFile == null ? 'N/A' : 'Attached',
-          style:
-              TextStyle(color: _pickedFile == null ? Colors.red : Colors.green),
-        ),
+
       ],
     );
   }

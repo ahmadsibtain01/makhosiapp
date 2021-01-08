@@ -12,7 +12,6 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 
-
 class PatientInboxTab extends StatefulWidget {
   @override
   _PatientInboxTabState createState() => _PatientInboxTabState();
@@ -46,8 +45,8 @@ class _PatientInboxTabState extends State<PatientInboxTab> {
     return _isLoading
         ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
         : _inboxList.isEmpty
-            ? AppStatusComponents.errorBody(message: 'Inbox empty')
-            : _getBody();
+        ? AppStatusComponents.errorBody(message: 'Inbox empty')
+        : _getBody();
   }
 
   Widget _getBody() {
@@ -89,14 +88,14 @@ class _PatientInboxTabState extends State<PatientInboxTab> {
               children: [
                 model.senderProfileSnapshot == null
                     ? Others.getProfilePlaceHOlder()
-                    : model.senderProfileSnapshot.get('profile_image') == null
-                        ? Others.getProfilePlaceHOlder()
-                        : CircleAvatar(
-                            radius: 18,
-                            backgroundImage: NetworkImage(
-                              model.senderProfileSnapshot.get('profile_image'),
-                            ),
-                          ),
+                    : model.senderProfileSnapshot.get('id_picture') == null
+                    ? Others.getProfilePlaceHOlder()
+                    : CircleAvatar(
+                  radius: 18,
+                  backgroundImage: NetworkImage(
+                    model.senderProfileSnapshot.get('id_picture'),
+                  ),
+                ),
                 SizedBox(
                   width: 8,
                 ),
@@ -150,16 +149,16 @@ class _PatientInboxTabState extends State<PatientInboxTab> {
                 ),
                 !model.inBoxSnapshot.get('seen')
                     ? SizedBox(
-                        width: 8,
-                      )
+                  width: 8,
+                )
                     : Container(),
                 model.inBoxSnapshot.get('seen')
                     ? Container()
                     : Icon(
-                        Icons.brightness_1,
-                        color: Colors.red,
-                        size: 12,
-                      ),
+                  Icons.brightness_1,
+                  color: Colors.red,
+                  size: 12,
+                ),
               ],
             ),
           ),

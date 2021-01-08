@@ -7,11 +7,13 @@ import 'package:makhosi_app/Screens/facebook.dart';
 import 'package:makhosi_app/Screens/linkedin.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'dart:async';
-
+import 'package:makhosi_app/main_ui/patients_ui/other/patients_booking_screen.dart';
 import 'package:flutter/services.dart';
 //import 'package:flutter_linkedin/linkedloginflutter.dart';
 //import 'dart:async';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard2 extends StatefulWidget {
@@ -89,13 +91,20 @@ class _BusinessCardState extends State<BusinessCard2> {
     });
   }*/
   String _platformVersion = 'Unknown';
+  dynamic _userProfileSnapshot;
+  String _uid;
 
   @override
   void initState() {
     super.initState();
+    _getUserProfileData();
     initPlatformState();
   }
-
+  Future<void> _getUserProfileData() async {
+    _userProfileSnapshot =
+    await FirebaseFirestore.instance.collection('service_provider').doc(firstname).get();
+    setState(() {});
+  }
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
@@ -492,26 +501,32 @@ class _BusinessCardState extends State<BusinessCard2> {
                                 hourRow('●   Saturday and Sunday',
                                     '08:00am : 08:00pm'),
                                 sizeBox(40),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * .2),
-                                  child: Container(
-                                    height: 55,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(100),
-                                        color: AppColors.COLOR_PRIMARY),
-                                    child: Center(
-                                      child: Text(
-                                        'Book',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16),
+                                InkWell(
+                                  onTap: (){
+                                   // NavigationController.push(context, PatientsBookingScreen());
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: width * .2),
+                                    child: Container(
+                                      height: 55,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(100),
+                                          color: AppColors.COLOR_PRIMARY),
+                                      child: Center(
+                                        child: Text(
+                                          'Book',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
+
                                 sizeBox(20)
                               ],
                             ),

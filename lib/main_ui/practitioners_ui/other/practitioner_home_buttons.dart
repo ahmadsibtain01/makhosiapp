@@ -16,6 +16,8 @@ import 'package:makhosi_app/secondMain.dart';
 import 'package:makhosi_app/main_ui/administration/admin.dart';
 import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
 import '../../../enums/click_type.dart';
+import 'package:makhosi_app/Screens/consultation.dart';
+
 class PractitionerHomeButtons extends StatefulWidget {
   @override
   _PractitionerHomeButtonsState createState() =>
@@ -211,7 +213,13 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
               height: 45,
 
               //minWidth: 50,
-              onPressed: null,
+              onPressed: (){
+
+                NavigationController.push(
+                  context,
+                  consultation(),
+                );
+              },
               child: Row(
                 children: [
                   Text('CONSULTATION FEES', style: TextStyle(

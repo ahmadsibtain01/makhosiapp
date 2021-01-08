@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
-import 'package:makhosi_app/main_ui/patients_ui/other/patients_booking_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_bookings_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/chat/practitioner_inbox_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_home_buttons.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
@@ -23,7 +23,6 @@ import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/setting_page.dart';
 import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
 import 'package:makhosi_app/enums/click_type.dart';
-
 
 
 class PractitionersProfileScreen extends StatefulWidget {
@@ -292,7 +291,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                       Column(
                         children: [
                           Text(
-                            '2.3',
+                            '0',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 21,
@@ -533,7 +532,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
         onPressed: () async {
           NavigationController.push(
             context,
-            PatientsBookingScreen(_snapshot),
+            PractitionerBookingsScreen(),
           );
         },
         child: Text(

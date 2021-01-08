@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:braintree_payment/braintree_payment.dart';
-
+import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:provider/provider.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:makhosi_app/contracts/i_rounded_button_clicked.dart';
+import 'package:makhosi_app/enums/click_type.dart';
+import 'package:makhosi_app/main_ui/patients_ui/home/patient_home.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
+import 'package:makhosi_app/ui_components/app_buttons.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/utils/others.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/traditional_healers_screenone.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/traditional_healers_updated_screens/tradional_healer_register_screen_main.dart';
+import 'package:provider/provider.dart';
+import 'package:makhosi_app/main_ui/payment_ui/subscription_payment.dart';
 class Subscriptions extends StatefulWidget {
   @override
   _SubscriptionsState createState() => _SubscriptionsState();
 }
 
-class _SubscriptionsState extends State<Subscriptions> {
+class _SubscriptionsState extends State<Subscriptions>implements IRoundedButtonClicked {
   String serviceAll =
       "Virtual Reception\nSmart Booking Calendar\nStore Listing\nMkhosi Knowladge Hub\nIn-App VIdeo and voice calling\nGenarate summary booking reports\n";
   String startUp =
@@ -112,10 +128,25 @@ class _SubscriptionsState extends State<Subscriptions> {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(50),
-              child: RaisedButton(
+              child:  AppButtons.getRoundedButton(
+                context: context,
+                iRoundedButtonClicked: this,
+                label: 'Choose Plan',
+                clickType: ClickType.PRACTITIONER,
+              ),/* RaisedButton(
                 color: Colors.white,
                 onPressed: () {
-                 payNow(price);
+                  NavigationController.pushReplacement(context, PractitionersHome());
+                   Provider<NotificationProvider>(
+                      create: (context) {
+                        NotificationProvider notificationProvider =
+                        NotificationProvider();
+                        notificationProvider.firebaseMessaging.subscribeToTopic(
+                            'messages_${FirebaseAuth.instance.currentUser.uid}');
+                        return notificationProvider;
+                      },
+                      child: PractitionersHome());
+                  //payNow(price);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(18.0),
@@ -124,7 +155,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                     style: TextStyle(letterSpacing: 2, fontSize: 20),
                   ),
                 ),
-              ),
+              ),*/
             )
           ],
         ),
@@ -143,4 +174,37 @@ class _SubscriptionsState extends State<Subscriptions> {
         nonce: clientNonce, amount:price.toString(), nameRequired:true);
     print("Response of the payment $data");
   }
+  @override
+  onClick(ClickType clickType) {
+    Object targetScreen;
+    switch (clickType) {
+      case ClickType.PATIENT:
+        targetScreen = Provider<NotificationProvider>(
+            create: (context) {
+              NotificationProvider notificationProvider =
+              NotificationProvider();
+              notificationProvider.firebaseMessaging.subscribeToTopic(
+                  'messages_${FirebaseAuth.instance.currentUser.uid}');
+              return notificationProvider;
+            },
+            child: PatientHome());
+        break;
+      case ClickType.PRACTITIONER:
+        targetScreen = Provider<NotificationProvider>(
+            create: (context) {
+              NotificationProvider notificationProvider =
+              NotificationProvider();
+              notificationProvider.firebaseMessaging.subscribeToTopic(
+                  'messages_${FirebaseAuth.instance.currentUser.uid}');
+              return notificationProvider;
+            },
+            child: PractitionersHome());
+        break;
+      case ClickType.LOGIN:
+        break;
+      case ClickType.DUMMY:
+        break;
+    }
+      NavigationController.pushReplacement(context, targetScreen);
+}
 }

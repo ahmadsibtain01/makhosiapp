@@ -93,10 +93,11 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
       if (snapshot.size == 0) {
         setState(() {
           _isLoading = false;
-          AppToast.showToast(message: 'No practitioner found in your area');
+          AppToast.showToast(message: 'No service provider found in your area');
         });
       } else {
         snapshot.docs.forEach((doc) {
+          print(doc.id);
           _practitioners.add(doc.data());
           Marker marker = Marker(
             markerId: MarkerId(doc.id),
@@ -298,6 +299,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
   }
 
   Widget _getPractitionerRow(dynamic snapshot) {
+    String image;
     bool isOnline=false;
     String firstName = " ";
     String secondName = " ";
@@ -312,6 +314,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
     whatsapp=snapshot['WhatsappList'];
 
 
+    image=snapshot['id_picture'];
     firstName = snapshot[AppKeys.FIRST_NAME];
     secondName = snapshot[AppKeys.SECOND_NAME];
     location = snapshot[AppKeys.ADDRESS];
@@ -321,6 +324,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
     instagram=snapshot[AppKeys.LIST_OF_SOCIAL_MEDIA];
     linkedin=snapshot['LinkedInList'];
     fb=snapshot['FbList'];
+    isOnline=snapshot[AppKeys.ONLINE];
     if (firstName == null) {
       firstName = " ";
     }

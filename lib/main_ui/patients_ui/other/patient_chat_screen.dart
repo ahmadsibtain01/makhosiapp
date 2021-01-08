@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:rating_dialog/rating_dialog.dart';
 
 import 'package:agora_rtc_engine/rtc_engine.dart' as rtc;
+import 'package:braintree_payment/braintree_payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
 import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
+import 'package:makhosi_app/main_ui/patients_ui/other/payment_success.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
 import 'package:makhosi_app/utils/app_toast.dart';
@@ -36,6 +39,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
   bool _muted = false;
   TextEditingController serviceProviderController = new TextEditingController();
   TextEditingController complainController = new TextEditingController();
+  Map profile;
 
   @override
   void initState() {
@@ -58,13 +62,60 @@ class _PatientChatScreenState extends State<PatientChatScreen>
         .doc(widget._practitionerUid)
         .get()
         .then((doc) async {
-      var mute = await doc.get('mute');
-      setState(() {
-        _muted = mute;
-      });
+      var mute = false;
+      try {
+        mute = await doc.get('mute');
+        setState(() {
+          _muted = mute;
+        });
+      } catch (e) {
+        setState(() {
+          _muted = mute;
+        });
+      }
     });
+
+    getProfile();
   }
 
+  Future<void> getProfile() async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection(AppKeys.PRACTITIONERS)
+        .doc(widget._practitionerUid)
+        .get();
+    setState(() {
+      profile = snapshot.data();
+    });
+  }
+  void _showRatingDialog() {
+    // We use the built in showDialog function to show our Rating Dialog
+    showDialog(
+        context: context,
+        barrierDismissible: true, // set to false if you want to force a rating
+        builder: (context) {
+
+            return Theme(
+                data: ThemeData(dialogBackgroundColor: AppColors.COLOR_PRIMARY),
+          child:RatingDialog(
+              icon:Image.asset(
+                  'images/logo-full.png'
+              ), // set your own image/icon widget
+              title: "How was your\nexperience?",
+              description:
+              "",
+              submitButton: "SUBMIT",
+              //alternativeButton: "Contact us instead?", // optional
+              positiveComment: "We are so happy to hear :)", // optional
+              negativeComment: "We're sad to hear :(", // optional
+              accentColor: Colors.white, // option// al
+              onSubmitPressed: (int rating) {
+                print("onSubmitPressed: rating = $rating");
+                // TODO: open the app's page on Google Play / Apple App Store
+              },
+
+            ));
+        });
+  }
   Future<void> _sendReportServiceProvider(
       String serviceProviderName, String complain) async {
     //Now we will add message to patient section
@@ -302,7 +353,9 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                               'patientUid': widget._myUid,
                               'type': 'voice',
                             });
-
+                        _sendMessage(
+                            'Voice call from ${user.get(AppKeys.FULL_NAME)}',
+                            'voice');
                         NavigationController.push(
                             context,
                             AudioCall(
@@ -337,6 +390,9 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                               'patientUid': widget._myUid,
                               'type': 'video'
                             });
+                        _sendMessage(
+                            'Video call from ${user.get(AppKeys.FULL_NAME)}',
+                            'video');
                         NavigationController.push(
                             context,
                             CallPage(
@@ -398,6 +454,9 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                       ),
                     ),
                     ListTile(
+                      onTap: (){
+                        _showRatingDialog();
+                      },
                       leading: Icon(
                         Icons.mode_comment,
                         color: Colors.white,
@@ -538,8 +597,137 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     );
   }
 
+  Widget sendPaymentCard(snapshot) {
+    return Container(
+      padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(color: Colors.grey[300], blurRadius: 5, spreadRadius: 3)
+        ],
+        color: Colors.white,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'You have received a payment request',
+            style: TextStyle(
+              color: AppColors.COLOR_PRIMARY,
+              fontSize: 13,
+            ),
+          ),
+          Text(
+            'From Service Provider',
+            style: TextStyle(
+              color: AppColors.COLOR_PRIMARY,
+              fontWeight: FontWeight.w300,
+              fontSize: 12,
+            ),
+          ),
+          CircleAvatar(
+            radius: 20,
+            backgroundImage: profile != null
+                ? NetworkImage(
+              profile['id_picture'],
+            )
+                : AssetImage('images/circleavater.png'),
+          ),
+          Text(
+            profile != null ? profile['first_name'] : '',
+            style: TextStyle(
+              color: AppColors.COLOR_PRIMARY,
+              fontSize: 13,
+            ),
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(
+              'R${snapshot.get('amount')}',
+              style: TextStyle(
+                color: AppColors.COLOR_PRIMARY,
+                fontSize: 13,
+              ),
+            ),
+            Text(
+              ' ZAR',
+              style: TextStyle(
+                color: AppColors.COLOR_PRIMARY,
+                fontSize: 8,
+              ),
+            ),
+          ]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              RaisedButton(
+                color: AppColors.COLOR_PRIMARY,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: Text(
+                  'Proceed to Pay',
+                  style: TextStyle(
+                    color: AppColors.COLOR_WHITE,
+                    fontSize: 11,
+                  ),
+                ),
+                onPressed: () async {
+                  String clientNonce =
+                      "eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiJlNTc1Mjc3MzZiODkyZGZhYWFjOTIxZTlmYmYzNDNkMzc2ODU5NTIxYTFlZmY2MDhhODBlN2Q5OTE5NWI3YTJjfGNyZWF0ZWRfYXQ9MjAxOS0wNS0yMFQwNzoxNDoxNi4zMTg0ODg2MDArMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJncmFwaFFMIjp7InVybCI6Imh0dHBzOi8vcGF5bWVudHMuc2FuZGJveC5icmFpbnRyZWUtYXBpLmNvbS9ncmFwaHFsIiwiZGF0ZSI6IjIwMTgtMDUtMDgifSwiY2hhbGxlbmdlcyI6W10sImVudmlyb25tZW50Ijoic2FuZGJveCIsImNsaWVudEFwaVVybCI6Imh0dHBzOi8vYXBpLnNhbmRib3guYnJhaW50cmVlZ2F0ZXdheS5jb206NDQzL21lcmNoYW50cy8zNDhwazljZ2YzYmd5dzJiL2NsaWVudF9hcGkiLCJhc3NldHNVcmwiOiJodHRwczovL2Fzc2V0cy5icmFpbnRyZWVnYXRld2F5LmNvbSIsImF1dGhVcmwiOiJodHRwczovL2F1dGgudmVubW8uc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbSIsImFuYWx5dGljcyI6eyJ1cmwiOiJodHRwczovL29yaWdpbi1hbmFseXRpY3Mtc2FuZC5zYW5kYm94LmJyYWludHJlZS1hcGkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0=";
+                  BraintreePayment braintreePayment = BraintreePayment();
+                  var data = await braintreePayment.showDropIn(
+                      nonce: clientNonce,
+                      amount: snapshot.get('amount'),
+                      enableGooglePay: true,
+                      nameRequired: true);
+
+                  if (data['status'] == 'success') {
+                    showPaymentSuccess(
+                        context, profile, snapshot.get('amount'));
+                  }
+                },
+              ),
+              RaisedButton(
+                color: AppColors.COLOR_OFF_PRIMERY,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: Text(
+                  'Decline Request',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+                onPressed: () {
+                  showPaymentSuccess(context, profile, snapshot.get('amount'));
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Future<void> savePaymentTransaction() async {
+  //   FirebaseFirestore.instance
+  //                           .collection('passbook').doc(widget._myUid).set(
+  //                             {
+  //                               'transactionId':
+  //                             }
+  //                           )
+  // }
+
   Widget _chatRow(int position) {
     DocumentSnapshot snapshot = _chatList[position];
+    var type = snapshot.get('type');
+
+    if (type == 'payment_request') {
+      var payContainer = sendPaymentCard(snapshot);
+      return payContainer;
+    }
     return GestureDetector(
       onLongPress: () {
         Others().hideKeyboard(context);
@@ -579,6 +767,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     );
   }
 
+  // Widget
   Widget _getSendMessageSection(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -620,8 +809,12 @@ class _PatientChatScreenState extends State<PatientChatScreen>
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                SizedBox(
+                width: 16,
+              ),
                   GestureDetector(
                     onTap: () async {
+
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
                         var user = await FirebaseFirestore.instance
@@ -638,19 +831,17 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                               'patientUid': widget._myUid,
                               'type': 'text'
                             });
-                        _sendMessage(message);
+                        _sendMessage(message, 'text');
                       }
                     },
                     child: Icon(
-                      Icons.add,
+                      Icons.send,
                       color: AppColors.EDIT_PROFILE,
                       size: 30,
                     ),
                   ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  GestureDetector(
+
+                 /* GestureDetector(
                     onTap: () async {
                       String message = _messageController.text.trim();
                       if (message.isNotEmpty) {
@@ -668,7 +859,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                               'patientUid': widget._myUid,
                               'type': 'text',
                             });
-                        _sendMessage(message);
+                        _sendMessage(message, 'text');
                       }
                     },
                     child: Icon(
@@ -698,15 +889,15 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                               'patientUid': widget._myUid,
                               'type': 'text',
                             });
-                        _sendMessage(message);
+                        _sendMessage(message, 'text');
                       }
-                    },
-                    child: Icon(
+                    },*/
+                   /* child: Icon(
                       Icons.camera_alt,
                       color: AppColors.EDIT_PROFILE,
                       size: 30,
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -769,7 +960,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     });
   }
 
-  Future<void> _sendMessage(String message) async {
+  Future<void> _sendMessage(String message, String type) async {
     //First we will update inbox data for patient i.e last message, seen and timestamp
     FirebaseFirestore.instance
         .collection('chats')
@@ -797,6 +988,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
       {
         'timestamp': Timestamp.now(),
         'message': message,
+        'type': type,
         'is_received': false,
       },
     );
@@ -827,6 +1019,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
       {
         'timestamp': Timestamp.now(),
         'message': message,
+        'type': type,
         'is_received': true,
       },
     );
