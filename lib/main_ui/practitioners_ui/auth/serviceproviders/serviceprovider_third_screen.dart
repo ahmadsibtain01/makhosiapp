@@ -184,7 +184,7 @@ class _PractitionerRegisterScreenFirstState
         ),
         Others.getSizedBox(boxHeight: 0, boxWidth: 8),
         Text(
-          _pickedFile == null ? 'N/A' : 'Attached',
+          _pickedFile == null ? '' : 'Attached',
           style:
               TextStyle(color: _pickedFile == null ? Colors.red : Colors.green),
         ),

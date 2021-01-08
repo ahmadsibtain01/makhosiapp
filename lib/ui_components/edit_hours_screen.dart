@@ -7,9 +7,9 @@ import 'package:makhosi_app/utils/app_toast.dart';
 import 'package:makhosi_app/utils/app_toolbars.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:hexcolor/hexcolor.dart';
+
 class EditHoursScreen extends StatefulWidget {
   EditHoursScreen({Key key}) : super(key: key);
-
 
   @override
   _EditHoursScreenState createState() => _EditHoursScreenState();
@@ -17,8 +17,8 @@ class EditHoursScreen extends StatefulWidget {
 
 class _EditHoursScreenState extends State<EditHoursScreen>
     implements ITrailingClicked {
-  var checkk=false;
-  var checkk2=false;
+  var checkk = false;
+  var checkk2 = false;
   DateTime now = DateTime.now();
   var _list = <DayTimeModel>[];
   var _closedDaysList = <ClosedDaysModel>[];
@@ -89,7 +89,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
 
   Widget _getBody() {
     return Container(
-      padding: EdgeInsets.only(left: 24,right: 24,bottom: 2,top: 5),
+      padding: EdgeInsets.only(left: 24, right: 24, bottom: 2, top: 5),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,30 +97,29 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             Container(
                 height: 160,
                 width: 350,
-                child: Image.asset("images/bgg.png", width: 330,)
-            ),
+                child: Image.asset(
+                  "images/bgg.png",
+                  width: 330,
+                )),
             Center(
-              child: Text(
-                'BUSINESS OPERATING HOURS',
-                style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.black45,
-                ),
-              )
-            ),
+                child: Text(
+              'BUSINESS OPERATING HOURS',
+              style: TextStyle(
+                fontSize: 17,
+                color: Colors.black45,
+              ),
+            )),
             SizedBox(
               height: 5,
             ),
             Center(
                 child: Text(
-                  'Configure availability',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.black,
-                  ),
-                )
-            ),
-
+              'Configure availability by clicking on the day you are available and then followed by the times',
+              style: TextStyle(
+                fontSize: 19,
+                color: Colors.black,
+              ),
+            )),
             SizedBox(
               height: 24,
             ),
@@ -187,17 +186,14 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             SizedBox(
               height: 16,
             ),
-
             Center(
                 child: Text(
-                  'Additional Information',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black45,
-                  ),
-                )
-            ),
-
+              'Additional Information',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black45,
+              ),
+            )),
             SizedBox(
               height: 8,
             ),
@@ -207,77 +203,57 @@ class _EditHoursScreenState extends State<EditHoursScreen>
                   width: 20,
                 ),
                 GestureDetector(
-                  onTap:()
-                  {
+                  onTap: () {
                     setState(() {
-                      checkk2=true;
-
+                      checkk2 = true;
                     });
                   },
-                  child:
-                Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: checkk2==true?Colors.red:Colors.black,
-                        ),
-                        color:  Hexcolor('#78BEBD'),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                    )
-                ),
+                  child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: checkk2 == true ? Colors.red : Colors.black,
+                          ),
+                          color: Hexcolor('#78BEBD'),
+                          borderRadius: BorderRadius.all(Radius.circular(20)))),
                 ),
                 SizedBox(
                   width: 180,
                 ),
                 GestureDetector(
-                  onTap:()
-                  {
+                  onTap: () {
                     setState(() {
-                      checkk=true;
-
+                      checkk = true;
                     });
                   },
-
-
-                  child:
-                Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: checkk==true?Colors.red:Colors.black,
-                        ),
-                        color:  Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(50))
-                    )
-                ),
+                  child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: checkk == true ? Colors.red : Colors.black,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(50)))),
                 )
               ],
             ),
-
             SizedBox(
               height: 3,
             ),
             Row(
               children: [
-
                 Text(
-                    'Available on Public\n Holidays',
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontSize: 10
-                  ),
+                  'Available on Public\n Holidays',
+                  style: TextStyle(color: Colors.black45, fontSize: 10),
                 ),
                 SizedBox(
                   width: 95,
                 ),
                 Text(
-                    'Available for emergency\n consultations ',
-                  style: TextStyle(
-                      color: Colors.black45,
-                      fontSize: 10
-                  ),
+                  'Available for emergency\n consultations ',
+                  style: TextStyle(color: Colors.black45, fontSize: 10),
                 ),
               ],
             )
@@ -288,7 +264,6 @@ class _EditHoursScreenState extends State<EditHoursScreen>
   }
 
   Widget _getRow(
-
     int index,
     String label,
     TextEditingController startTime,
@@ -301,44 +276,37 @@ class _EditHoursScreenState extends State<EditHoursScreen>
             endTime.text == '11';
             setState(() {});
           },
-          child:
-        Container(
-          height: 25,
-          width: 90,
-          decoration: BoxDecoration(
-              border: Border.all(
-
-              ),
-         color: startTime.text != '00' || endTime.text == '00'
-        ?   Colors.white
-        : Hexcolor('#78BEBD'),
-              borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
-          child: Center(
-            child:  Text(
-              label,
-              style: TextStyle(
-                color: startTime.text != '00' || endTime.text == '00'
-                    ? Colors.black
-                    :  Colors.white,
-              ),
-            ),
-          )
-        ),
+          child: Container(
+              height: 25,
+              width: 90,
+              decoration: BoxDecoration(
+                  border: Border.all(),
+                  color: startTime.text != '00' || endTime.text == '00'
+                      ? Colors.white
+                      : Hexcolor('#78BEBD'),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Center(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: startTime.text != '00' || endTime.text == '00'
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                ),
+              )),
         ),
         SizedBox(
           width: 3,
         ),
-
         SizedBox(
           width: 11,
         ),
         GestureDetector(
-
           onTap: () async {
             TimeOfDay startTimeOfDay = await showTimePicker(
               context: context,
-              initialTime: TimeOfDay(hour: now.hour, minute:now.minute),
+              initialTime: TimeOfDay(hour: now.hour, minute: now.minute),
             );
             _list[index].startHours = startTimeOfDay.hour;
             _list[index].startMinutes = startTimeOfDay.minute;
@@ -349,9 +317,9 @@ class _EditHoursScreenState extends State<EditHoursScreen>
               hours = startTimeOfDay.hour;
             }
             if (startTimeOfDay.minute < 10) {
-            minutes = '0${startTimeOfDay.minute}';
+              minutes = '0${startTimeOfDay.minute}';
             } else {
-            minutes = startTimeOfDay.minute;
+              minutes = startTimeOfDay.minute;
             }
             if (_list[index].startHours < _list[index].endHours) {
               AppToast.showToast(
@@ -362,8 +330,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
               });
             }
           },
-          child:
-      Others.timingBox(label: startTime.text),
+          child: Others.timingBox(label: startTime.text),
         ),
         SizedBox(
           width: 8,
@@ -405,7 +372,6 @@ class _EditHoursScreenState extends State<EditHoursScreen>
           },
           child: Others.timingBox(label: endTime.text),
         ),
-
       ],
     );
   }

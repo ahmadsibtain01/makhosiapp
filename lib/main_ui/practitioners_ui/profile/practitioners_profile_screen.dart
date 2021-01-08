@@ -171,7 +171,7 @@ class _PractitionersProfileScreenState
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Log Out?"),
-      content: Text("Are youn sure you want to log out of the app?"),
+      content: Text("Are you sure you want to log out of the app?"),
       actions: [
         cancelButton,
         continueButton,

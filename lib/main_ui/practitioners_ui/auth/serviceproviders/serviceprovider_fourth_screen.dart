@@ -122,16 +122,16 @@ class _PractiotnerRegisterScreenFourthState
                 style: new TextStyle(fontWeight: FontWeight.bold),
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () => NavigationController.push(
-                    context,
-                    WebViewPage(
-                      link: StringConstants.COMMUNITY_GUIDLINES,
-                      title: 'Community Guidelines',
-                    ),
-                  ),
+                        context,
+                        WebViewPage(
+                          link: StringConstants.COMMUNITY_GUIDLINES,
+                          title: 'Community Guidelines',
+                        ),
+                      ),
               ),
               new TextSpan(
                   text:
-                  ' Failure to do so will result in the deactivation of your account and possible criminal charges'),
+                      ' Failure to do so will result in the deactivation of your account and possible criminal charges'),
             ],
           ),
         ),
@@ -167,7 +167,8 @@ class _PractiotnerRegisterScreenFourthState
           context: context,
           iRoundedButtonClicked: this,
           label: 'SIGN UP',
-          clickType: ClickType.DUMMY,
+          // clickType: ClickType.DUMMY,
+          clickType: ClickType.PRACTITIONER,
         ),
       ],
     );
@@ -234,7 +235,7 @@ class _PractiotnerRegisterScreenFourthState
       );
       if (registerStatus) {
         //upload id image first
-print(widget._userData);
+        print(widget._userData);
         bool firestoreResult = await helper.savePatientDataToFirestore2(
           userInfoMap: widget._userData,
           //userType: ClickType.PRACTITIONER,
