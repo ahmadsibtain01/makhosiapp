@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/chat/paid_success.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/chat/practitioner_chat_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/providers/notificaton.dart';
@@ -78,7 +79,12 @@ class _PractitionersHomeState extends State<PractitionersHome> {
               context.read<NotificationProvider>().showNotification(
                   message['notification']['title'],
                   message['notification']['body']);
-
+              break;
+            case 'payment_request':
+              var sender = message['data']['patientUid'];
+              var amount = message['data']['amount'];
+              NavigationController.push(
+                  context, PaidFee(sender: sender, amount: amount));
               break;
             default:
           }
@@ -111,6 +117,12 @@ class _PractitionersHomeState extends State<PractitionersHome> {
                   PractitionerChatScreen(message['data']['patientUid']));
 
               break;
+            case 'payment_request':
+              var sender = message['notification']['body']['patientUid'];
+              var amount = message['notification']['body']['amount'];
+              NavigationController.push(
+                  context, PaidFee(sender: sender, amount: amount));
+              break;
             default:
           }
         }
@@ -138,6 +150,12 @@ class _PractitionersHomeState extends State<PractitionersHome> {
             case 'text':
               NavigationController.push(context,
                   PractitionerChatScreen(message['data']['patientUid']));
+              break;
+            case 'payment_request':
+              var sender = message['notification']['body']['patientUid'];
+              var amount = message['notification']['body']['amount'];
+              NavigationController.push(
+                  context, PaidFee(sender: sender, amount: amount));
               break;
             default:
           }
@@ -171,6 +189,7 @@ class _PractitionersHomeState extends State<PractitionersHome> {
     //   },
     // );
   }
+
   onMessageDialog(
       {BuildContext context, String title, String label, Function onAccept}) {
     showDialog(
@@ -193,6 +212,7 @@ class _PractitionersHomeState extends State<PractitionersHome> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return _isLoading

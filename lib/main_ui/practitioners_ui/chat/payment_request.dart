@@ -14,8 +14,10 @@ class PaymentRequest extends StatefulWidget {
 
 class _PaymentRequestState extends State<PaymentRequest> {
   bool consultations = false;
+  bool goods = false;
+
   Map sender, reciever;
-  TextEditingController _remark = TextEditingController(text: 'Remarks');
+  TextEditingController _remark = TextEditingController(text: '');
   TextEditingController _amountToReq = TextEditingController();
 
   @override
@@ -58,7 +60,7 @@ class _PaymentRequestState extends State<PaymentRequest> {
       ),
     );
     //Now we will add message to patient section
-    FirebaseFirestore.instance
+    var senderMsg = await FirebaseFirestore.instance
         .collection('chats')
         .doc(widget.sender)
         .collection('inbox')
@@ -104,7 +106,8 @@ class _PaymentRequestState extends State<PaymentRequest> {
         'is_received': true,
         'amount': _amountToReq.text,
         'type': 'payment_request',
-        'paid': false
+        'paid': false,
+        'message_ref': senderMsg.id
       },
     );
     _amountToReq.text = '';
@@ -175,6 +178,7 @@ class _PaymentRequestState extends State<PaymentRequest> {
                     controller: _amountToReq,
                     style:
                         TextStyle(color: AppColors.COLOR_PRIMARY, fontSize: 30),
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -201,12 +205,12 @@ class _PaymentRequestState extends State<PaymentRequest> {
               child: TextField(
                 controller: _remark,
                 decoration: InputDecoration(
-                  fillColor: AppColors.COLOR_LIGHTSKY,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.COLOR_SKYBORDER),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+                    fillColor: AppColors.COLOR_LIGHTSKY,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.COLOR_SKYBORDER),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    hintText: "Remarks"),
               ),
             ),
             SizedBox(
@@ -217,7 +221,7 @@ class _PaymentRequestState extends State<PaymentRequest> {
               style: TextStyle(color: AppColors.COLOR_PRIMARY, fontSize: 20),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 25),
+              margin: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -232,10 +236,33 @@ class _PaymentRequestState extends State<PaymentRequest> {
                       style: TextStyle(
                           color: AppColors.COLOR_PRIMARY, fontSize: 16),
                     ),
-                    subtitle: Text(
-                      'These are charges for any consultation session that might have been carried out',
-                      style: TextStyle(color: Colors.blueGrey, fontSize: 11),
+                    subtitle: Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            'These are charges for any consultation session that might have been carried out',
+                            style:
+                                TextStyle(color: Colors.blueGrey, fontSize: 11),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Visibility(
+                            visible: consultations,
+                            child: Icon(
+                              Icons.done,
+                              color: AppColors.COLOR_PRIMARY,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
+                    onTap: () {
+                      setState(() {
+                        consultations = !consultations;
+                      });
+                    },
                   ),
                   Divider(color: Colors.blueGrey),
                   ListTile(
@@ -249,10 +276,33 @@ class _PaymentRequestState extends State<PaymentRequest> {
                       style: TextStyle(
                           color: AppColors.COLOR_PRIMARY, fontSize: 16),
                     ),
-                    subtitle: Text(
-                      'Buying something? Any goods or even additional services which do not include consultations',
-                      style: TextStyle(color: Colors.blueGrey, fontSize: 11),
+                    subtitle: Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Text(
+                            'Buying something? Any goods or even additional services which do not include consultations',
+                            style:
+                                TextStyle(color: Colors.blueGrey, fontSize: 11),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Visibility(
+                            visible: goods,
+                            child: Icon(
+                              Icons.done,
+                              color: AppColors.COLOR_PRIMARY,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
+                    onTap: () {
+                      setState(() {
+                        goods = !goods;
+                      });
+                    },
                   ),
                 ],
               ),

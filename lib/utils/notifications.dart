@@ -18,7 +18,8 @@ class NotificationsUtills {
         .collection('inbox')
         .doc(sender)
         .get();
-    var isMuted = await recieverInbox.get('mute');
+    var rIb = recieverInbox.data();
+    var isMuted = rIb.containsKey('mute') ? recieverInbox.get('mute') : false;
     if (!isMuted) {
       var data = <String, dynamic>{
         'notification': message == null

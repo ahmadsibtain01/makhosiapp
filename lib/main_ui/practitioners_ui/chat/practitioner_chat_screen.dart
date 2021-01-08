@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:makhosi_app/contracts/i_dialogue_button_clicked.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
 import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
@@ -41,6 +42,7 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
   bool isAbelapi = false;
   TextEditingController customerNameController = new TextEditingController();
   TextEditingController complainController = new TextEditingController();
+  DocumentSnapshot profile;
 
   @override
   void initState() {
@@ -64,8 +66,9 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
         .collection('inbox')
         .doc(widget._patientUid)
         .get()
-        .then((doc) async {
-      var mute = await doc.get('mute');
+        .then((doc) {
+      var d = doc.data();
+      var mute = d.containsKey('mute') ? doc.get('mute') : false;
       setState(() {
         _muted = mute;
       });
@@ -219,6 +222,10 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
         .doc(widget._myUid)
         .get();
     var type = serviceProvider.get("service_type");
+
+    setState(() {
+      profile = serviceProvider;
+    });
 
     if (type.toLowerCase() == "Abelaphi".toLowerCase()) {
       setState(() {
@@ -573,6 +580,82 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
     );
   }
 
+  Widget paidCard(DocumentSnapshot snapshot) {
+    var data = snapshot.data();
+    var pr = profile?.data();
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(color: Colors.grey[300], blurRadius: 5, spreadRadius: 3)
+        ],
+        color: Colors.white,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                DateFormat('d MMMM yyyy').format(data['timestamp'].toDate()),
+                style: TextStyle(
+                  color: AppColors.LIGHT_GREY,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: profile != null
+                    ? NetworkImage(
+                        pr['id_picture'],
+                      )
+                    : AssetImage('images/circleavater.png'),
+              ),
+              Spacer(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    profile != null ? pr['first_name'] : '',
+                    style: TextStyle(
+                      color: AppColors.COLOR_PRIMARY,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    data['paid'] ? 'Payment received' : 'Pending',
+                    style: TextStyle(
+                      color: AppColors.LIGHT_GREY,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Text(
+                '+${snapshot.get('amount')}ZAR',
+                style: TextStyle(
+                  color: AppColors.COLOR_PRIMARY,
+                  fontSize: 14,
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _getBody() {
     return Container(
       color: Colors.white,
@@ -592,6 +675,13 @@ class _PractitionerChatScreenState extends State<PractitionerChatScreen>
 
   Widget _chatRow(int position) {
     DocumentSnapshot snapshot = _chatList[position];
+
+    var type = snapshot.get('type');
+
+    if (type == 'payment_request') {
+      var payContainer = paidCard(snapshot);
+      return payContainer;
+    }
     return GestureDetector(
       onLongPress: () {
         Others().hideKeyboard(context);

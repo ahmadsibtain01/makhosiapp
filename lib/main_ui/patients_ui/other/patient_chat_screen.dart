@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:makhosi_app/contracts/i_message_dialog_clicked.dart';
 import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
@@ -17,6 +18,7 @@ import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/notifications.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/permissions_handle.dart';
+import 'package:uuid/uuid.dart';
 
 class PatientChatScreen extends StatefulWidget {
   String _practitionerUid, _myUid;
@@ -565,7 +567,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     );
   }
 
-  Widget sendPaymentCard(snapshot) {
+  Widget sendPaymentCard(DocumentSnapshot snapshot) {
     return Container(
       padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -651,8 +653,33 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                       nameRequired: true);
 
                   if (data['status'] == 'success') {
-                    showPaymentSuccess(
-                        context, profile, snapshot.get('amount'));
+                    var paymentDetails = await savePaymentTransaction(snapshot);
+                    FirebaseFirestore.instance
+                        .collection('chats')
+                        .doc(widget._myUid)
+                        .collection('inbox')
+                        .doc(widget._practitionerUid)
+                        .collection('messages')
+                        .doc(snapshot.id)
+                        .set(
+                      {'paid': true},
+                      SetOptions(merge: true),
+                    );
+
+                    FirebaseFirestore.instance
+                        .collection('chats')
+                        .doc(widget._practitionerUid)
+                        .collection('inbox')
+                        .doc(widget._myUid)
+                        .collection('messages')
+                        .doc(snapshot.get('message_ref'))
+                        .set(
+                      {'paid': true},
+                      SetOptions(merge: true),
+                    );
+
+                    var transaction = await paymentDetails.get();
+                    showPaymentSuccess(context, transaction.data());
                   }
                 },
               ),
@@ -669,7 +696,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
                   ),
                 ),
                 onPressed: () {
-                  showPaymentSuccess(context, profile, snapshot.get('amount'));
+                  // showPaymentSuccess(context, profile, snapshot.get('amount'));
                 },
               ),
             ],
@@ -679,22 +706,158 @@ class _PatientChatScreenState extends State<PatientChatScreen>
     );
   }
 
-  // Future<void> savePaymentTransaction() async {
-  //   FirebaseFirestore.instance
-  //                           .collection('passbook').doc(widget._myUid).set(
-  //                             {
-  //                               'transactionId':
-  //                             }
-  //                           )
-  // }
+  Widget paidCard(DocumentSnapshot snapshot) {
+    var data = snapshot.data();
+    return Container(
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(color: Colors.grey[300], blurRadius: 5, spreadRadius: 3)
+        ],
+        color: Colors.white,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                DateFormat('d MMMM yyyy').format(data['timestamp'].toDate()),
+                style: TextStyle(
+                  color: AppColors.LIGHT_GREY,
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: profile != null
+                    ? NetworkImage(
+                        profile['id_picture'],
+                      )
+                    : AssetImage('images/circleavater.png'),
+              ),
+              Spacer(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    profile != null ? profile['first_name'] : '',
+                    style: TextStyle(
+                      color: AppColors.COLOR_PRIMARY,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    'Payment submitted',
+                    style: TextStyle(
+                      color: AppColors.LIGHT_GREY,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Text(
+                '+${snapshot.get('amount')}ZAR',
+                style: TextStyle(
+                  color: AppColors.COLOR_PRIMARY,
+                  fontSize: 14,
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<DocumentReference> savePaymentTransaction(
+      DocumentSnapshot snapshot) async {
+    var patientProfile = await FirebaseFirestore.instance
+        .collection(AppKeys.PATIENTS)
+        .doc(widget._myUid)
+        .get();
+
+    var pProfile = patientProfile.data();
+
+    var transaction = await FirebaseFirestore.instance
+        .collection('passbook')
+        .doc(widget._myUid)
+        .collection('transactions')
+        .add({
+      'transactionId': Uuid().v4().characters.string,
+      'sender': widget._myUid,
+      'receiver': widget._practitionerUid,
+      'amount': snapshot.get('amount'),
+      'currency': 'ZAR',
+      'senderProPic': pProfile.containsKey('profile_image')
+          ? pProfile['profile_image']
+          : 'images/circleavater.png',
+      'receiverProPic': profile.containsKey('id_picture')
+          ? profile['id_picture']
+          : 'images/circleavater.png',
+      'senderName': pProfile['full_name'],
+      'receiverName': profile['first_name'],
+      'sentOn': Timestamp.now(),
+      'message': {'id': snapshot.id, ...snapshot.data()}
+    });
+    FirebaseFirestore.instance
+        .collection('passbook')
+        .doc(widget._practitionerUid)
+        .collection('transactions')
+        .add({
+      'transactionId': Uuid().v4().characters.string,
+      'sender': widget._myUid,
+      'receiver': widget._practitionerUid,
+      'amount': snapshot.get('amount'),
+      'currency': 'ZAR',
+      'senderProPic': pProfile.containsKey('profile_image')
+          ? pProfile['profile_image']
+          : 'images/circleavater.png',
+      'receiverProPic': profile.containsKey('id_picture')
+          ? profile['id_picture']
+          : 'images/circleavater.png',
+      'sentOn': Timestamp.now(),
+      'senderName': pProfile['full_name'],
+      'receiverName': profile['first_name'],
+      'message': {'id': snapshot.id, ...snapshot.data()}
+    });
+
+    NotificationsUtills.sendMsgNotification(
+        sender: widget._myUid,
+        reciever: widget._practitionerUid,
+        title:
+            '${pProfile['full_name']} sent you ${snapshot.get('amount')} ZAR',
+        body: {
+          'patientUid': widget._myUid,
+          'type': 'payment_request',
+          'amount': snapshot.get('amount')
+        });
+    return transaction;
+  }
 
   Widget _chatRow(int position) {
     DocumentSnapshot snapshot = _chatList[position];
     var type = snapshot.get('type');
 
     if (type == 'payment_request') {
-      var payContainer = sendPaymentCard(snapshot);
-      return payContainer;
+      if (snapshot.get('paid')) {
+        var payContainer = paidCard(snapshot);
+        return payContainer;
+      } else {
+        var payContainer = sendPaymentCard(snapshot);
+        return payContainer;
+      }
     }
     return GestureDetector(
       onLongPress: () {
@@ -938,6 +1101,7 @@ class _PatientChatScreenState extends State<PatientChatScreen>
         'timestamp': Timestamp.now(),
         'last_message': message,
         'seen': true,
+        'mute': _muted,
       },
       SetOptions(
         merge: true,

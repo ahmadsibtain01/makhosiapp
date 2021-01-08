@@ -24,7 +24,6 @@ import 'package:makhosi_app/utils/pickup_call_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:makhosi_app/utils/app_dialogues.dart';
 
-
 class PatientHome extends StatefulWidget {
   @override
   _PatientHomeState createState() => _PatientHomeState();
@@ -197,13 +196,13 @@ class _PatientHomeState extends State<PatientHome> {
                 padding: EdgeInsets.only(top: 12, bottom: 12),
                 margin: EdgeInsets.only(right: 16),
                 child: _userProfileSnapshot != null &&
-                    _userProfileSnapshot.get(AppKeys.PROFILE_IMAGE) != null
+                        _userProfileSnapshot.get(AppKeys.PROFILE_IMAGE) != null
                     ? CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(
-                    _userProfileSnapshot.get(AppKeys.PROFILE_IMAGE),
-                  ),
-                )
+                        radius: 16,
+                        backgroundImage: NetworkImage(
+                          _userProfileSnapshot.get(AppKeys.PROFILE_IMAGE),
+                        ),
+                      )
                     : Icon(Icons.person),
               ),
             ),
