@@ -54,7 +54,9 @@ class _RegisterSuccessScreenState extends State<RegisterSuccessScreen>
               height: 10,
             ),
             Text(
-              'AS A SERVICE PROVIDER',
+              widget._clickType == ClickType.PATIENT
+                  ? 'AS A CUSTOMER'
+                  : 'AS A SERVICE PROVIDER',
               style: TextStyle(
                 fontSize: 21,
                 color: Colors.black54,

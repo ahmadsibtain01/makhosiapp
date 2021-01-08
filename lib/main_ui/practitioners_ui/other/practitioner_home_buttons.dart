@@ -253,7 +253,7 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
                 Others.showInfoDialog(
                   context: context,
                   title: 'Log Out?',
-                  message: 'Are youn sure you want to log out of the app?',
+                  message: 'Are you sure you want to log out of the app?',
                   positiveButtonLabel: 'LOG OUT',
                   negativeButtonLabel: 'CANCEL',
                   iInfoDialogClicked: this,
@@ -287,7 +287,7 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
       Others.showInfoDialog(
         context: context,
         title: 'Log Out?',
-        message: 'Are youn sure you want to log out of the app?',
+        message: 'Are you sure you want to log out of the app?',
         positiveButtonLabel: 'LOG OUT',
         negativeButtonLabel: 'CANCEL',
         iInfoDialogClicked: this,
