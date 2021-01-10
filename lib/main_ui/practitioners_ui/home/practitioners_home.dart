@@ -118,8 +118,8 @@ class _PractitionersHomeState extends State<PractitionersHome> {
 
               break;
             case 'payment_request':
-              var sender = message['notification']['body']['patientUid'];
-              var amount = message['notification']['body']['amount'];
+              var sender = message['data']['patientUid'];
+              var amount = message['data']['amount'];
               NavigationController.push(
                   context, PaidFee(sender: sender, amount: amount));
               break;
@@ -152,8 +152,8 @@ class _PractitionersHomeState extends State<PractitionersHome> {
                   PractitionerChatScreen(message['data']['patientUid']));
               break;
             case 'payment_request':
-              var sender = message['notification']['body']['patientUid'];
-              var amount = message['notification']['body']['amount'];
+              var sender = message['data']['patientUid'];
+              var amount = message['data']['amount'];
               NavigationController.push(
                   context, PaidFee(sender: sender, amount: amount));
               break;
