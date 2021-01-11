@@ -19,7 +19,7 @@ class _OnBoardingOneState extends State<OnBoardingOne> {
           ),
           Center(
             child: Image.asset(
-              "images/boarding.png",
+              "images/appicon.jpeg",
               height: 200,
               width: 250,
             ),

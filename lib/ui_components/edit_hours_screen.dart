@@ -45,20 +45,20 @@ class _EditHoursScreenState extends State<EditHoursScreen>
       closingDay.dayOfWeek = i;
       _closedDaysList.add(closingDay);
     }
-    _sundayStartTimingController.text = '00';
-    _mondayStartTimingController.text = '08';
-    _tuesdayStartTimingController.text = '08';
-    _wednesdayStartTimingController.text = '08';
-    _thursdayStartTimingController.text = '08';
-    _fridayStartTimingController.text = '08';
-    _saturdayStartTimingController.text = '08';
-    _sundayEndTimingController.text = '00';
-    _mondayEndTimingController.text = '17';
-    _tuesdayEndTimingController.text = '17';
-    _wednesdayEndTimingController.text = '17';
-    _thursdayEndTimingController.text = '17';
-    _fridayEndTimingController.text = '17';
-    _saturdayEndTimingController.text = '13';
+    _sundayStartTimingController.text = '00:00';
+    _mondayStartTimingController.text = '08:00';
+    _tuesdayStartTimingController.text = '08:00';
+    _wednesdayStartTimingController.text = '08:00';
+    _thursdayStartTimingController.text = '08:00';
+    _fridayStartTimingController.text = '08:00';
+    _saturdayStartTimingController.text = '08:00';
+    _sundayEndTimingController.text = '00:00';
+    _mondayEndTimingController.text = '17:00';
+    _tuesdayEndTimingController.text = '17:00';
+    _wednesdayEndTimingController.text = '17:00';
+    _thursdayEndTimingController.text = '17:00';
+    _fridayEndTimingController.text = '17:00';
+    _saturdayEndTimingController.text = '13:00';
     for (var i = 0; i < 7; i++) {
       var dayTimeModel = DayTimeModel();
       dayTimeModel.startHours = 0;
@@ -205,7 +205,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      checkk2 = true;
+                      checkk2 = !checkk2;
                     });
                   },
                   child: Container(
@@ -213,9 +213,9 @@ class _EditHoursScreenState extends State<EditHoursScreen>
                       width: 40,
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: checkk2 == true ? Colors.red : Colors.black,
+                            color: Colors.black,
                           ),
-                          color: Hexcolor('#78BEBD'),
+                          color: checkk2 ? Hexcolor('#78BEBD') : Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(20)))),
                 ),
                 SizedBox(
@@ -224,7 +224,7 @@ class _EditHoursScreenState extends State<EditHoursScreen>
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      checkk = true;
+                      checkk = !checkk;
                     });
                   },
                   child: Container(
@@ -232,9 +232,10 @@ class _EditHoursScreenState extends State<EditHoursScreen>
                       width: 40,
                       decoration: BoxDecoration(
                           border: Border.all(
-                            color: checkk == true ? Colors.red : Colors.black,
+                            // color: checkk == true ? Colors.red : Colors.black,
+                            color: Colors.black,
                           ),
-                          color: Colors.white,
+                          color: checkk ? Hexcolor('#78BEBD') : Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(50)))),
                 )
               ],

@@ -8,6 +8,7 @@ import 'package:makhosi_app/ui_components/app_buttons.dart';
 import 'package:makhosi_app/ui_components/settings/terms_policy.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
+import 'package:makhosi_app/utils/screen_dimensions.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
 
 class UserTypeScreen extends StatefulWidget {
@@ -29,6 +30,16 @@ class _UserTypeScreenState extends State<UserTypeScreen>
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Image.asset(
+                  'images/appicon.jpeg',
+                  width: ScreenDimensions.getScreenWidth(context) / 1.39,
+                  // height: ScreenDimensions.getScreenWidth(context) / 1.39,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Others.getSizedBox(boxHeight: 25, boxWidth: 0),
               AppButtons.getRoundedButton(
                 context: context,
                 iRoundedButtonClicked: this,

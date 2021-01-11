@@ -32,13 +32,46 @@ class TraditionalHealersScreenFirst extends StatefulWidget {
 class _TraditionalHealersScreenFirstState
     extends State<TraditionalHealersScreenFirst>
     implements IRoundedButtonClicked {
-  var _medicineSourceController = TextEditingController();
-  var _traditionalHealerRulesController = TextEditingController();
-  var _healerTypeController = TextEditingController();
-  var _particularSpecialityController = TextEditingController();
-  //dropdown
+  // var _medicineSourceController = TextEditingController();
+  // var _traditionalHealerRulesController = TextEditingController();
+  // var _healerTypeController = TextEditingController();
+  // var _particularSpecialityController = TextEditingController();
+  //dropdown consultancy
   var _consultancyTypeList = ['Physically', 'Virtually', 'Both'];
   String _selectedConsultancyType;
+  //dropdown typeofhealer
+  var _healerTypeList = ['Sangoma', 'Mthandazi', 'Herbalist', 'Other'];
+  String _selectedHealerType;
+  //dropdown particular speciality
+  var _particularSpecialityList = [
+    'Initiation',
+    'Children',
+    'Pregnancy',
+    "Family problems",
+    "General illness",
+    'Wounds and sores',
+  ];
+  String _selectedParticularSpecialityType;
+  //dropdown medicine source
+  var _medicineSourceList = [
+    'Own wild harvesting',
+    'Own cultivation',
+    'Muthi Market – if market, which one is it:',
+    'Faraday Market (Johannesburg)',
+    'Ezimbuzini Market (Umlazi)',
+    'Marabastad (Pretoria)',
+    'Mona Market (Nongoma)',
+    'Other',
+  ];
+  String _selectedMedicineSourceType;
+
+  //dropdown patientrules
+  var _patientrulesList = [
+    'Dress code - explain',
+    'Technology – Explain',
+    'Fasting rules',
+  ];
+  String _selectedpatientrule;
   //form
   final _formKey = GlobalKey<FormState>();
 
@@ -73,34 +106,137 @@ class _TraditionalHealersScreenFirstState
             textAlign: TextAlign.justify,
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-          AppTextFields.getTextField(
-            controller: _healerTypeController,
-            label: 'What type of healer are you?',
-            isPassword: false,
-            isNumber: false,
+          // AppTextFields.getTextField(
+          //   controller: _healerTypeController,
+          //   label: 'What type of healer are you?',
+          //   isPassword: false,
+          //   isNumber: false,
+          // ),
+          Container(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+            ),
+            child: DropdownButton(
+              hint: Text('What type of healer are you?'),
+              isExpanded: true,
+              underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+              value: _selectedHealerType,
+              items: _healerTypeList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    ),
+                  )
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  _selectedHealerType = item;
+                });
+              },
+            ),
+          ),
+
+          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
+          // AppTextFields.getTextField(
+          //   controller: _particularSpecialityController,
+          //   label: 'Do you have particular specialities?',
+          //   isPassword: false,
+          //   isNumber: false,
+          // ),
+          Container(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+            ),
+            child: DropdownButton(
+              hint: Text('Do you have particular specialities?'),
+              isExpanded: true,
+              underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+              value: _selectedParticularSpecialityType,
+              items: _particularSpecialityList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    ),
+                  )
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  _selectedParticularSpecialityType = item;
+                });
+              },
+            ),
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-          AppTextFields.getTextField(
-            controller: _particularSpecialityController,
-            label: 'Do you have particular specialities?',
-            isPassword: false,
-            isNumber: false,
+          // AppTextFields.getTextField(
+          //   controller: _medicineSourceController,
+          //   label:
+          //       'If you are a herbalist, where do you source your medicine (imithi)?',
+          //   isPassword: false,
+          //   isNumber: false,
+          // ),
+          Container(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+            ),
+            child: DropdownButton(
+              hint: Text(
+                  'If you are a herbalist, where do you source your medicine (imithi)?'),
+              isExpanded: true,
+              underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+              value: _selectedMedicineSourceType,
+              items: _medicineSourceList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    ),
+                  )
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  _selectedMedicineSourceType = item;
+                });
+              },
+            ),
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-          AppTextFields.getTextField(
-            controller: _medicineSourceController,
-            label:
-                'If you are a herbalist, where do you source your medicine (imithi)?',
-            isPassword: false,
-            isNumber: false,
-          ),
-          Others.getSizedBox(boxHeight: 16, boxWidth: 0),
-          AppTextFields.getTextField(
-            controller: _traditionalHealerRulesController,
-            label:
-                'What rules do patients have to abide by when consulting with you?',
-            isPassword: false,
-            isNumber: false,
+          // AppTextFields.getTextField(
+          //   controller: _traditionalHealerRulesController,
+          //   label:
+          //       'What rules do patients have to abide by when consulting with you?',
+          //   isPassword: false,
+          //   isNumber: false,
+          // ),
+          Container(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+            ),
+            child: DropdownButton(
+              hint: Text(
+                  'What rules do patients have to abide by when consulting with you?'),
+              isExpanded: true,
+              underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+              value: _selectedpatientrule,
+              items: _patientrulesList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      child: Text(item),
+                      value: item,
+                    ),
+                  )
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  _selectedpatientrule = item;
+                });
+              },
+            ),
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           //consultancytyp dropdown
@@ -181,22 +317,31 @@ class _TraditionalHealersScreenFirstState
   @override
   onClick(ClickType clickType) {
     if (_formKey.currentState.validate()) {
-      String medicineSource = _medicineSourceController.text.trim();
-      String traditionalHealerRules =
-          _traditionalHealerRulesController.text.trim();
-      String healerType = _healerTypeController.text.trim();
-      String particularspeciality = _particularSpecialityController.text.trim();
+      // String medicineSource = _medicineSourceController.text.trim();
+      // String traditionalHealerRules =
+      //     _traditionalHealerRulesController.text.trim();
+      // String healerType = _healerTypeController.text.trim();
+      // String particularspeciality = _particularSpecialityController.text.trim();
       if (_selectedConsultancyType == null) {
         AppToast.showToast(message: 'Please select Consultancy type');
+      } else if (_selectedHealerType == null) {
+        AppToast.showToast(message: 'Please select Healer type');
+      } else if (_selectedMedicineSourceType == null) {
+        AppToast.showToast(message: 'Please select Medicine Source');
+      } else if (_selectedParticularSpecialityType == null) {
+        AppToast.showToast(
+            message: 'Please select Particular Speciality field');
+      } else if (_selectedpatientrule == null) {
+        AppToast.showToast(message: 'Please select Patient rules');
       } else {
         NavigationController.push(
           context,
           TraditionalHealersScreenTwo(
             {
-              AppKeys.MEDICINE_SOURCING: medicineSource,
-              AppKeys.RULES_FOR_PATIENT: traditionalHealerRules,
-              AppKeys.WHAT_TYPE_OF_HEALER: healerType,
-              AppKeys.PARTICULAR_SPECIALITY: particularspeciality,
+              AppKeys.MEDICINE_SOURCING: _selectedMedicineSourceType,
+              AppKeys.RULES_FOR_PATIENT: _selectedpatientrule,
+              AppKeys.WHAT_TYPE_OF_HEALER: _selectedHealerType,
+              AppKeys.PARTICULAR_SPECIALITY: _particularSpecialityList,
             },
           ),
         );
