@@ -40,6 +40,14 @@ class _TraditionalHealersScreenTwoState
   var _uGhobelaLocationController = TextEditingController();
   var _finalHomecomingCeremonyController = TextEditingController();
   var _threePeopleReferenceController = TextEditingController();
+  //dropdown consultancy
+  var _comercialProductsList = [
+    'Herbal remedies',
+    'Drums',
+    'Traditional clothing',
+    'Traditional Clothes'
+  ];
+  String _selectedComercialProduct;
   //form key
   final _formKey = GlobalKey<FormState>();
 
@@ -63,13 +71,43 @@ class _TraditionalHealersScreenTwoState
               fontSize: 19,
             ),
           ),
-          AppTextFields.getTextField(
-            controller: _comercialProductsController,
-            label:
-                'Do you have commercial products that you would like to sell?',
-            isPassword: false,
-            isNumber: false,
+          // AppTextFields.getTextField(
+          //   controller: _comercialProductsController,
+          //   label:
+          //       'Do you have commercial products that you would like to sell?',
+          //   isPassword: false,
+          //   isNumber: false,
+          // ),
+          Container(
+            padding: EdgeInsets.only(left: 12, right: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+            ),
+            child: DropdownButton(
+              hint: Text(
+                  'Do you have commercial products that you would like to sell?'),
+              isExpanded: true,
+              underline: Others.getSizedBox(boxHeight: 0, boxWidth: 0),
+              value: _selectedComercialProduct,
+              items: _comercialProductsList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(item),
+                      ),
+                      value: item,
+                    ),
+                  )
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  _selectedComercialProduct = item;
+                });
+              },
+            ),
           ),
+
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           AppTextFields.getTextField(
             controller: _ukuthawasaStartDateController,
@@ -173,29 +211,33 @@ class _TraditionalHealersScreenTwoState
 
   @override
   onClick(ClickType clickType) {
-    if (_formKey.currentState.validate()) {
-      String commercialProduct = _comercialProductsController.text.trim();
-      String ukuthawasaStartDate = _ukuthawasaStartDateController.text.trim();
-      String start_end_training_control =
-          _startAndEndOfTrainingController.text.trim();
-      String teacher = _teacherNameController.text.trim();
-      String uGhobelLocation = _uGhobelaLocationController.text.trim();
-      String homecommingCermonyLocation =
-          _finalHomecomingCeremonyController.text.trim();
-      String reference = _threePeopleReferenceController.text.trim();
-      widget._userData.addAll({
-        AppKeys.COMERICAL_PRODUCTS: commercialProduct,
-        AppKeys.UKUTHWASA_PRACTICING_YEARS: ukuthawasaStartDate,
-        AppKeys.UGHOBELA_LOCATION: uGhobelLocation,
-        AppKeys.TEACHER: teacher,
-        AppKeys.HOMECOMING_CEREMONY_LOCATION: homecommingCermonyLocation,
-        AppKeys.REFERENCES: reference,
-        AppKeys.TRAINING_END_DATE: start_end_training_control,
-      });
-      NavigationController.push(
-        context,
-        TraditionalHealersScreenThree(widget._userData),
-      );
+    if (_selectedComercialProduct != null) {
+      if (_formKey.currentState.validate()) {
+        // String commercialProduct = _comercialProductsController.text.trim();
+        String ukuthawasaStartDate = _ukuthawasaStartDateController.text.trim();
+        String start_end_training_control =
+            _startAndEndOfTrainingController.text.trim();
+        String teacher = _teacherNameController.text.trim();
+        String uGhobelLocation = _uGhobelaLocationController.text.trim();
+        String homecommingCermonyLocation =
+            _finalHomecomingCeremonyController.text.trim();
+        String reference = _threePeopleReferenceController.text.trim();
+        widget._userData.addAll({
+          AppKeys.COMERICAL_PRODUCTS: _selectedComercialProduct,
+          AppKeys.UKUTHWASA_PRACTICING_YEARS: ukuthawasaStartDate,
+          AppKeys.UGHOBELA_LOCATION: uGhobelLocation,
+          AppKeys.TEACHER: teacher,
+          AppKeys.HOMECOMING_CEREMONY_LOCATION: homecommingCermonyLocation,
+          AppKeys.REFERENCES: reference,
+          AppKeys.TRAINING_END_DATE: start_end_training_control,
+        });
+        NavigationController.push(
+          context,
+          TraditionalHealersScreenThree(widget._userData),
+        );
+      }
+    } else {
+      AppToast.showToast(message: 'Please select dropdown menu');
     }
   }
 }
