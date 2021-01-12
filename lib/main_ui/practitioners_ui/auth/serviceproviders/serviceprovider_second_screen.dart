@@ -457,6 +457,7 @@ class _PractitionerRegisterScreenSecondState
           AppKeys.COMPANY_WEBSITE_LINK: isBuisnessWebsite ? website_link : null,
           AppKeys.SOCIAL_MEDIA: isSocialMediaInsta,
           AppKeys.LIST_OF_SOCIAL_MEDIA: isSocialMediaInsta ? social_media_link: null,
+          "consultation_fee": consultation_fee.isEmpty ? '0' : consultation_fee,
 
           AppKeys.isSocialMediaLinkedIn: isSocialMediaLinkedIn,
           AppKeys.LinkedInList: isSocialMediaLinkedIn ? social_media_link2: null,
