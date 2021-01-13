@@ -37,7 +37,7 @@ class _PractitionerRegisterScreenSecondState
   var _socialMediaUsernameControllerInstagram = TextEditingController();
   var _socialMediaUsernameControllerLinkedIn = TextEditingController();
   var _socialMediaUsernameControllerFacebook = TextEditingController();
-  var _socialMediaUsernameControllerWhatsapp= TextEditingController();
+  var _socialMediaUsernameControllerWhatsapp = TextEditingController();
 
   var _deliveryPriceController = TextEditingController();
   var _consultationFeeController = TextEditingController();
@@ -49,7 +49,10 @@ class _PractitionerRegisterScreenSecondState
   String _selectedPaymentType;
   //checkbox
   bool isBuisnessWebsite = false;
-  bool isSocialMediaInsta=false, isSocialMediaLinkedIn=false, isSocialMediaFb  = false, isSocialMediaWhatsapp=false;
+  bool isSocialMediaInsta = false,
+      isSocialMediaLinkedIn = false,
+      isSocialMediaFb = false,
+      isSocialMediaWhatsapp = false;
   bool isDelivery = false;
   bool sickNote = false, invoice = false, quotation = false;
   //formkey
@@ -184,7 +187,7 @@ class _PractitionerRegisterScreenSecondState
               });
             },
             controlAffinity:
-            ListTileControlAffinity.trailing, //  <-- leading Checkbox
+                ListTileControlAffinity.trailing, //  <-- leading Checkbox
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           Visibility(
@@ -209,7 +212,7 @@ class _PractitionerRegisterScreenSecondState
               });
             },
             controlAffinity:
-            ListTileControlAffinity.trailing, //  <-- leading Checkbox
+                ListTileControlAffinity.trailing, //  <-- leading Checkbox
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           Visibility(
@@ -234,7 +237,7 @@ class _PractitionerRegisterScreenSecondState
               });
             },
             controlAffinity:
-            ListTileControlAffinity.trailing, //  <-- leading Checkbox
+                ListTileControlAffinity.trailing, //  <-- leading Checkbox
           ),
           Others.getSizedBox(boxHeight: 16, boxWidth: 0),
           Visibility(
@@ -323,23 +326,24 @@ class _PractitionerRegisterScreenSecondState
             mainAxisSize: MainAxisSize.min,
             children: [
               //first
-              ServiceProviderRegisterScreenOne.checkservice=='Abelaphi'?
-              Flexible(
-                child: CheckboxListTile(
-                  title: Text(
-                    "Sick Notes",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
-                  value: sickNote,
-                  onChanged: (newValue) {
-                    setState(() {
-                      sickNote = newValue;
-                    });
-                  },
-                  controlAffinity:
-                      ListTileControlAffinity.trailing, //  <-- leading Checkbox
-                ),
-              ):Text(''),
+              ServiceProviderRegisterScreenOne.checkservice == 'Abelaphi'
+                  ? Flexible(
+                      child: CheckboxListTile(
+                        title: Text(
+                          "Sick Notes",
+                          style: TextStyle(fontSize: 15.0),
+                        ),
+                        value: sickNote,
+                        onChanged: (newValue) {
+                          setState(() {
+                            sickNote = newValue;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity
+                            .trailing, //  <-- leading Checkbox
+                      ),
+                    )
+                  : Text(''),
               //second
               Flexible(
                 child: CheckboxListTile(
@@ -436,10 +440,14 @@ class _PractitionerRegisterScreenSecondState
     if (_formKey.currentState.validate()) {
       String practiceYears = _yearsInPracticeController.text.trim();
       String website_link = _websiteLinkController.text.trim();
-      String social_media_link = _socialMediaUsernameControllerInstagram.text.trim();
-      String social_media_link2 = _socialMediaUsernameControllerLinkedIn.text.trim();
-      String social_media_link3= _socialMediaUsernameControllerFacebook.text.trim();
-      String social_media_link4= _socialMediaUsernameControllerWhatsapp.text.trim();
+      String social_media_link =
+          _socialMediaUsernameControllerInstagram.text.trim();
+      String social_media_link2 =
+          _socialMediaUsernameControllerLinkedIn.text.trim();
+      String social_media_link3 =
+          _socialMediaUsernameControllerFacebook.text.trim();
+      String social_media_link4 =
+          _socialMediaUsernameControllerWhatsapp.text.trim();
 
       String delivery_price = _deliveryPriceController.text.trim();
       String consultation_fee = _consultationFeeController.text.trim();
@@ -451,22 +459,22 @@ class _PractitionerRegisterScreenSecondState
         AppToast.showToast(message: 'Please select business operating hours');
       } else {
         widget._userData.addAll({
+          AppKeys.CONSULTATION_FEE_PER_SESSION: consultation_fee,
           AppKeys.BUSINESS_PRACTICE_TYPE: _selectedPractice,
           AppKeys.PRACTICE_YEARS: practiceYears,
           AppKeys.COMPANY_WEBSITE: isBuisnessWebsite,
           AppKeys.COMPANY_WEBSITE_LINK: isBuisnessWebsite ? website_link : null,
           AppKeys.SOCIAL_MEDIA: isSocialMediaInsta,
-          AppKeys.LIST_OF_SOCIAL_MEDIA: isSocialMediaInsta ? social_media_link: null,
-
+          AppKeys.LIST_OF_SOCIAL_MEDIA:
+              isSocialMediaInsta ? social_media_link : null,
           AppKeys.isSocialMediaLinkedIn: isSocialMediaLinkedIn,
-          AppKeys.LinkedInList: isSocialMediaLinkedIn ? social_media_link2: null,
-
+          AppKeys.LinkedInList:
+              isSocialMediaLinkedIn ? social_media_link2 : null,
           AppKeys.isSocialMediaFb: isSocialMediaFb,
-          AppKeys.FbList: isSocialMediaFb ? social_media_link3: null,
-
+          AppKeys.FbList: isSocialMediaFb ? social_media_link3 : null,
           AppKeys.isSocialMediaWhatsapp: isSocialMediaWhatsapp,
-          AppKeys.WhatsappList: isSocialMediaWhatsapp ? social_media_link4: null,
-
+          AppKeys.WhatsappList:
+              isSocialMediaWhatsapp ? social_media_link4 : null,
           AppKeys.IS_DELIVER: isDelivery,
           AppKeys.DELIVERY_PRICE: isDelivery ? delivery_price : null,
           AppKeys.TIMINGS: {

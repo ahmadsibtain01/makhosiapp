@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patients_booking_screen.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/auth/update.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/chat/practitioner_inbox_screen.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/other/practitioner_home_buttons.dart';
 import 'package:makhosi_app/ui/ratingstaticpage.dart';
@@ -74,12 +75,16 @@ class _PractitionersProfileScreenState
     }
   }
 
-  getData()async{
+  getData() async {
     String id = FirebaseAuth.instance.currentUser.uid;
 
-    await FirebaseFirestore.instance.collection('bookings').where('appointment_to', isEqualTo: id).get().then((value) {
+    await FirebaseFirestore.instance
+        .collection('bookings')
+        .where('appointment_to', isEqualTo: id)
+        .get()
+        .then((value) {
       setState(() {
-        totalClient =value.docs.length;
+        totalClient = value.docs.length;
       });
     });
   }
@@ -285,7 +290,9 @@ class _PractitionersProfileScreenState
                             child: Column(
                               children: [
                                 Text(
-                                  (totalClient!=null)?totalClient.toString():'0',
+                                  (totalClient != null)
+                                      ? totalClient.toString()
+                                      : '0',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 21,
@@ -385,10 +392,10 @@ class _PractitionersProfileScreenState
                         ),
                         color: AppColors.COLOR_PRIMARY,
                         onPressed: () {
-                          //NavigationController.push(
-                          //context,
-                          //BLogHomeScreen(_snapshot.id, true),
-                          //);
+                          NavigationController.push(
+                            context,
+                            ServiceProviderUpdateScreen(),
+                          );
                         },
                         child: Text(
                           'EDIT PROFILE',
