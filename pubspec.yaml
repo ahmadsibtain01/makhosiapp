@@ -75,6 +75,10 @@ dependencies:
   #flutter_facebook_login: ^3.0.0
   clay_containers: ^0.2.2
   rating_dialog: ^1.0.0
+  carousel_pro: ^1.0.0
+  tabbar: ^0.1.1
+  bottom_navy_bar: ^5.5.0
+
 
 
 

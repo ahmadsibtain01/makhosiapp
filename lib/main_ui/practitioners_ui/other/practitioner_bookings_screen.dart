@@ -192,25 +192,11 @@ class _PractitionerBookingsScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-      ),
-      body: _isLoading
+    return _isLoading
           ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
           : _finalList.isEmpty
           ? AppStatusComponents.errorBody(message: 'No appointments')
-          : _getBody(),
-    );
+          : _getBody();
   }
 
   Widget _tabs() {

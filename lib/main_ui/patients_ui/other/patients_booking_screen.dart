@@ -14,7 +14,7 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/screen_dimensions.dart';
 
 class PatientsBookingScreen extends StatefulWidget {
-  final _snapshot;
+  final DocumentSnapshot _snapshot;
 
   PatientsBookingScreen(this._snapshot);
 
@@ -33,9 +33,11 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
   bool _forSomeoneElse = false;
   var _emailEditController = TextEditingController();
   var _mobileEditController = TextEditingController();
+  Map snap;
 
   @override
   void initState() {
+    var snap = widget._snapshot.data();
     _timingMap = widget._snapshot.get(AppKeys.TIMINGS);
     _emailEditController.text = widget._snapshot.get(AppKeys.EMAIL);
     _getBookings();
@@ -63,6 +65,7 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
 
   @override
   Widget build(BuildContext context) {
+    var snap = widget._snapshot.data();
     return Scaffold(
       body: _isLoading
           ? AppStatusComponents.loadingContainer(AppColors.COLOR_PRIMARY)
@@ -121,7 +124,9 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
                         ),
                       ),
                       Text(
-                        '120',
+                        snap.containsKey('consultation_fee')
+                            ? '${snap['consultation_fee']}'
+                            : '0',
                         style: TextStyle(
                           fontSize: 18,
                           color: AppColors.COLOR_ORG,
@@ -516,6 +521,7 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
 
   Widget _getPractitionerDetailsSection() {
     bool isOnline = widget._snapshot.get(AppKeys.ONLINE);
+
     return Container(
       height: 100,
       decoration: BoxDecoration(
@@ -524,11 +530,11 @@ class _PatientsBookingScreenState extends State<PatientsBookingScreen>
       width: ScreenDimensions.getScreenWidth(context),
       child: Row(
         children: [
-          widget._snapshot.get(AppKeys.PROFILE_IMAGE) != null
+          widget._snapshot.get("id_picture") != null
               ? CircleAvatar(
             radius: 24,
             backgroundImage: NetworkImage(
-              widget._snapshot.get(AppKeys.PROFILE_IMAGE),
+              widget._snapshot.get("id_picture"),
             ),
           )
               : ClipRRect(

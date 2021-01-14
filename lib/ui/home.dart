@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../podo/category.dart';
 import '../providers/home_provider.dart';
 import '../helper/constants.dart';
@@ -14,6 +14,7 @@ import '../widgets/book_card.dart';
 import '../widgets/spotlight.dart';
 import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -33,6 +34,15 @@ class Home extends StatelessWidget {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
         onPressed:() {
+          Provider<NotificationProvider>(
+              create: (context) {
+                NotificationProvider notificationProvider =
+                NotificationProvider();
+                notificationProvider.firebaseMessaging.subscribeToTopic(
+                    'messages_${FirebaseAuth.instance.currentUser.uid}');
+                return notificationProvider;
+              },
+              child: PractitionersHome());
           NavigationController.push(
             context,
             PractitionersHome(),

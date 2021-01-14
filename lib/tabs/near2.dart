@@ -316,7 +316,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
     whatsapp=snapshot['WhatsappList'];
 
 
-    firstName = snapshot[AppKeys.FIRST_NAME];
+    firstName = snapshot['prefered_buisness_name'];
     secondName = snapshot[AppKeys.SECOND_NAME];
     location = snapshot[AppKeys.ADDRESS];
     years=snapshot[AppKeys.PRACTICE_YEARS];
@@ -495,7 +495,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab2> {
                       ),
                       color: AppColors.COLOR_PRIMARY,
                       onPressed: () {
-                        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
+                        NavigationController.push(context, BusinessCard2(firstName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
 
                       },
                       child: Text(

@@ -140,30 +140,7 @@ class _ConsultationsState extends State<Consultations>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          shadowColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            iconSize: 41.0,
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              iconSize: 41,
-              color: Colors.black,
-              tooltip: 'Increase volume by 10',
-              onPressed: () {
-                setState(() {});
-              },
-            ),
-          ],
-        ),
-        body: Container(
+    return  Container(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
           height: MediaQuery.of(context).size.height,
           color: Colors.white,
@@ -259,9 +236,9 @@ class _ConsultationsState extends State<Consultations>
               ),
             ],
           ),
-        )
+        );
         // ],
         // )),
-        );
+
   }
 }

@@ -17,18 +17,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class BusinessCard2 extends StatefulWidget {
-  String firstname, secondname, location, years, language, service, instagram, linkedin, fb, whatsapp;
+  String firstname, location, years, language, service, instagram, linkedin, fb, whatsapp;
   BusinessCard2(
-      this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
+      this.firstname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
   );
   @override
-  _BusinessCardState createState() => _BusinessCardState(this.firstname, this.secondname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp);
+  _BusinessCardState createState() => _BusinessCardState(this.firstname, this.location, this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp);
 }
 
 class _BusinessCardState extends State<BusinessCard2> {
-  String firstname, secondname, location,years, language, service, instagram,linkedin, fb,whatsapp;
+  String firstname, location,years, language, service, instagram,linkedin, fb,whatsapp;
   _BusinessCardState(
-      this.firstname, this.secondname, this.location,this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
+      this.firstname, this.location,this.years, this.language, this.service, this.instagram, this.linkedin, this.fb, this.whatsapp
 );
   /* static final FacebookLogin facebookSignIn = new FacebookLogin();
   String _message = 'Log in/out by pressing the buttons below.';
@@ -192,7 +192,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Clinic',
+                                      'Website',
                                       style: TextStyle(
                                         color: AppColors.BUSINESS_TEXT1,
                                         fontWeight: FontWeight.w600,
@@ -244,7 +244,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                               children: [
                                 Center(
                                   child: Text(
-                                    '${firstname} ${secondname}',
+                                    '${firstname}',
                                     style: TextStyle(
                                       color: AppColors.BUSINESS_TEXT2,
                                       fontWeight: FontWeight.w600,
@@ -422,7 +422,7 @@ class _BusinessCardState extends State<BusinessCard2> {
                                     padding:
                                     EdgeInsets.symmetric(horizontal: 25),
                                     child: Text(
-                                      'About',
+                                      'Business Description',
                                       style: TextStyle(
                                         color: AppColors.BUSINESS_TEXT2,
                                         fontWeight: FontWeight.w500,

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:makhosi_app/providers/notificaton.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -32,13 +34,19 @@ class Home extends StatelessWidget {
             ),
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.black),
-                onPressed:() {
+                onPressed: () {
                   NavigationController.push(
-                    context,
-                    PatientHome(),
-                  );
-                }
-            ),
+                      context,
+                      Provider<NotificationProvider>(
+                          create: (context) {
+                            NotificationProvider notificationProvider =
+                            NotificationProvider();
+                            notificationProvider.firebaseMessaging.subscribeToTopic(
+                                'messages_${FirebaseAuth.instance.currentUser.uid}');
+                            return notificationProvider;
+                          },
+                          child: PatientHome()));
+                }),
           ),
           body: homeProvider.loading
               ? Center(
@@ -275,7 +283,7 @@ class Home extends StatelessWidget {
   Widget getSearchBarUI(BuildContext context) {
     // Create a text controller and use it to retrieve the current value
     // of the TextField.
-    final _txtSearch  = TextEditingController();
+    final _txtSearch = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
@@ -337,8 +345,10 @@ class Home extends StatelessWidget {
                 ),
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  _txtSearch.text.isEmpty ? Fluttertoast.showToast(
-                    msg: "You just perform an empty search so we had nothing to show you.",
+                  _txtSearch.text.isEmpty
+                      ? Fluttertoast.showToast(
+                    msg:
+                    "You just perform an empty search so we had nothing to show you.",
                     toastLength: Toast.LENGTH_SHORT,
                     timeInSecForIosWeb: 5,
                   )
@@ -348,7 +358,7 @@ class Home extends StatelessWidget {
                       type: PageTransitionType.rightToLeft,
                       child: Genre(
                         title: "Search Result",
-                        url: Api.searchUrl+_txtSearch.text,
+                        url: Api.searchUrl + _txtSearch.text,
                       ),
                     ),
                   );
@@ -356,8 +366,7 @@ class Home extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Icon(Icons.search,
-                      size: 25,
-                      color: Theme.of(context).backgroundColor),
+                      size: 25, color: Theme.of(context).backgroundColor),
                 ),
               ),
             ),

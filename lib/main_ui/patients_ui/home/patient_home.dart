@@ -5,6 +5,7 @@ import 'package:makhosi_app/main_ui/general_ui/audio_call.dart';
 import 'package:makhosi_app/main_ui/general_ui/call_page.dart';
 import 'package:makhosi_app/main_ui/patients_ui/other/patient_chat_screen.dart';
 import 'package:makhosi_app/providers/notificaton.dart';
+import 'package:makhosi_app/main_ui/patients_ui/other/patient_inbox_screen.dart';
 
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,8 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/pickup_call_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:makhosi_app/utils/app_dialogues.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:makhosi_app/main_ui/general_ui/settingpage2.dart';
 
 
 class PatientHome extends StatefulWidget {
@@ -166,10 +169,86 @@ class _PatientHomeState extends State<PatientHome> {
         await FirebaseFirestore.instance.collection('patients').doc(_uid).get();
     setState(() {});
   }
+  int currentIndex = 0;
+  PageController _pageController;
 
+  Widget decide()
+  {
+    if(currentIndex==0)
+    {
+      return PageView(
+          controller: _pageController,
+          onPageChanged: (_index) {
+            setState(() => currentIndex = _index);
+          },
+          children: [
+            AllTab(_userProfileSnapshot),
+          ]
+      );
+    }
+    else if(currentIndex==1)
+    {
+      return NearbyPractitionersTab();
+    }
+    else if(currentIndex==2)
+    {
+      return PractitionerInboxScreen();
+    }
+    else if(currentIndex==3)
+    {
+      return SettingPage();
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+
+    return Scaffold(
+      body:
+      decide(),
+      bottomNavigationBar: BottomNavyBar(
+        backgroundColor: AppColors.COLOR_PRIMARY,
+        selectedIndex: currentIndex,
+        showElevation: true, // use this to remove appBar's elevation
+        onItemSelected: (_index) => setState(() {
+          currentIndex = _index;
+        }),
+        items: [
+
+          BottomNavyBarItem(
+              icon: Image.asset('images/a.png'),
+              title: Text('Home'),
+              activeColor: Colors.white,
+              inactiveColor: Colors.black
+
+          ),
+
+          BottomNavyBarItem(
+              icon: Image.asset('images/nearby businesses white.png', height: 28,width: 28,),
+              title: Text('Nearby'),
+              activeColor: Colors.white,
+              inactiveColor: Colors.black
+
+          ),
+          BottomNavyBarItem(
+            icon: Image.asset('images/wallet white.png',height: 28,width: 28),
+            title: Text('Inbox'),
+            activeColor: Colors.white,
+            // inactiveColor: Colors.black
+
+          ),
+          BottomNavyBarItem(
+            icon: Image.asset('images/profile white.png', height: 28,width: 28),
+            title: Text('profile'),
+            activeColor: Colors.white,
+            // inactiveColor: Colors.black
+          ),
+
+
+        ],
+      ),
+    );
+
+   /* return DefaultTabController(
       length: 5,
       child: Scaffold(
         appBar: AppBar(
@@ -249,6 +328,6 @@ class _PatientHomeState extends State<PatientHome> {
           ],
         ),
       ),
-    );
+    );*/
   }
 }

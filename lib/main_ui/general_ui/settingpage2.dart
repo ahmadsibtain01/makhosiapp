@@ -21,6 +21,7 @@ import 'package:makhosi_app/utils/firestore_service.dart';
 import 'package:makhosi_app/utils/navigation_controller.dart';
 import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
+import 'package:makhosi_app/Screens/notification_screen.dart';
 
 import 'login_screen.dart';
 class SettingPage extends StatefulWidget {
@@ -71,7 +72,7 @@ class _SettingPageState extends State<SettingPage>
           title: 'Report a Service Provider',
           icon: Icons.warning),
       SettingItem(title: 'Invite a friend', icon: Icons.person),
-      SettingItem(title: 'Payment Settings', icon: Icons.payment),
+      SettingItem(title: 'Deactivate Account', icon: Icons.payment),
       SettingItem(title: 'Help Center', icon: Icons.help_center),
       SettingItem(title: 'Report a Problem', icon: Icons.report_problem),
       SettingItem(title: 'Term and Policies', icon: Icons.policy),
@@ -109,13 +110,45 @@ class _SettingPageState extends State<SettingPage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Setting',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
-                        fontFamily: 'Poppins',
+                    Card(
+                      child: ListTile(
+                          leading: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  "images/circleavater.png",
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                              border: Border.all(
+                                color: Color(
+                                  0xff6043f5,
+                                ),
+                                width: 1,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+
+                          title: Text('Thembi’s Butcher'),
+                          trailing: GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
+                            },
+                            child: Image.asset('images/notification.png', height: 30,width: 30,),
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Icon(Icons.star,color: Colors.yellow,),
+                              Text('4.8 (53)')
+                            ],
+                          )
                       ),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Column(
                       children: listOfSettingItems
@@ -321,7 +354,7 @@ class _SettingPageState extends State<SettingPage>
         });
         break;
       case 4:
-        NavigationController.push(context, PaymentSettingPage());
+        //NavigationController.push(context, PaymentSettingPage());
         break;
       case 5:
         NavigationController.push(context, HelpCenterPage());

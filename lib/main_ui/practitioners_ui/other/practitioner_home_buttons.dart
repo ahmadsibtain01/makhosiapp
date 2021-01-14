@@ -14,11 +14,16 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/secondMain.dart';
 import 'package:makhosi_app/main_ui/administration/admin.dart';
-import 'package:makhosi_app/main_ui/business_card/businessCard.dart';
+import 'package:makhosi_app/main_ui/business_card/businessCard2.dart';
 import '../../../enums/click_type.dart';
 import 'package:makhosi_app/Screens/consultation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:makhosi_app/utils/app_keys.dart';
 
 class PractitionerHomeButtons extends StatefulWidget {
+  dynamic snapshot;
+  PractitionerHomeButtons(this.snapshot);
   @override
   _PractitionerHomeButtonsState createState() =>
       _PractitionerHomeButtonsState();
@@ -26,6 +31,37 @@ class PractitionerHomeButtons extends StatefulWidget {
 
 class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
     implements IOutlinedButtonClicked, IInfoDialogClicked {
+  dynamic snapshot;
+  @override
+  void initState() {
+    snapshot = widget.snapshot;
+    super.initState();
+    getdata();
+  }
+  String firstName = " ";
+  String secondName = " ";
+  String location = " ";
+  String years=" ";
+  String language=" ";
+  String service=" ";
+  dynamic instagram=" ";
+  dynamic linkedin=" ";
+  dynamic fb=" ";
+  dynamic whatsapp=" ";
+
+void getdata(){
+  firstName = snapshot['prefered_buisness_name'];
+  secondName = snapshot[AppKeys.SECOND_NAME];
+  location = snapshot[AppKeys.ADDRESS];
+  years=snapshot[AppKeys.PRACTICE_YEARS];
+  language=snapshot[AppKeys.LANGUAGES];
+  service=snapshot[AppKeys.SERVICE_TYPE];
+  instagram=snapshot['social_medias_list'];
+  linkedin=snapshot['LinkedInList'];
+  fb=snapshot['FbList'];
+  whatsapp=snapshot['WhatsappList'];
+}
+
   @override
   Widget build(BuildContext context) {
     return  Column(
@@ -180,7 +216,7 @@ class _PractitionerHomeButtonsState extends State<PractitionerHomeButtons>
               onPressed: (){
                 NavigationController.push(
                   context,
-                  BusinessCard(),
+                  BusinessCard2(firstName, location, years, language, service, instagram,linkedin,fb,whatsapp)
                 );
               },
               child: Row(

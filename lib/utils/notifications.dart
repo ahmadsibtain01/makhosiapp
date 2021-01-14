@@ -8,23 +8,24 @@ class NotificationsUtills {
 
   static Future<void> sendMsgNotification(
       {String sender,
-      String reciever,
-      String title,
-      String message,
-      Map body}) async {
+        String reciever,
+        String title,
+        String message,
+        Map body}) async {
     var recieverInbox = await FirebaseFirestore.instance
         .collection('chats')
         .doc(reciever)
         .collection('inbox')
         .doc(sender)
         .get();
-    var isMuted = await recieverInbox.get('mute');
+    var rIb = recieverInbox.data();
+    var isMuted = rIb.containsKey('mute') ? recieverInbox.get('mute') : false;
     if (!isMuted) {
       var data = <String, dynamic>{
         'notification': message == null
             ? <String, dynamic>{
-                'title': title,
-              }
+          'title': title,
+        }
             : <String, dynamic>{'title': title, 'body': message},
         'priority': 'high',
         'data': <String, dynamic>{

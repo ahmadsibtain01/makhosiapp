@@ -4,7 +4,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:makhosi_app/main_ui/practitioners_ui/profile/practitioners_profile_screen.dart';
 import 'package:makhosi_app/ui_components/app_status_components.dart';
 import 'package:makhosi_app/utils/app_colors.dart';
 import 'package:makhosi_app/utils/app_keys.dart';
@@ -315,7 +314,7 @@ class _NearbyPractitionersTabState extends State<NearbyPractitionersTab> {
 
 
     image=snapshot['id_picture'];
-    firstName = snapshot[AppKeys.FIRST_NAME];
+    firstName = snapshot['prefered_buisness_name'];
     secondName = snapshot[AppKeys.SECOND_NAME];
     location = snapshot[AppKeys.ADDRESS];
     years=snapshot[AppKeys.PRACTICE_YEARS];
@@ -498,7 +497,7 @@ Container(
                       ),
                       color: AppColors.COLOR_PRIMARY,
                       onPressed: () {
-                        NavigationController.push(context, BusinessCard2(firstName, secondName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
+                        NavigationController.push(context, BusinessCard2(firstName, location, years, language, service, instagram,linkedin,fb,whatsapp),);
 
                       },
                       child: Text(

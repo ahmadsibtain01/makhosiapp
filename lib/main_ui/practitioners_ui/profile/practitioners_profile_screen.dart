@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:carousel_pro/carousel_pro.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
@@ -23,8 +25,29 @@ import 'package:makhosi_app/Screens/notification_screen.dart';
 import 'package:makhosi_app/main_ui/general_ui/setting_page.dart';
 import 'package:makhosi_app/main_ui/general_ui/login_screen.dart';
 import 'package:makhosi_app/enums/click_type.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/profile/home.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/other/consultations.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:tabbar/tabbar.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
+/*import 'package:fluttertoast/fluttertoast.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:makhosi_app/podo/category.dart';
+import 'package:makhosi_app/providers/home_provider.dart';
+import 'package:makhosi_app/helper/constants.dart';
+import 'package:makhosi_app/helper/api.dart';
+import 'package:makhosi_app/ui/genre.dart';
 
-
+import 'package:makhosi_app/widgets/book_list_item.dart';
+import 'package:makhosi_app/widgets/book_card.dart';
+import 'package:makhosi_app/widgets/spotlight.dart';
+import 'package:makhosi_app/main_ui/practitioners_ui/home/practitioners_home.dart';
+import 'package:makhosi_app/utils/navigation_controller.dart';
+import 'package:makhosi_app/providers/notificaton.dart';*/
 class PractitionersProfileScreen extends StatefulWidget {
   bool _isViewer;
   dynamic _snapshot;
@@ -37,6 +60,8 @@ class PractitionersProfileScreen extends StatefulWidget {
 }
 
 class _PractitionersProfileScreenState extends State<PractitionersProfileScreen> {
+  int currentIndex = 0;
+  final controller = PageController();
 
   dynamic _snapshot;
   bool _isLoading = false, _isFavorite = false;
@@ -70,15 +95,183 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
       print(exc);
     }
   }
+  PageController _pageController;
+  Widget decide()
+  {
+    if(currentIndex==0)
+    {
+      return PageView(
+          controller: _pageController,
+          onPageChanged: (_index) {
+            setState(() => currentIndex = _index);
+          },
+          children: [
+          AllTab(_snapshot),
+    ]
+      );
+      }
+    else if(currentIndex==1)
+      {
+
+  }
+    else if(currentIndex==2)
+    {
+
+    }
+    else if(currentIndex==3)
+    {
+      return PractitionerBookingsScreen();
+    }
+    else if(currentIndex==4)
+    {
+      return Consultations();
+    }
+    }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading
-          ? AppStatusComponents.loadingContainer(Colors.white)
-          : _snapshot == null
-              ? AppStatusComponents.errorBody(message: 'No profile data')
-              : Stack(
+      body:
+      decide(),
+          bottomNavigationBar: BottomNavyBar(
+          backgroundColor: AppColors.COLOR_PRIMARY,
+          selectedIndex: currentIndex,
+          showElevation: true, // use this to remove appBar's elevation
+          onItemSelected: (_index) => setState(() {
+            currentIndex = _index;
+          }),
+          items: [
+
+            BottomNavyBarItem(
+                icon: Image.asset('images/a.png'),
+                title: Text('Home'),
+                activeColor: Colors.white,
+                inactiveColor: Colors.black
+
+            ),
+
+            BottomNavyBarItem(
+                icon: Image.asset('images/b.png'),
+                title: Text('Earnings'),
+                activeColor: Colors.white,
+                inactiveColor: Colors.black
+
+            ),
+            BottomNavyBarItem(
+                icon: Image.asset('images/c.png'),
+                title: Text('Records'),
+                activeColor: Colors.white,
+               // inactiveColor: Colors.black
+
+            ),
+            BottomNavyBarItem(
+                icon: Image.asset('images/d.png'),
+                title: Text('Appointments'),
+                activeColor: Colors.white,
+               // inactiveColor: Colors.black
+
+            ),
+            BottomNavyBarItem(
+                icon: Image.asset('images/e.png'),
+                title: Text('Inbox'),
+                activeColor: Colors.white,
+               // inactiveColor: Colors.black
+
+            ),
+
+          ],
+        ),
+    );
+
+
+      /*  SizedBox(
+              height: 0.71,
+            ),
+            Text(
+              "Announcements",
+              style: TextStyle(
+                color: Color(
+                  0xffb36647,
+                ),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: "Poppins",
+              ),
+            ),
+            SizedBox(
+              height: 0.71,
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 3,top: 3,left: 5,right: 5 ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child:
+                new Container(
+                  height: 170.0,
+                  child: new Carousel(
+                    boxFit: BoxFit.cover,
+                    images: [
+                      AssetImage('anouncement.png'),
+                      AssetImage('anouncement.png'),
+                      AssetImage('anouncement.png'),
+                    ],
+                    autoplay: true,
+                    dotSize: 4.0,
+                    //dotColor: ,
+                    indicatorBgPadding: 2.0,
+                    dotBgColor: Colors.transparent,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 0.71,
+            ),
+            Text(
+              "Enterpreneurship",
+              style: TextStyle(
+                color: Color(
+                  0xffb36647,
+                ),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontFamily: "Poppins",
+              ),
+            ),
+            Consumer<HomeProvider>(
+                builder: (BuildContext context, HomeProvider homeProvider, Widget child) {
+                  return Container(
+                    height: 250,
+                    child: Center(
+                      child: ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: homeProvider.top.feed.entry.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          Entry entry = homeProvider.top.feed.entry[index];
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 10),
+                            child: BookCard(
+                              img: entry.coverImage,
+                              entry: entry,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }
+            ),
+
+          ],
+        ),
+      ),
+*/
+
+
+      /*Stack(
                   children: [
                     Align(
                       alignment: Alignment.topCenter,
@@ -130,7 +323,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
                     ),
                   ],
                 ),
-    );
+    );*/
   }
   showAlertDialog(BuildContext context) {
     // set up the buttons
@@ -460,7 +653,7 @@ class _PractitionersProfileScreenState extends State<PractitionersProfileScreen>
         ],
       ),
     ),
-         widget._isViewer ? Container() : PractitionerHomeButtons(),
+         widget._isViewer ? Container() : PractitionerHomeButtons(_snapshot),
 
 
       ],
