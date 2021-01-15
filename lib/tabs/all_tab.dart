@@ -21,6 +21,10 @@ import 'package:makhosi_app/tabs/recentprofiles.dart';
 import 'package:makhosi_app/main_ui/general_ui/settingpage2.dart';
 import 'package:makhosi_app/tabs/providers.dart';
 import 'package:makhosi_app/tabs/Home_near.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:makhosi_app/main_ui/blog_screens/blog_home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AllTab extends StatefulWidget {
   dynamic _snapshot;
   AllTab( this._snapshot);
@@ -38,9 +42,18 @@ class _AllTabState extends State<AllTab> {
   void initState() {
     _dataList = new List();
     _getData();
+    _getUserProfileData();
     super.initState();
   }
-
+  String _uid;
+DocumentSnapshot _userProfileSnapshot;
+  Future<void> _getUserProfileData() async {
+    _uid = FirebaseAuth.instance.currentUser.uid;
+    _userProfileSnapshot =
+        await FirebaseFirestore.instance.collection('patients').doc(_uid).get();
+    setState(() {});
+  }
+  
   Future<void> _getData() async {
     await FirebaseFirestore.instance
         .collection(AppKeys.PRACTITIONERS)
@@ -64,113 +77,118 @@ class _AllTabState extends State<AllTab> {
         : _dataList.isEmpty
             ? AppStatusComponents.errorBody(message: 'No practitioner found')
             : _getBody();
-  }
+  }  
+   
+
   Widget _getBody() {
-    return  DefaultTabController(
-        length: 3,
-        child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0.2,
-              title:  Container(
-                height: 60,
-                width: 250,
-                //margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                child:  new Theme(
-                  data: new ThemeData(
-                    hintColor: Colors.grey,
-                    primaryColor: AppColors.COLOR_PRIMARY,
-                    primaryColorDark: AppColors.COLOR_PRIMARY,
-                  ),
-                  child:Padding(
-                    padding: EdgeInsets.only(right:10, top: 10,bottom: 10,left:2),
-                    child: TextField(
-                      style: TextStyle(color: Colors.grey),
-                      //controller: editingController,
-                      decoration: InputDecoration(
-                          labelText: "Search",
-                          hintText: "Search",
-                          prefixIcon: Icon(Icons.search,color: AppColors.COLOR_PRIMARY,),
-                          enabled: true,
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.COLOR_PRIMARY),
-                              borderRadius: BorderRadius.all(Radius.circular(25.0))),
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(color:AppColors.COLOR_PRIMARY, width: 0.0),
-                              borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+     
+    return  SafeArea(
+          child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0.2,
+                title:  Container(
+                  height: 60,
+                  width: 250,
+                  //margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  child:  new Theme(
+                    data: new ThemeData(
+                      hintColor: Colors.grey,
+                      primaryColor: AppColors.COLOR_PRIMARY,
+                      primaryColorDark: AppColors.COLOR_PRIMARY,
+                    ),
+                    child:Padding(
+                      padding: EdgeInsets.only(right:10, top: 10,bottom: 10,left:2),
+                      child: TextField(
+                        style: TextStyle(color: Colors.grey),
+                        //controller: editingController,
+                        decoration: InputDecoration(
+                            labelText: "Search",
+                            hintText: "Search",
+                            prefixIcon: Icon(Icons.search,color: AppColors.COLOR_PRIMARY,),
+                            enabled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColors.COLOR_PRIMARY),
+                                borderRadius: BorderRadius.all(Radius.circular(25.0))),
+                            border: OutlineInputBorder(
+                                borderSide: const BorderSide(color:AppColors.COLOR_PRIMARY, width: 0.0),
+                                borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              actions: [
-                GestureDetector(
-                  onTap: (){
-                    NavigationController.push(
-                      context,
-                      SettingPage(),
-                    );
-                  },
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    margin: EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: ExactAssetImage('images/circleavater.png'),
-                        fit: BoxFit.cover,
-                      ),
-                      border: Border.all(
-                        color: Color(
-                          0xff6043f5,
+                actions: [
+                  GestureDetector(
+                    onTap: (){
+                      NavigationController.push(
+                        context,
+                        SettingPage(),
+                      );
+                    },
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      margin: EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: ExactAssetImage('images/circleavater.png'),
+                          fit: BoxFit.cover,
                         ),
-                        width: 1,
+                        border: Border.all(
+                          color: Color(
+                            0xff6043f5,
+                          ),
+                          width: 1,
+                        ),
+                        shape: BoxShape.circle,
                       ),
-                      shape: BoxShape.circle,
                     ),
+
+                  )
+
+
+                ],
+                bottom: TabBar(
+                  isScrollable: true,
+                  indicator: BubbleTabIndicator(
+                    indicatorHeight: 25.0,
+                    indicatorColor: AppColors.COLOR_PRIMARY,
+                    tabBarIndicatorSize: TabBarIndicatorSize.tab,
                   ),
+                  unselectedLabelColor: Colors.black,
+                  tabs: [
+                    Tab(
+                      child: Text('Home'),
+                    ),
+                    Tab(
+                      child: Text('Nearby Businesses'),
+                    ),
+                    Tab(
+                      child: Text('Appointments'),
+                    ),
 
-                )
-
-
-              ],
-              bottom: TabBar(
-                isScrollable: true,
-                indicator: BubbleTabIndicator(
-                  indicatorHeight: 25.0,
-                  indicatorColor: AppColors.COLOR_PRIMARY,
-                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                  ],
                 ),
-                unselectedLabelColor: Colors.black,
-                tabs: [
-                  Tab(
-                    child: Text('Home'),
-                  ),
-                  Tab(
-                    child: Text('Nearby Businesses'),
-                  ),
-                  Tab(
-                    child: Text('Appointments'),
-                  ),
-
-                ],
               ),
-            ),
-            body: Container(
-              padding: EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 10),
-              child:
-              TabBarView(
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  _getdataa(),
-                NearbyPractitionersTab(),
-              Text('shbsd')
-                 // Consultations(),
-                  //PractitionerBookingsScreen(),
-                ],
-              ),
+              body: Container(
+                padding: EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 10),
+                child:
+                TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    _getdataa(),
+                  NearbyPractitionersTab(),
+                Text('shbsd')
+                   // Consultations(),
+                    //PractitionerBookingsScreen(),
+                  ],
+                ),
 
-            )
-        )
+              )
+          )
+      ),
     );
   }
   Widget _getdataa()
@@ -180,16 +198,49 @@ class _AllTabState extends State<AllTab> {
       child: ListView(
         primary: true,
         children: [
-          Text(
-            "Mkhosi Knowledge Hub",
-            style: TextStyle(
-              color: Color(
-                0xffb36647,
+          Row(
+            children: [
+              Text(
+                "Mkhosi Knowledge Hub",
+                style: TextStyle(
+                  color: Color(
+                    0xffb36647,
+                  ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "Poppins",
+                ),
               ),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Poppins",
-            ),
+              Spacer(),
+                     InkWell(
+onTap:(){
+ // Navigator.push(context, MaterialPageRoute(builder: (context) => BLogHomeScreen(_practitionerUid:_uid,_isViewer:true)));
+} ,                              child: Padding(
+  padding: const EdgeInsets.only(right:8.0),
+  child:   Text(
+  
+                    "See All",
+  
+                    style: TextStyle(
+  
+                      color: Color(
+  
+                        0xff929292,
+  
+                      ),
+  
+                      fontSize: 12,
+  
+                      fontWeight: FontWeight.w400,
+  
+                      fontFamily: "Poppins",
+  
+                    ),
+  
+                  ),
+),
+              ),
+            ],
           ),
           SizedBox(
             height: 5,
@@ -234,17 +285,7 @@ class _AllTabState extends State<AllTab> {
               SizedBox(
                 width: 76,
               ),
-              Text(
-                "See All",
-                style: TextStyle(
-                  color: Color(
-                    0xff929292,
-                  ),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "Poppins",
-                ),
-              ),
+       
             ],
           ),
 

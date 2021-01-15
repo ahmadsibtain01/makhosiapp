@@ -23,8 +23,12 @@ import 'package:makhosi_app/utils/others.dart';
 import 'package:makhosi_app/utils/string_constants.dart';
 import 'package:makhosi_app/Screens/notification_screen.dart';
 
+import 'package:mailer/mailer.dart';
+
+import 'package:mailer/smtp_server.dart';
 import 'login_screen.dart';
 class SettingPage extends StatefulWidget {
+
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -62,9 +66,48 @@ class _SettingPageState extends State<SettingPage>
   TextEditingController reportTxtController = TextEditingController();
   //waiting circularindicator
   bool isWaiting = false;
+  String email;
+  String _uid;
+ DocumentSnapshot _userProfileSnapshot;
+  Future<void> _getUserProfileData() async {
+    _uid = FirebaseAuth.instance.currentUser.uid;
+    _userProfileSnapshot =
+        await FirebaseFirestore.instance.collection('patients').doc(_uid).get();
+    setState(() {});
+  }
+  
+   sendmail() async {
+     email=_userProfileSnapshot['email'];
+    String username = 'mkhosi.app@gmail.com';
+    String password = "@Mkhosi2020";
+
+    final smtpServer = gmail(username, password);
+    // Creating the Gmail server
+
+    // Create our email message.
+    final message = Message()
+      ..from = Address(username)
+      ..recipients.add(email) //recipent email
+      // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com']) //cc Recipents emails
+      // ..bccRecipients.add(Address('bccAddress@example.com')) //bcc Recipents emails
+      ..subject = 'Report  Service Provider' //subject of the email
+      ..text = '' //body of the email
+      ..html =
+          "<h3>Dear Customer, </h3>\n<p>Thank you for reporting or flagging a Service Provider. Our team will start investigations and act accordingly, this process will take between 5 – 10 working days.</p><p>Kind regards,</p>\n\n<p>Mkhosi</p>";
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' +
+          sendReport.toString()); //print if the email is sent
+    } on MailerException catch (e) {
+      print('Message not sent. \n' +
+          e.toString()); //print if the email is not sent
+      // e.toString() will show why the email is not sending
+    }
+  }
 
   @override
   void initState() {
+    _getUserProfileData();
     listOfSettingItems = [
       SettingItem(title: 'Notifications Settings', icon: Icons.notifications),
       SettingItem(title: 'Language', icon: Icons.language),
@@ -132,7 +175,7 @@ class _SettingPageState extends State<SettingPage>
                             ),
                           ),
 
-                          title: Text('Thembi’s Butcher'),
+                          title: Text(_userProfileSnapshot['full_name']??""),
                           trailing: GestureDetector(
                             onTap: (){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>new NotificationScreen()));
@@ -208,6 +251,7 @@ class _SettingPageState extends State<SettingPage>
                     },
                     onSubmit: () async {
                       print('submit');
+                      sendmail();
                       if (_formKeyReportUser.currentState.validate()) {
                         FirestoreService database = FirestoreService();
                         String userid = database.getCurrentUserID();

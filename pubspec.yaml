@@ -78,6 +78,7 @@ dependencies:
   carousel_pro: ^1.0.0
   tabbar: ^0.1.1
   bottom_navy_bar: ^5.5.0
+  mailer:
 
 
 

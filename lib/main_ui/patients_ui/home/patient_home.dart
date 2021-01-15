@@ -27,7 +27,7 @@ import 'package:makhosi_app/utils/app_dialogues.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:makhosi_app/main_ui/general_ui/settingpage2.dart';
 
-
+import 'package:shared_preferences/shared_preferences.dart';
 class PatientHome extends StatefulWidget {
   @override
   _PatientHomeState createState() => _PatientHomeState();
@@ -139,7 +139,39 @@ class _PatientHomeState extends State<PatientHome> {
       },
     );
   }
-
+final keyIsPatientHomeFirstLoaded = 'is_first_loaded';
+     showDialogIfFirstLoaded(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstLoaded = prefs.getBool(keyIsPatientHomeFirstLoaded);
+    if (isFirstLoaded == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+                      title: new Text("Welcome!"),
+            content: SingleChildScrollView(
+              child: new Text(
+          "I would like to take this opportunity thank you for signing up on the Mkhosi App, and becoming part of the Mkhosi Community, whether as a Potential Customer or a Service Provider. Mkhosi is shortened from “Hlaba umkhosi” which comes from the isiZulu language of South Africa which has multiple meanings including to send an SOS or to call for help or assistance or the clarion call. On its own, “Mkhosi” can mean a ceremony or festival as well as an army battalion.\n Applying this name to the App is because when you run a small business on your own, there are times when you feel like you need an army to assist you just to get through the daily tasks and to make sense of the do’s and don’ts of running your business. With that, when you have success, it does feel like there is a cause for a celebration, a festival. Our hope is that Mkhosi is able to support you in your journey to a sustainable business, being the support, you need when the going gets tough and the community that is always there to celebrate with you when the plan falls into place.\n The app is free for all Users who are joining or registration as Customers. As a Mkhosi Customer you have access to many service providers ranging from Traditional Healers to Mechanics. You will also have access to their work calendar which will enable you to seamlessly book for consultations either virtually or physically (or both). Additionally, we have also added a calling (video and voice) and payment feature for those who might want to purchase goods from the service providers.\nService Providers have three subscription options available for them, which are i. start-up, ii. Setup and iii. shine packages. These packages are based on access to some functionalities on the app which all will enable you to setup your business digitally. There are also many benefits of signing up as a Service Provider on the app, and you can find out more about this on the website: www.mkhosi.com\n Should have any questions or would like to engage with one of our team members, please do email us at: support@mkhosi.com  \nRegards\n\n,Amanda Gcabashe \nFounder & CEO",
+          style: TextStyle(fontSize: 14),
+        ),
+      ),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                child: new Text("Dismiss"),
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                  prefs.setBool(keyIsPatientHomeFirstLoaded, false);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
   onMessageDialog(
       {BuildContext context, String title, String label, Function onAccept}) {
     showDialog(
@@ -201,50 +233,52 @@ class _PatientHomeState extends State<PatientHome> {
   }
   @override
   Widget build(BuildContext context) {
+  Future.delayed(Duration.zero, () => showDialogIfFirstLoaded(context));
+    return SafeArea(
+          child: Scaffold(
+        body:
+        decide(),
+        bottomNavigationBar: BottomNavyBar(
+          backgroundColor: AppColors.COLOR_PRIMARY,
+          selectedIndex: currentIndex,
+          showElevation: true, // use this to remove appBar's elevation
+          onItemSelected: (_index) => setState(() {
+            currentIndex = _index;
+          }),
+          items: [
 
-    return Scaffold(
-      body:
-      decide(),
-      bottomNavigationBar: BottomNavyBar(
-        backgroundColor: AppColors.COLOR_PRIMARY,
-        selectedIndex: currentIndex,
-        showElevation: true, // use this to remove appBar's elevation
-        onItemSelected: (_index) => setState(() {
-          currentIndex = _index;
-        }),
-        items: [
+            BottomNavyBarItem(
+                icon: Image.asset('images/a.png'),
+                title: Text('Home'),
+                activeColor: Colors.white,
+                inactiveColor: Colors.black
 
-          BottomNavyBarItem(
-              icon: Image.asset('images/a.png'),
-              title: Text('Home'),
+            ),
+
+            BottomNavyBarItem(
+                icon: Image.asset('images/nearby businesses white.png', height: 28,width: 28,),
+                title: Text('Nearby'),
+                activeColor: Colors.white,
+                inactiveColor: Colors.black
+
+            ),
+            BottomNavyBarItem(
+              icon: Image.asset('images/wallet white.png',height: 28,width: 28),
+              title: Text('Inbox'),
               activeColor: Colors.white,
-              inactiveColor: Colors.black
+              // inactiveColor: Colors.black
 
-          ),
-
-          BottomNavyBarItem(
-              icon: Image.asset('images/nearby businesses white.png', height: 28,width: 28,),
-              title: Text('Nearby'),
+            ),
+            BottomNavyBarItem(
+              icon: Image.asset('images/profile white.png', height: 28,width: 28),
+              title: Text('profile'),
               activeColor: Colors.white,
-              inactiveColor: Colors.black
-
-          ),
-          BottomNavyBarItem(
-            icon: Image.asset('images/wallet white.png',height: 28,width: 28),
-            title: Text('Inbox'),
-            activeColor: Colors.white,
-            // inactiveColor: Colors.black
-
-          ),
-          BottomNavyBarItem(
-            icon: Image.asset('images/profile white.png', height: 28,width: 28),
-            title: Text('profile'),
-            activeColor: Colors.white,
-            // inactiveColor: Colors.black
-          ),
+              // inactiveColor: Colors.black
+            ),
 
 
-        ],
+          ],
+        ),
       ),
     );
 
